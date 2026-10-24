@@ -1,0 +1,878 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tapwe — Smart NFC &amp; QR business cards (UI/UX design)</title>
+<meta name="description" content="Smart NFC and QR cards that connect your business to the digital world with one tap.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --canvas:#fbfaf8;--surface:#fff;--subtle:#f4f2ee;--line:#e7e4de;--line2:#d6d2ca;
+  --ink:#1c1b22;--ink2:#4a4953;--ink3:#6b6a75;
+  --b50:#f0f0ff;--b100:#e4e4fd;--b500:#5a4fd8;--b600:#4a3fc4;--b700:#3d33a8;--b900:#231d62;
+  --ok:#14774a;--okbg:#e8f5ee;--err:#b42318;--errbg:#fdeceb;--warn:#8a5a00;--warnbg:#fdf3dc;
+  --r:10px;--rl:14px;
+  --sh:0 1px 2px rgb(28 27 34/.04),0 1px 1px rgb(28 27 34/.03);
+  --lift:0 10px 30px -12px rgb(28 27 34/.18),0 2px 6px rgb(28 27 34/.05);
+  --dev:0 40px 70px -30px rgb(35 29 98/.35),0 12px 24px -12px rgb(28 27 34/.2);
+}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{background:var(--canvas);color:var(--ink);font:400 16px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+h1,h2,h3,h4{letter-spacing:-.02em;text-wrap:balance;line-height:1.15}
+p{text-wrap:pretty}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;cursor:pointer;background:none;border:0}
+:focus-visible{outline:2px solid var(--b500);outline-offset:2px;border-radius:4px}
+::selection{background:var(--b100)}
+svg.i{width:1em;height:1em;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.wrap{max-width:1152px;margin:0 auto;padding:0 24px}
+@media(max-width:640px){.wrap{padding:0 16px}}
+.muted{color:var(--ink2)}.faint{color:var(--ink3)}
+.eyebrow{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--b600);margin-bottom:12px}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:40px;padding:0 16px;border-radius:var(--r);font-size:14px;font-weight:500;white-space:nowrap;transition:background .15s,border-color .15s,color .15s;border:1px solid transparent}
+.btn svg{font-size:16px}
+.btn.lg{height:48px;padding:0 24px;font-size:16px}.btn.sm{height:32px;padding:0 12px;font-size:13px}
+.btn.icon{width:36px;height:36px;padding:0}
+.btn-p{background:var(--b600);color:#fff;box-shadow:var(--sh)}.btn-p:hover{background:var(--b700)}.btn-p:active{background:var(--b900)}
+.btn-s{background:var(--surface);border-color:var(--line2)}.btn-s:hover{background:var(--subtle)}
+.btn-g{color:var(--ink2)}.btn-g:hover{background:var(--subtle);color:var(--ink)}
+.btn-d{background:var(--err);color:#fff}.btn-d:hover{background:#8f1b11}
+.btn-w{background:#fff;color:var(--b900)}.btn-w:hover{background:var(--b50)}
+.btn[disabled]{opacity:.5;pointer-events:none}
+.btn .spin{width:16px;height:16px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* surfaces */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--rl);box-shadow:var(--sh)}
+.badge{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:2px 10px;font-size:12px;font-weight:500;background:var(--subtle);color:var(--ink2)}
+.badge.ok{background:var(--okbg);color:var(--ok)}.badge.warn{background:var(--warnbg);color:var(--warn)}.badge.brand{background:var(--b50);color:var(--b700)}
+.ico{width:44px;height:44px;border-radius:var(--r);background:var(--b50);color:var(--b600);display:grid;place-items:center;font-size:20px}
+.ico.outline{background:var(--surface);border:1px solid var(--line);box-shadow:var(--sh);width:40px;height:40px}
+
+/* forms */
+.field{display:grid;gap:6px}
+.field label,.legend{font-size:14px;font-weight:500}
+.input,select.input{height:40px;width:100%;border:1px solid var(--line2);border-radius:var(--r);background:var(--surface);padding:0 12px;font:inherit;font-size:14px;color:var(--ink);transition:border-color .15s,box-shadow .15s}
+.input::placeholder{color:var(--ink3)}
+.input:hover{border-color:var(--ink3)}
+.input:focus{outline:0;border-color:var(--b500);box-shadow:0 0 0 3px var(--b100)}
+.input.bad{border-color:var(--err)}.input.bad:focus{box-shadow:0 0 0 3px var(--errbg)}
+.hint{font-size:13px;color:var(--ink3)}.err{font-size:13px;color:var(--err)}
+.pwd{position:relative}.pwd .input{padding-right:42px}
+.pwd button{position:absolute;right:6px;top:50%;transform:translateY(-50%);padding:6px;color:var(--ink3);border-radius:6px}.pwd button:hover{color:var(--ink)}
+
+/* header / footer */
+header.top{position:sticky;top:0;z-index:40;background:rgb(251 250 248/.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;justify-content:space-between;height:64px}
+.logo{display:inline-flex;align-items:center;gap:10px;font-size:20px;font-weight:600;letter-spacing:-.02em}
+.logo svg{width:32px;height:32px}
+nav.main{display:flex;gap:4px}
+nav.main a{padding:8px 12px;border-radius:8px;font-size:14px;font-weight:500;color:var(--ink2)}
+nav.main a:hover,nav.main a.on{color:var(--ink)}
+.bar .actions{display:flex;gap:8px}
+.burger{display:none;width:40px;height:40px;border-radius:var(--r);place-items:center;font-size:20px}.burger:hover{background:var(--subtle)}
+#mnav{display:none;border-top:1px solid var(--line);padding:12px 16px 20px}
+#mnav a.l{display:block;padding:12px;border-radius:8px;font-weight:500;color:var(--ink2)}
+#mnav a.l:hover{background:var(--subtle)}
+#mnav .two{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+#mnav.open{display:block}
+@media(max-width:820px){nav.main,.bar .actions{display:none}.burger{display:grid}}
+footer.foot{border-top:1px solid var(--line);background:rgb(244 242 238/.6);margin-top:0}
+.fgrid{display:grid;grid-template-columns:1.4fr repeat(3,1fr);gap:40px;padding:56px 0 8px}
+.fgrid h3{font-size:14px;margin-bottom:16px}.fgrid li{list-style:none;margin-bottom:10px}.fgrid ul{padding:0}
+.fgrid li a{font-size:14px;color:var(--ink2)}.fgrid li a:hover{color:var(--ink)}
+.copy{border-top:1px solid var(--line);margin-top:48px;padding:24px 0;font-size:14px;color:var(--ink3)}
+@media(max-width:820px){.fgrid{grid-template-columns:1fr 1fr}.fgrid>div:first-child{grid-column:1/-1}}
+
+/* sections */
+section.s{padding:80px 0}
+section.s.alt{background:var(--surface);border-block:1px solid var(--line)}
+.sh{max-width:680px;margin:0 auto 56px;text-align:center}
+.sh h2{font-size:clamp(28px,4vw,40px);font-weight:600}
+.sh p{margin-top:16px;font-size:18px;color:var(--ink2)}
+.hero{display:grid;grid-template-columns:1.05fr 1fr;gap:32px;align-items:center;padding:80px 0}
+.hero h1{font-size:clamp(38px,5.4vw,64px);font-weight:600;line-height:1.06}
+.hero h1 em{font-style:normal;color:var(--b600)}
+.hero p.lead{margin-top:24px;font-size:18px;line-height:1.65;color:var(--ink2);max-width:560px}
+.hero .cta{display:flex;gap:12px;margin-top:32px}
+@media(max-width:960px){.hero{grid-template-columns:1fr;padding:48px 0 56px;gap:48px}}
+@media(max-width:520px){.hero .cta{flex-direction:column}}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:40px 32px}
+.g2{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}
+@media(max-width:960px){.g4{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:1fr 1fr}}
+@media(max-width:640px){.g3,.g4,.g2{grid-template-columns:1fr}}
+.step{padding:24px;background:var(--canvas);border:1px solid var(--line);border-radius:var(--rl)}
+.step .t{display:flex;justify-content:space-between;align-items:center;color:var(--ink3);font-size:14px;font-weight:500}
+.step h3,.uc h3{font-size:18px;margin-top:20px}.step p,.uc p{margin-top:8px;color:var(--ink2)}
+.feat h3{font-size:16px;margin-top:16px}.feat p{margin-top:6px;font-size:14px;line-height:1.6;color:var(--ink2)}
+.uc{padding:24px;transition:transform .2s,box-shadow .2s}.uc:hover{transform:translateY(-2px);box-shadow:var(--lift)}
+.uc h3{font-size:16px;margin-top:16px}.uc p{font-size:14px;margin-top:6px}
+.showcase{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+.showcase h2{font-size:clamp(28px,4vw,40px);font-weight:600}
+.showcase .lead{margin-top:16px;font-size:18px;color:var(--ink2);line-height:1.65}
+.ticks{list-style:none;padding:0;margin-top:24px;display:grid;gap:12px}
+.ticks li{display:flex;gap:12px;color:var(--ink2)}.ticks svg{color:var(--b600);font-size:20px;margin-top:2px}
+.panel{background:rgb(240 240 255/.6);border:1px solid var(--line);border-radius:var(--rl);padding:40px}
+@media(max-width:900px){.showcase{grid-template-columns:1fr;gap:40px}.panel{padding:24px}}
+.chip{display:inline-flex;align-items:center;gap:8px;margin-top:32px;padding:8px 12px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);font:12px ui-monospace,Menlo,monospace;color:var(--ink2)}
+.chip svg{color:var(--b600);font-size:14px}
+.band{background:var(--b900);color:#fff;border-radius:var(--rl);text-align:center;padding:64px 24px}
+.band h2{font-size:clamp(28px,4vw,40px);font-weight:600}.band p{max-width:560px;margin:16px auto 0;color:rgb(255 255 255/.75);font-size:18px}.band .btn{margin-top:32px}
+.pagehead{background:var(--surface);border-bottom:1px solid var(--line);padding:72px 0}
+.pagehead h1{font-size:clamp(34px,5vw,52px);font-weight:600;max-width:760px}.pagehead p{margin-top:20px;font-size:18px;color:var(--ink2);max-width:620px}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;padding:40px 0}
+.frow h2{font-size:clamp(24px,3vw,32px);font-weight:600;margin-top:20px}.frow .lead{margin-top:12px;font-size:18px;line-height:1.65;color:var(--ink2)}
+.frow.rev .txt{order:2}
+@media(max-width:900px){.frow{grid-template-columns:1fr;gap:28px}.frow.rev .txt{order:0}}
+.flow{display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
+@media(max-width:960px){.flow{grid-template-columns:1fr 1fr}}@media(max-width:560px){.flow{grid-template-columns:1fr}}
+.flow .card{padding:20px;position:relative}.flow h3{font-size:16px;margin-top:16px}.flow p{font-size:14px;color:var(--ink2);margin-top:6px;line-height:1.6}
+.note{display:flex;gap:12px;align-items:flex-start;padding:12px 16px;border-radius:var(--r);font-size:14px;background:var(--warnbg);color:var(--warn);border:1px solid rgb(138 90 0/.25);margin-bottom:32px}
+.plan{padding:24px}.plan.f{border-color:var(--b500);box-shadow:0 0 0 1px var(--b500)}
+.plan .price{font-size:32px;font-weight:600;color:var(--ink3);margin-top:16px}.plan .price small{font-size:16px;font-weight:400}
+.plan ul{list-style:none;padding:0;margin:24px 0;display:grid;gap:10px;font-size:14px;color:var(--ink2)}.plan li{display:flex;gap:10px}.plan li svg{color:var(--b600);margin-top:3px}
+
+@media(max-width:640px){.sc2{grid-template-columns:1fr!important}.sc2>div:last-child{max-width:200px!important}}
+
+/* team */
+.team{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;max-width:760px;margin:0 auto}
+.person{padding:28px;display:flex;gap:20px;align-items:flex-start}
+.person .av{width:64px;height:64px;border-radius:50%;background:var(--b100);color:var(--b700);display:grid;place-items:center;font-size:20px;font-weight:600;flex:none}
+.person h3{font-size:18px}.person .role{margin-top:4px;font-size:14px;font-weight:500;color:var(--b600)}
+.person p{margin-top:12px;font-size:14px;line-height:1.6;color:var(--ink2)}
+@media(max-width:700px){.team{grid-template-columns:1fr}}
+/* mockups */
+.hm{position:relative;width:100%;max-width:520px;margin:0 auto;padding:16px 0 24px}
+.hm .bg{position:absolute;inset:40px 24px auto;height:78%;border-radius:28px;background:var(--b50);z-index:-1}
+.hm .ph{width:44%;margin-left:auto}
+.hm .tap{position:absolute;left:38%;top:34%;width:40px;height:40px}
+.hm .tap i{position:absolute;inset:0;border-radius:50%;border:1px solid rgb(90 79 216/.6);animation:ring 2.4s ease-out infinite}
+.hm .tap b{position:absolute;inset:0;border-radius:50%;background:#fff;color:var(--b600);box-shadow:var(--lift);display:grid;place-items:center;font-size:16px}
+@keyframes ring{0%{transform:scale(.8);opacity:.6}100%{transform:scale(1.6);opacity:0}}
+@media(max-width:520px){.hm .ph{width:56%}.hm .tap{display:none}}
+.phone{position:relative;aspect-ratio:9/18.5;width:100%;border:7px solid var(--ink);border-radius:35px;background:var(--ink);box-shadow:var(--dev)}
+.phone .notch{position:absolute;left:50%;top:8px;width:64px;height:16px;border-radius:999px;background:var(--ink);transform:translateX(-50%);z-index:2}
+.phone .scr{height:100%;border-radius:27px;background:var(--canvas);padding:36px 12px 12px;display:flex;flex-direction:column;overflow:hidden}
+.phone .av{width:56px;height:56px;border-radius:50%;background:var(--b100);color:var(--b700);display:grid;place-items:center;font-weight:600;font-size:18px;margin:0 auto}
+.phone .nm{text-align:center;font-weight:600;font-size:14px;margin-top:10px}.phone .sb{text-align:center;font-size:11px;color:var(--ink3)}
+.phone .lk{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:12px}
+.phone .lk div,.phone .fb{display:flex;align-items:center;gap:6px;padding:8px;border:1px solid var(--line);background:#fff;border-radius:8px;font-size:10px;font-weight:500;white-space:nowrap;min-width:0}
+.phone .fb{margin-top:6px;padding:9px 10px;font-size:11px}
+.phone svg.i{color:var(--b600);font-size:13px}
+.phone .pbtn{margin-top:auto;display:flex;justify-content:center;align-items:center;gap:6px;background:var(--b600);color:#fff;border-radius:8px;padding:10px;font-size:12px;font-weight:500}
+.phone .pbtn svg{color:#fff}
+
+/* dashboard */
+.app{display:grid;grid-template-columns:250px 1fr;min-height:100vh}
+.side{position:sticky;top:0;height:100vh;border-right:1px solid var(--line);background:var(--surface);padding:16px;display:flex;flex-direction:column}
+.side .logo{padding:4px 8px}.side nav{margin-top:24px;flex:1;overflow:auto}
+.side nav,.drawer nav{display:grid;gap:4px;align-content:start}
+.side nav a,.drawer nav a{display:flex;gap:12px;align-items:center;padding:8px 12px;border-radius:8px;font-size:14px;font-weight:500;color:var(--ink2);transition:background .15s}
+.side nav a:hover,.drawer nav a:hover{background:var(--subtle);color:var(--ink)}.side nav a.on,.drawer nav a.on{background:var(--b50);color:var(--b700)}
+.side nav svg,.drawer nav svg{font-size:16px}
+.apmain{min-width:0}
+.atop{position:sticky;top:0;z-index:30;display:flex;align-items:center;justify-content:space-between;height:64px;padding:0 32px;border-bottom:1px solid var(--line);background:rgb(251 250 248/.92);backdrop-filter:blur(8px)}
+.acontent{max-width:1024px;margin:0 auto;padding:32px}
+.menu-btn{display:none}
+.user{display:flex;gap:8px;align-items:center;padding:6px 10px 6px 6px;border-radius:8px;font-size:14px;font-weight:500}.user:hover{background:var(--subtle)}
+.user i{width:32px;height:32px;border-radius:50%;background:var(--b100);color:var(--b700);display:grid;place-items:center;font-style:normal;font-weight:600;font-size:14px}
+.ptitle{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin-bottom:32px;flex-wrap:wrap}
+.ptitle h1{font-size:24px;font-weight:600}.ptitle p{margin-top:6px;color:var(--ink2)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.stats .card{padding:20px}.stats p{font-size:14px;color:var(--ink2)}.stats b{display:block;font-size:30px;font-weight:600;margin-top:8px}
+.twrap{position:relative;overflow-x:auto;border:1px solid var(--line);border-radius:var(--rl);background:var(--surface);box-shadow:var(--sh)}
+table{width:100%;min-width:640px;border-collapse:collapse;font-size:14px;text-align:left}
+th{background:rgb(244 242 238/.6);font-size:12px;font-weight:500;letter-spacing:.04em;text-transform:uppercase;color:var(--ink3);padding:12px 16px;border-bottom:1px solid var(--line)}
+td{padding:14px 16px;border-bottom:1px solid var(--line)}tr:last-child td{border-bottom:0}tbody tr:hover{background:var(--canvas)}
+td.id{font:12px ui-monospace,Menlo,monospace;color:var(--ink2)}td.dest{max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink2)}
+td.act{text-align:right;padding:8px 12px}
+.tabs{display:inline-flex;gap:4px;padding:4px;border-radius:var(--r);background:var(--subtle);margin-bottom:20px}
+.tabs button{padding:6px 12px;border-radius:7px;font-size:14px;font-weight:500;color:var(--ink3);text-transform:capitalize}
+.tabs button:hover{color:var(--ink)}.tabs button[aria-selected=true]{background:#fff;color:var(--ink);box-shadow:var(--sh)}
+.empty{display:flex;flex-direction:column;align-items:center;text-align:center;padding:56px 24px;border:1px dashed var(--line2);border-radius:var(--rl);background:var(--surface)}
+.empty .ico{border-radius:50%;width:48px;height:48px}.empty h2{font-size:18px;margin-top:16px;font-weight:600}.empty p{margin-top:6px;color:var(--ink2);max-width:380px}.empty .row{margin-top:24px;display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.skel{height:56px;border-radius:var(--r);background:var(--subtle);animation:pulse 1.4s ease-in-out infinite;margin-bottom:12px}
+@keyframes pulse{50%{opacity:.5}}
+.menu{position:absolute;right:12px;z-index:20;min-width:180px;background:#fff;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--lift);padding:4px;text-align:left;animation:up .15s ease-out}
+.menu button,.menu a{display:flex;gap:8px;align-items:center;width:100%;padding:8px 10px;border-radius:6px;font-size:14px;color:var(--ink2);text-align:left}
+.menu button:hover,.menu a:hover{background:var(--subtle);color:var(--ink)}.menu .dng{color:var(--err)}.menu .dng:hover{background:var(--errbg);color:var(--err)}
+.menu hr{border:0;border-top:1px solid var(--line);margin:4px 0}
+@keyframes up{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+dialog{border:1px solid var(--line);border-radius:var(--rl);padding:24px;width:min(440px,calc(100% - 32px));box-shadow:var(--lift);color:var(--ink);background:#fff;margin:auto}
+dialog::backdrop{background:rgb(28 27 34/.4)}dialog h2{font-size:18px;font-weight:600}dialog>p{margin-top:6px;color:var(--ink3);font-size:14px}
+dialog form{margin-top:20px;display:grid;gap:20px}dialog .row{display:flex;justify-content:flex-end;gap:12px}
+.progress{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:32px;list-style:none;padding:0}
+.progress li{display:grid;gap:8px;font-size:14px;font-weight:500;color:var(--ink3)}.progress li:before{content:"";height:4px;border-radius:99px;background:var(--line)}
+.progress li.on{color:var(--ink)}.progress li.on:before,.progress li.done:before{background:var(--b600)}.progress li.done{color:var(--ink3)}
+.cc{display:grid;grid-template-columns:1.3fr 1fr;gap:32px;align-items:start}
+.cc .card.f{padding:24px}.cc aside{position:sticky;top:88px}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px}
+.opt{display:flex;gap:12px;padding:14px;border:1px solid var(--line2);border-radius:var(--r);cursor:pointer;transition:background .15s}
+.opt:hover{background:var(--subtle)}.opt:has(input:checked){border-color:var(--b500);background:rgb(240 240 255/.6);box-shadow:0 0 0 1px var(--b500)}
+.opt input{position:absolute;opacity:0}.opt svg{color:var(--b600);font-size:20px;margin-top:2px}.opt b{display:block;font-size:14px;font-weight:500}.opt span{font-size:14px;color:var(--ink3)}
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.pill{padding:8px 12px;border:1px solid var(--line2);border-radius:var(--r);font-size:14px;font-weight:500;color:var(--ink2);cursor:pointer}
+.pill:hover{background:var(--subtle)}.pill:has(input:checked){border-color:var(--b500);background:var(--b50);color:var(--b700)}.pill input{position:absolute;opacity:0}
+.nav-btns{display:flex;justify-content:space-between;border-top:1px solid var(--line);margin-top:32px;padding-top:20px}
+.qrbox{display:flex;gap:20px;align-items:flex-start}
+.qrbox .q{padding:12px;border:1px solid var(--line);border-radius:var(--rl);background:#fff;flex:none}.qrbox .q svg{display:block;width:160px;height:160px}
+.url{word-break:break-all;background:var(--subtle);border:1px solid var(--line);border-radius:var(--r);padding:8px 12px;font:12px ui-monospace,Menlo,monospace;color:var(--ink2);margin-top:4px}
+.sum{display:grid;gap:8px;margin-top:20px;font-size:14px}.sum div{display:flex;justify-content:space-between;gap:16px}.sum dt{color:var(--ink3)}.sum dd{margin:0;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ptab{margin-top:16px;font-size:14px;line-height:1.7;color:var(--ink2)}.ptab ol{padding-left:20px;margin-top:8px}
+.bars{display:flex;align-items:flex-end;gap:16px;height:192px;margin-top:24px;list-style:none;padding:0}
+.bars li{flex:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:8px;font-size:12px;color:var(--ink3)}
+.bars li i{width:100%;background:var(--b500);border-radius:4px 4px 0 0}.bars li span{color:var(--ink2)}
+.stack{display:grid;gap:12px}
+.row-card{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:16px;flex-wrap:wrap}
+.drawer{display:none;position:fixed;inset:0;z-index:50}.drawer.open{display:block}.drawer .sc{position:absolute;inset:0;background:rgb(28 27 34/.4)}
+.drawer .pn{position:absolute;inset:0 auto 0 0;width:288px;max-width:85%;background:#fff;padding:16px;box-shadow:var(--lift);animation:up .2s}
+@media(max-width:900px){.app{grid-template-columns:1fr}.side{display:none}.menu-btn{display:grid}.atop{padding:0 16px}.acontent{padding:24px 16px}.cc{grid-template-columns:1fr}.cc aside{position:static}.stats{grid-template-columns:1fr}}
+@media(max-width:560px){.opts{grid-template-columns:1fr}.qrbox{flex-direction:column;align-items:center}}
+
+/* auth */
+.auth{min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:40px 16px}
+.auth .box{width:100%;max-width:384px;margin-top:40px}.auth h1{font-size:24px;font-weight:600}.auth .sub{margin-top:6px;color:var(--ink2)}
+.auth form{margin-top:28px;padding:24px;background:#fff;border:1px solid var(--line);border-radius:var(--rl);box-shadow:var(--sh);display:grid;gap:16px}
+.auth .alt{margin-top:24px;text-align:center;font-size:14px;color:var(--ink2)}.auth .alt a{color:var(--b600);font-weight:500}.auth .alt a:hover{text-decoration:underline}
+
+/* toast */
+#toasts{position:fixed;right:24px;bottom:16px;z-index:90;display:grid;gap:8px;pointer-events:none}
+.toast{pointer-events:auto;display:flex;align-items:center;gap:12px;width:min(380px,calc(100vw - 32px));padding:12px 16px;background:#fff;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--lift);font-size:14px;animation:up .25s ease-out}
+.toast svg{font-size:16px;color:var(--ok)}.toast.error svg{color:var(--err)}.toast span{flex:1}
+@media(max-width:560px){#toasts{right:16px;left:16px}}
+.page{animation:up .35s ease-out both}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+
+/* ===== v2 visual upgrade ===== */
+.js .rv{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1);transition-delay:var(--d,0s)}
+.js .rv.in{opacity:1;transform:none}
+.gt{background:linear-gradient(100deg,#4a3fc4 0%,#7c5cf0 55%,#c14fd8 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.btn-p{background:linear-gradient(180deg,#5a4fd8,#4a3fc4);box-shadow:inset 0 1px 0 rgb(255 255 255/.2),0 8px 18px -8px rgb(74 63 196/.6)}
+.btn-p:hover{background:linear-gradient(180deg,#5247cf,#3d33a8)}
+.btn.lg{border-radius:12px}
+.hero-wrap{position:relative;overflow:hidden}
+.hero-wrap:before{content:"";position:absolute;inset:0;background:radial-gradient(640px 420px at 82% 16%,rgb(124 92 240/.22),transparent 62%),radial-gradient(520px 360px at 6% 0,rgb(74 63 196/.10),transparent 62%),radial-gradient(420px 300px at 60% 100%,rgb(193 79 216/.10),transparent 62%);pointer-events:none}
+.hero-wrap:after{content:"";position:absolute;inset:0;background-image:radial-gradient(#cdc7ec 1px,transparent 1px);background-size:22px 22px;-webkit-mask-image:radial-gradient(ellipse 55% 60% at 72% 36%,#000,transparent 75%);mask-image:radial-gradient(ellipse 55% 60% at 72% 36%,#000,transparent 75%);opacity:.75;pointer-events:none}
+.hero-wrap .wrap{position:relative;z-index:1}
+.hero h1{font-size:clamp(42px,6.2vw,76px);font-weight:700;line-height:1.02;letter-spacing:-.035em}
+.hero .hl{animation:up .7s ease-out both}
+.pillb{display:inline-flex;align-items:center;gap:8px;padding:5px 14px 5px 5px;border:1px solid var(--b100);background:rgb(255 255 255/.85);border-radius:999px;font-size:13px;font-weight:500;color:var(--b700);box-shadow:var(--sh);margin-bottom:24px}
+.pillb b{background:var(--b600);color:#fff;border-radius:999px;font-size:11px;padding:3px 9px;font-weight:600;letter-spacing:.02em}
+.trust{display:flex;flex-wrap:wrap;gap:10px 24px;margin-top:28px;font-size:14px;color:var(--ink2);list-style:none;padding:0}
+.trust li{display:flex;gap:8px;align-items:center}.trust svg{color:var(--b600);font-size:16px}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes floatr{0%,100%{transform:rotate(-6deg) translateY(0)}50%{transform:rotate(-6deg) translateY(-9px)}}
+@keyframes fadein{from{opacity:0}to{opacity:1}}
+.hm .bg{background:linear-gradient(160deg,#ebe7ff,#f6f1ff 60%,#fdeef8);box-shadow:inset 0 0 0 1px var(--b100)}
+.hm .ph{animation:floaty 7s ease-in-out infinite}
+
+.fchip{position:absolute;display:flex;align-items:center;gap:8px;padding:8px 12px 8px 8px;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:var(--lift);font-size:12px;font-weight:600;white-space:nowrap;animation:floaty 5s ease-in-out infinite;z-index:3}
+.fchip i{width:24px;height:24px;border-radius:8px;display:grid;place-items:center;background:var(--b50);color:var(--b600);font-size:13px}
+.fchip.ok i{background:var(--okbg);color:var(--ok)}
+@media(max-width:520px){.fchip.hm2{display:none}}
+.marq{border-block:1px solid var(--line);background:var(--surface);overflow:hidden;padding:18px 0}
+.marq .tr{display:flex;gap:12px;width:max-content;animation:marq 42s linear infinite}
+.marq:hover .tr{animation-play-state:paused}
+.marq span{display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border:1px solid var(--line);border-radius:999px;font-size:14px;font-weight:500;color:var(--ink2);background:var(--canvas);white-space:nowrap}
+.marq span svg{color:var(--b600)}
+@keyframes marq{to{transform:translateX(-50%)}}
+@media(prefers-reduced-motion:reduce){.marq .tr{animation:none;flex-wrap:wrap;width:auto;justify-content:center;padding:0 16px}.hm .ph,.fchip{animation:none}}
+.how{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;position:relative;list-style:none;padding:0}
+.how:before{content:"";position:absolute;top:34px;left:17%;right:17%;border-top:2px dashed #cbcbfa}
+.how li{text-align:center;position:relative}
+.how .n{width:68px;height:68px;margin:0 auto;border-radius:20px;display:grid;place-items:center;font-size:26px;color:#fff;background:linear-gradient(135deg,#5a4fd8,#7c5cf0);box-shadow:inset 0 1px 0 rgb(255 255 255/.3),0 14px 26px -10px rgb(90 79 216/.65);position:relative;z-index:1}
+.how .k{display:block;margin-top:18px;font-size:13px;font-weight:600;letter-spacing:.08em;color:var(--b600)}
+.how h3{margin-top:6px;font-size:20px}.how p{margin:8px auto 0;max-width:280px;color:var(--ink2)}
+@media(max-width:760px){.how{grid-template-columns:1fr}.how:before{display:none}}
+.demo{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+.demo h2{font-size:clamp(28px,4vw,40px);font-weight:700}.demo .lead{margin-top:16px;font-size:18px;color:var(--ink2);line-height:1.65}
+.dtabs{display:grid;gap:10px;margin-top:28px}
+.dtab{display:flex;gap:14px;align-items:center;width:100%;text-align:left;padding:12px 16px;border:1px solid var(--line);background:#fff;border-radius:14px;transition:border-color .2s,box-shadow .2s}
+.dtab:hover{border-color:#cbcbfa}
+.dtab[aria-selected=true]{border-color:var(--b500);box-shadow:0 0 0 1px var(--b500),var(--lift)}
+.dtab .ico{width:40px;height:40px;font-size:18px;flex:none}
+.dtab b{display:block;font-weight:600;font-size:15px}.dtab .d{font-size:14px;color:var(--ink3)}
+.stage{position:relative;display:grid;justify-items:center;gap:20px;padding:44px 24px 32px;border-radius:28px;background:linear-gradient(160deg,#ebe7ff,#f6f1ff 55%,#fdeef8);border:1px solid var(--b100);overflow:hidden}
+.stage:before{content:"";position:absolute;inset:0;background-image:radial-gradient(#d3cdee 1px,transparent 1px);background-size:20px 20px;-webkit-mask-image:radial-gradient(circle at 50% 40%,#000,transparent 70%);mask-image:radial-gradient(circle at 50% 40%,#000,transparent 70%);opacity:.7}
+.stage .phone{width:232px;position:relative}
+.stage .phone .scr{animation:none}
+.urlb{position:relative;display:flex;flex-wrap:wrap;gap:4px 12px;justify-content:center;align-items:center;padding:10px 14px;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:var(--sh);font-size:12px;color:var(--ink2)}
+.urlb code{font:12px ui-monospace,Menlo,monospace;color:var(--ink)}.urlb svg{color:var(--b600)}.urlb b{color:var(--b700)}
+#dscr.fade>*{animation:fadein .4s ease-out both}
+.phone svg.f{fill:var(--b600)}
+.phone .mi{display:grid;gap:6px;margin-top:12px}
+.phone .mi div{display:flex;justify-content:space-between;align-items:center;padding:10px;border:1px solid var(--line);background:#fff;border-radius:8px;font-size:11px;font-weight:500}
+.phone .stars{display:flex;justify-content:center;gap:4px;margin:16px 0 4px;font-size:22px}
+.phone .stars svg{font-size:22px}
+.phone .big{font-size:15px;font-weight:600;text-align:center;margin-top:10px}
+.bento{display:grid;grid-template-columns:repeat(6,1fr);gap:16px}
+.bc{grid-column:span 2;position:relative;overflow:hidden;display:flex;flex-direction:column;padding:28px;background:linear-gradient(180deg,#fff 45%,#faf9ff);border:1px solid var(--line);border-radius:20px;transition:transform .25s,box-shadow .25s,border-color .25s}
+.bc.c3{grid-column:span 3}
+.bc:hover{transform:translateY(-3px);box-shadow:var(--lift);border-color:#cbcbfa}
+.bc .ico{width:42px;height:42px;font-size:19px;background:linear-gradient(135deg,#ece9ff,#f6f1ff);box-shadow:inset 0 0 0 1px var(--b100)}
+.bc h3{font-size:18px;margin-top:16px}.bc p{margin-top:6px;font-size:14px;line-height:1.6;color:var(--ink2);max-width:440px}
+.bv{margin-top:24px;min-height:150px;margin-top:auto;border-radius:14px;background-color:var(--subtle);background-image:radial-gradient(#dfdaf0 1px,transparent 1px);background-size:16px 16px;display:grid;place-items:center;padding:16px;position:relative;overflow:hidden}
+.bt{margin-bottom:24px}
+.rip{position:relative;width:96px;height:96px;display:grid;place-items:center}
+.rip i{position:absolute;inset:0;border-radius:50%;border:2px solid rgb(90 79 216/.45);animation:ring 2.8s ease-out infinite}
+.rip i:nth-child(2){animation-delay:.9s}.rip i:nth-child(3){animation-delay:1.8s}
+.rip b{width:52px;height:52px;border-radius:16px;background:linear-gradient(135deg,#5a4fd8,#7c5cf0);color:#fff;display:grid;place-items:center;font-size:24px;box-shadow:0 10px 22px -8px rgb(90 79 216/.7);position:relative}
+.qrs{position:relative;width:124px;height:124px;background:#fff;padding:8px;border-radius:14px;box-shadow:var(--lift)}.qrs svg{width:100%;height:100%;display:block}
+.qrs u{position:absolute;left:4px;right:4px;top:10px;height:2px;background:linear-gradient(90deg,transparent,#5a4fd8,transparent);box-shadow:0 0 12px #5a4fd8;animation:scan 2.6s ease-in-out infinite}
+@keyframes scan{0%,100%{top:10px}50%{top:calc(100% - 12px)}}
+.mini{display:grid;gap:8px;width:100%;max-width:230px;font-size:12px}
+.mini div{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 10px;box-shadow:var(--sh);font-weight:500}
+.mini svg{color:var(--b600);font-size:14px}.mini .sp{margin-left:auto}
+.swap{display:flex;align-items:center;gap:10px;font-size:12px;font-weight:500;flex-wrap:wrap;justify-content:center}
+.swap span{background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 10px;box-shadow:var(--sh)}
+.swap .on{border-color:var(--b500);color:var(--b700);background:var(--b50)}.swap svg{color:var(--b600)}
+@media(max-width:900px){.bc,.bc.c3{grid-column:span 3}.demo{grid-template-columns:1fr;gap:40px}}
+@media(max-width:640px){.bento{grid-template-columns:1fr}.bc,.bc.c3{grid-column:auto}}
+.uc{padding:24px;border-radius:18px;position:relative;overflow:hidden}
+.uc .ico{background:var(--cb,var(--b50));color:var(--c,var(--b600));border-radius:12px}
+.uc:after{content:"";position:absolute;right:-30px;top:-30px;width:110px;height:110px;border-radius:50%;background:var(--cb);opacity:.55;transition:transform .35s}
+.uc:hover:after{transform:scale(1.35)}
+.panel{background:linear-gradient(160deg,#eeebff,#f7f3ff 60%,#fdf0f8);border-color:var(--b100);border-radius:24px}
+.pagehead{position:relative;overflow:hidden;background:radial-gradient(520px 260px at 88% 0,rgb(124 92 240/.16),transparent 62%),radial-gradient(420px 220px at 0 100%,rgb(193 79 216/.08),transparent 62%),var(--surface)}
+.pagehead h1{font-weight:700;letter-spacing:-.03em}
+.band{position:relative;overflow:hidden;background:radial-gradient(620px 320px at 12% 0,rgb(124 92 240/.55),transparent 60%),radial-gradient(520px 320px at 92% 100%,rgb(193 79 216/.38),transparent 60%),var(--b900);border-radius:28px;padding:72px 24px}
+.band:before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgb(255 255 255/.16) 1px,transparent 1px);background-size:22px 22px;-webkit-mask-image:radial-gradient(ellipse 60% 70% at 50% 50%,#000,transparent 80%);mask-image:radial-gradient(ellipse 60% 70% at 50% 50%,#000,transparent 80%)}
+.band>*{position:relative}.band h2{font-weight:700;letter-spacing:-.03em}
+.person{border-radius:20px;transition:transform .25s,box-shadow .25s}.person:hover{transform:translateY(-3px);box-shadow:var(--lift)}
+.person .av{background:linear-gradient(135deg,#5a4fd8,#c14fd8);color:#fff;box-shadow:0 10px 20px -8px rgb(90 79 216/.6)}
+.sh h2{font-weight:700;letter-spacing:-.03em}
+.step,.feat{transition:transform .25s}
+header.top{box-shadow:0 1px 0 rgb(255 255 255/.6) inset}
+.authw{display:grid;grid-template-columns:1.05fr 1fr;min-height:100vh}
+.authl{position:relative;overflow:hidden;color:#fff;padding:48px;display:flex;flex-direction:column;justify-content:space-between;background:radial-gradient(520px 380px at 18% 0,rgb(124 92 240/.6),transparent 60%),radial-gradient(520px 380px at 100% 100%,rgb(193 79 216/.38),transparent 60%),var(--b900)}
+.authl .logo{color:#fff}.authl h2{font-size:clamp(28px,3vw,42px);font-weight:700;line-height:1.08;letter-spacing:-.03em;max-width:440px}
+.authl p{color:rgb(255 255 255/.72);margin-top:14px;max-width:400px;font-size:17px}
+.authr{background:var(--canvas)}.authr>.logo{display:none}
+@media(max-width:900px){.authw{grid-template-columns:1fr}.authl{display:none}.authr>.logo{display:inline-flex}}
+.promo{display:grid;grid-template-columns:1fr 280px;gap:24px;align-items:center;padding:32px;margin-bottom:24px;color:#fff;border-radius:20px;overflow:hidden;position:relative;background:radial-gradient(420px 260px at 10% 0,rgb(124 92 240/.55),transparent 60%),var(--b900)}
+.promo h2{font-size:22px;font-weight:700;letter-spacing:-.02em}.promo p{margin:8px 0 20px;color:rgb(255 255 255/.75);max-width:420px}
+@media(max-width:700px){.promo{grid-template-columns:1fr}.promo .pm{display:none}}
+.stats .ico{width:36px;height:36px;font-size:16px;margin-bottom:14px}
+
+
+/* request form */
+.rq{display:grid;grid-template-columns:.9fr 1.1fr;gap:56px;align-items:start;padding:64px 0 88px}
+.rq h1{font-size:clamp(34px,4.6vw,54px);font-weight:700;letter-spacing:-.03em}
+.rq .lead{margin-top:18px;font-size:18px;line-height:1.65;color:var(--ink2);max-width:480px}
+.rq ol{list-style:none;padding:0;margin-top:32px;display:grid;gap:18px}
+.rq ol li{display:flex;gap:14px;align-items:flex-start}
+.rq ol b{display:block;font-weight:600}.rq ol span.d{font-size:14px;color:var(--ink2)}
+.rq ol i{width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,#5a4fd8,#7c5cf0);color:#fff;display:grid;place-items:center;font-style:normal;font-weight:600;font-size:14px;flex:none}
+.rq .mock{margin-top:36px;max-width:340px}
+.rqc{padding:32px;border-radius:20px;box-shadow:var(--lift)}
+.rqc form{display:grid;gap:20px}
+.rqc h2{font-size:20px;font-weight:600}
+.rqc .two{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}.rqc .field{align-content:start}
+.rqc textarea.input{height:auto;min-height:88px;padding:10px 12px;resize:vertical;line-height:1.5}
+.pill:has(input:focus-visible){outline:2px solid var(--b500);outline-offset:2px}
+.pill{display:inline-flex;align-items:center;gap:6px}.pill svg{font-size:15px}
+.chk{display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--ink2);cursor:pointer}
+.chk input{width:18px;height:18px;margin-top:2px;accent-color:var(--b600);flex:none}
+.rqok{text-align:center;padding:24px 8px}
+.rqok .big{width:60px;height:60px;border-radius:50%;background:var(--okbg);color:var(--ok);display:grid;place-items:center;font-size:28px;margin:0 auto}
+.rqok h2{margin-top:18px;font-size:24px}.rqok p{margin-top:8px;color:var(--ink2)}
+.rqok dl{margin:24px auto 0;max-width:360px;text-align:left;display:grid;gap:10px;font-size:14px;padding:16px;background:var(--subtle);border-radius:12px}
+.rqok dl div{display:flex;justify-content:space-between;gap:16px}.rqok dt{color:var(--ink3)}.rqok dd{margin:0;font-weight:500;text-align:right}
+.band .row2{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:32px}.band .row2 .btn{margin-top:0}
+.btn-o{border:1px solid rgb(255 255 255/.4);color:#fff}.btn-o:hover{background:rgb(255 255 255/.12)}
+@media(max-width:900px){.rq{grid-template-columns:1fr;gap:40px;padding:40px 0 64px}.rq .mock{display:none}}
+@media(max-width:560px){.rqc{padding:20px}.rqc .two{grid-template-columns:1fr}}
+
+.req{color:var(--err);font-weight:600}
+.opt:has(input:focus-visible){outline:2px solid var(--b500);outline-offset:2px}
+
+.pc{--ac:#4a3fc4;position:relative;container-type:inline-size;aspect-ratio:5/8;width:100%;border-radius:6%/3.75%;overflow:hidden;display:flex;flex-direction:column;color:#fff;box-shadow:0 24px 40px -18px rgb(20 16 60/.45),0 0 0 1px rgb(0 0 0/.06);isolation:isolate;background:linear-gradient(160deg,#5b50d6,#2c2478)}
+.pc>*{position:relative;z-index:1}.pc>.pc-d{position:absolute;inset:0;z-index:0;pointer-events:none}
+.pc-top{padding:7cqw 7cqw 0;display:flex;flex-direction:column;align-items:center;text-align:center;gap:3.5cqw}
+.pc-badge{width:14cqw;height:14cqw;border-radius:50%;background:#fff;display:grid;place-items:center;color:var(--ac);box-shadow:0 2cqw 5cqw -2cqw rgb(0 0 0/.35)}
+.pc-badge svg{width:58%;height:58%;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.pc-h{margin:0;font-size:8.6cqw;line-height:1.1;font-weight:700;letter-spacing:-.02em}.pc-h span{display:block}
+.pc-body{flex:1;display:grid;place-items:center;padding:4cqw 19cqw 2cqw;min-height:0}
+.pc-qr{width:100%;aspect-ratio:1;background:#fff;border-radius:6cqw;padding:5cqw;box-shadow:0 3cqw 8cqw -3cqw rgb(0 0 0/.4)}.pc-qr svg{width:100%;height:100%;display:block}
+.pc-foot{padding:0 7cqw 6cqw;display:grid;justify-items:center;gap:2cqw;text-align:center}
+.pc-tap{font-size:4.2cqw;font-weight:700;letter-spacing:.16em}.pc-nfc{width:11cqw;height:11cqw}
+.pc-by{font-size:3.2cqw;opacity:.85}.pc-by b{font-weight:700}
+.pc-wave{position:absolute;left:0;right:0;bottom:0;width:100%;height:30%}
+.pc-ic{position:absolute;width:9cqw;height:9cqw;color:#fff;opacity:.55;transform:rotate(var(--r,0deg));display:grid}.pc-ic svg{width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.pc-insta{--ac:#e1306c;background:linear-gradient(165deg,#f9a03f 0%,#e1306c 48%,#6d3fc4 100%)}
+.pc-review{--ac:#f5a524;background:linear-gradient(165deg,#3b82f6,#1d4ed8)}.pc-review .pc-badge svg{fill:#f5a524;stroke:#f5a524}
+.pc-review .pc-body{margin:3cqw 6cqw 0;background:#fff;border-radius:6cqw;flex:1;padding:5cqw 17cqw}.pc-review .pc-qr{box-shadow:none;padding:0}
+.pc-menu{--ac:#c2651b;background:#f7f3ea;color:#1d1a14;box-shadow:0 24px 40px -18px rgb(60 40 10/.35),0 0 0 1px rgb(0 0 0/.08)}
+.pc-menu .pc-badge{background:transparent;box-shadow:none;color:#1d1a14;width:16cqw;height:16cqw}.pc-menu .pc-badge svg{width:100%;height:100%;stroke-width:1.6}
+.pc-menu .pc-h{font-family:Georgia,'Times New Roman',serif;font-size:11cqw;letter-spacing:.02em;font-weight:700}
+.pc-menu .pc-qr{border:1.2cqw solid var(--ac);box-shadow:none}.pc-menu .pc-tap{background:#111;color:#fff;border-radius:99px;padding:2.4cqw 6cqw;font-size:3.6cqw}
+.pc-menu .pc-nfc{display:none}.pc-menu .pc-foot{gap:3cqw}
+.pc-leaves{position:absolute;inset:0;width:100%;height:100%}
+.fan3{display:grid;grid-template-columns:repeat(3,1fr);gap:3%;align-items:end;max-width:600px;margin:auto}.fan3 .f{margin:0;text-align:center}
+.fan3 figcaption{font-size:12px;color:var(--ink3);margin-top:10px;font-weight:500}
+.fan3 .f1{transform:rotate(-5deg) translateY(10px)}.fan3 .f3{transform:rotate(5deg) translateY(10px)}.fan3 .f2{position:relative;z-index:2;transform:translateY(-6px)}
+.sg{display:flex;align-items:center;justify-content:center;gap:28px;flex-wrap:wrap}.sg .sc{width:190px;transform:rotate(-5deg);transition:transform .3s}.sg .sc .pc{transition:opacity .25s}
+.hm .cd{position:absolute;transition:transform .3s;animation:cfloat 6s ease-in-out infinite;--r:-8deg}
+.hm .c1{left:0;bottom:44px;width:37%}.hm .c2{left:25%;bottom:0;width:35%;--r:6deg;animation-delay:-3s;z-index:3}
+@keyframes cfloat{0%,100%{transform:rotate(var(--r)) translateY(0)}50%{transform:rotate(var(--r)) translateY(-9px)}}
+.authv{position:relative;height:310px;margin:32px 0 0}.authv>div{position:absolute;width:35%}
+.authv .a1{left:0;top:18px;transform:rotate(-8deg)}.authv .a3{left:32.5%;top:0;z-index:2;animation:floaty 7s ease-in-out infinite}.authv .a2{right:0;top:30px;transform:rotate(8deg)}
+.promo .pm{width:150px;justify-self:end;margin:-6px 8px -90px 0;transform:rotate(6deg)}
+.rq .mock{margin-top:36px;max-width:420px}
+@media(max-width:520px){.hm .c1{width:40%}.hm .c2{width:38%;left:24%}.sg .sc{width:150px}}
+@media(prefers-reduced-motion:reduce){.hm .cd,.authv .a3{animation:none;transform:rotate(var(--r,0deg))}}
+</style>
+</head>
+<body>
+<a href="#main" class="sr" onfocus="this.className='';this.style.cssText='position:absolute;left:12px;top:12px;z-index:99;background:#fff;padding:8px 12px;border-radius:8px'">Skip to content</a>
+<div id="view"></div>
+<div id="toasts" aria-live="polite"></div>
+<dialog id="dlg"></dialog>
+
+<script>/* yup 1.4.0 (MIT), bundled inline so this file works offline */
+(()=>{var tt=Object.create;var re=Object.defineProperty;var rt=Object.getOwnPropertyDescriptor;var nt=Object.getOwnPropertyNames;var st=Object.getPrototypeOf,it=Object.prototype.hasOwnProperty;var ne=(n,e)=>()=>{try{return e||n((e={exports:{}}).exports,e),e.exports}catch(t){throw e=0,t}},ut=(n,e)=>{for(var t in e)re(n,t,{get:e[t],enumerable:!0})},at=(n,e,t,r)=>{if(e&&typeof e=="object"||typeof e=="function")for(let s of nt(e))!it.call(n,s)&&s!==t&&re(n,s,{get:()=>e[s],enumerable:!(r=rt(e,s))||r.enumerable});return n};var se=(n,e,t)=>(t=n!=null?tt(st(n)):{},at(e||!n||!n.__esModule?re(t,"default",{value:n,enumerable:!0}):t,n));var Se=ne((nr,ke)=>{"use strict";function A(n){this._maxSize=n,this.clear()}A.prototype.clear=function(){this._size=0,this._values=Object.create(null)};A.prototype.get=function(n){return this._values[n]};A.prototype.set=function(n,e){return this._size>=this._maxSize&&this.clear(),n in this._values||this._size++,this._values[n]=e};var lt=/[^.^\]^[]+|(?=\[\]|\.\.)/g,Oe=/^\d+$/,ot=/^\d/,ct=/[~`!#$%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/g,ft=/^\s*(['"]?)(.*?)(\1)\s*$/,ae=512,$e=new A(ae),Fe=new A(ae),Ee=new A(ae);ke.exports={Cache:A,split:ue,normalizePath:ie,setter:function(n){var e=ie(n);return Fe.get(n)||Fe.set(n,function(r,s){for(var i=0,u=e.length,a=r;i<u-1;){var l=e[i];if(l==="__proto__"||l==="constructor"||l==="prototype")return r;a=a[e[i++]]}a[e[i]]=s})},getter:function(n,e){var t=ie(n);return Ee.get(n)||Ee.set(n,function(s){for(var i=0,u=t.length;i<u;)if(s!=null||!e)s=s[t[i++]];else return;return s})},join:function(n){return n.reduce(function(e,t){return e+(le(t)||Oe.test(t)?"["+t+"]":(e?".":"")+t)},"")},forEach:function(n,e,t){ht(Array.isArray(n)?n:ue(n),e,t)}};function ie(n){return $e.get(n)||$e.set(n,ue(n).map(function(e){return e.replace(ft,"$2")}))}function ue(n){return n.match(lt)||[""]}function ht(n,e,t){var r=n.length,s,i,u,a;for(i=0;i<r;i++)s=n[i],s&&(mt(s)&&(s='"'+s+'"'),a=le(s),u=!a&&/^\d+$/.test(s),e.call(t,s,a,u,i,n))}function le(n){return typeof n=="string"&&n&&["'",'"'].indexOf(n.charAt(0))!==-1}function dt(n){return n.match(ot)&&!n.match(Oe)}function pt(n){return ct.test(n)}function mt(n){return!le(n)&&(dt(n)||pt(n))}});var je=ne((sr,De)=>{var yt=/[A-Z\xc0-\xd6\xd8-\xde]?[a-z\xdf-\xf6\xf8-\xff]+(?:['’](?:d|ll|m|re|s|t|ve))?(?=[\xac\xb1\xd7\xf7\x00-\x2f\x3a-\x40\x5b-\x60\x7b-\xbf\u2000-\u206f \t\x0b\f\xa0\ufeff\n\r\u2028\u2029\u1680\u180e\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200a\u202f\u205f\u3000]|[A-Z\xc0-\xd6\xd8-\xde]|$)|(?:[A-Z\xc0-\xd6\xd8-\xde]|[^\ud800-\udfff\xac\xb1\xd7\xf7\x00-\x2f\x3a-\x40\x5b-\x60\x7b-\xbf\u2000-\u206f \t\x0b\f\xa0\ufeff\n\r\u2028\u2029\u1680\u180e\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200a\u202f\u205f\u3000\d+\u2700-\u27bfa-z\xdf-\xf6\xf8-\xffA-Z\xc0-\xd6\xd8-\xde])+(?:['’](?:D|LL|M|RE|S|T|VE))?(?=[\xac\xb1\xd7\xf7\x00-\x2f\x3a-\x40\x5b-\x60\x7b-\xbf\u2000-\u206f \t\x0b\f\xa0\ufeff\n\r\u2028\u2029\u1680\u180e\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200a\u202f\u205f\u3000]|[A-Z\xc0-\xd6\xd8-\xde](?:[a-z\xdf-\xf6\xf8-\xff]|[^\ud800-\udfff\xac\xb1\xd7\xf7\x00-\x2f\x3a-\x40\x5b-\x60\x7b-\xbf\u2000-\u206f \t\x0b\f\xa0\ufeff\n\r\u2028\u2029\u1680\u180e\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200a\u202f\u205f\u3000\d+\u2700-\u27bfa-z\xdf-\xf6\xf8-\xffA-Z\xc0-\xd6\xd8-\xde])|$)|[A-Z\xc0-\xd6\xd8-\xde]?(?:[a-z\xdf-\xf6\xf8-\xff]|[^\ud800-\udfff\xac\xb1\xd7\xf7\x00-\x2f\x3a-\x40\x5b-\x60\x7b-\xbf\u2000-\u206f \t\x0b\f\xa0\ufeff\n\r\u2028\u2029\u1680\u180e\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200a\u202f\u205f\u3000\d+\u2700-\u27bfa-z\xdf-\xf6\xf8-\xffA-Z\xc0-\xd6\xd8-\xde])+(?:['’](?:d|ll|m|re|s|t|ve))?|[A-Z\xc0-\xd6\xd8-\xde]+(?:['’](?:D|LL|M|RE|S|T|VE))?|\d*(?:1ST|2ND|3RD|(?![123])\dTH)(?=\b|[a-z_])|\d*(?:1st|2nd|3rd|(?![123])\dth)(?=\b|[A-Z_])|\d+|(?:[\u2700-\u27bf]|(?:\ud83c[\udde6-\uddff]){2}|[\ud800-\udbff][\udc00-\udfff])[\ufe0e\ufe0f]?(?:[\u0300-\u036f\ufe20-\ufe2f\u20d0-\u20ff]|\ud83c[\udffb-\udfff])?(?:\u200d(?:[^\ud800-\udfff]|(?:\ud83c[\udde6-\uddff]){2}|[\ud800-\udbff][\udc00-\udfff])[\ufe0e\ufe0f]?(?:[\u0300-\u036f\ufe20-\ufe2f\u20d0-\u20ff]|\ud83c[\udffb-\udfff])?)*/g,Y=n=>n.match(yt)||[],G=n=>n[0].toUpperCase()+n.slice(1),oe=(n,e)=>Y(n).join(e).toLowerCase(),Ae=n=>Y(n).reduce((e,t)=>`${e}${e?t[0].toUpperCase()+t.slice(1).toLowerCase():t.toLowerCase()}`,""),bt=n=>G(Ae(n)),xt=n=>oe(n,"_"),gt=n=>oe(n,"-"),vt=n=>G(oe(n," ")),wt=n=>Y(n).map(G).join(" ");De.exports={words:Y,upperFirst:G,camelCase:Ae,pascalCase:bt,snakeCase:xt,kebabCase:gt,sentenceCase:vt,titleCase:wt}});var Ne=ne((ir,ce)=>{ce.exports=function(n){return Ce(_t(n),n)};ce.exports.array=Ce;function Ce(n,e){var t=n.length,r=new Array(t),s={},i=t,u=Tt(e),a=$t(n);for(e.forEach(function(o){if(!a.has(o[0])||!a.has(o[1]))throw new Error("Unknown node. There is an unknown node in the supplied edges.")});i--;)s[i]||l(n[i],i,new Set);return r;function l(o,f,c){if(c.has(o)){var h;try{h=", node was:"+JSON.stringify(o)}catch{h=""}throw new Error("Cyclic dependency"+h)}if(!a.has(o))throw new Error("Found unknown node. Make sure to provided all involved nodes. Unknown node: "+JSON.stringify(o));if(!s[f]){s[f]=!0;var d=u.get(o)||new Set;if(d=Array.from(d),f=d.length){c.add(o);do{var v=d[--f];l(v,a.get(v),c)}while(f);c.delete(o)}r[--t]=o}}}function _t(n){for(var e=new Set,t=0,r=n.length;t<r;t++){var s=n[t];e.add(s[0]),e.add(s[1])}return Array.from(e)}function Tt(n){for(var e=new Map,t=0,r=n.length;t<r;t++){var s=n[t];e.has(s[0])||e.set(s[0],new Set),e.has(s[1])||e.set(s[1],new Set),e.get(s[0]).add(s[1])}return e}function $t(n){for(var e=new Map,t=0,r=n.length;t<r;t++)e.set(n[t],t);return e}});var xe={};ut(xe,{ArraySchema:()=>U,BooleanSchema:()=>I,DateSchema:()=>N,MixedSchema:()=>V,NumberSchema:()=>R,ObjectSchema:()=>P,Schema:()=>m,StringSchema:()=>M,TupleSchema:()=>Z,ValidationError:()=>y,addMethod:()=>er,array:()=>We,bool:()=>Ge,boolean:()=>Ge,date:()=>be,defaultLocale:()=>Le,getIn:()=>ye,isSchema:()=>D,lazy:()=>Qt,mixed:()=>Ye,number:()=>He,object:()=>Qe,printValue:()=>T,reach:()=>Ct,ref:()=>jt,setLocale:()=>Wt,string:()=>Xe,tuple:()=>et});var g=se(Se()),z=se(je()),Me=se(Ne()),Ft=Object.prototype.toString,Et=Error.prototype.toString,Ot=RegExp.prototype.toString,kt=typeof Symbol!="undefined"?Symbol.prototype.toString:()=>"",St=/^Symbol\((.*)\)(.*)$/;function At(n){return n!=+n?"NaN":n===0&&1/n<0?"-0":""+n}function ze(n,e=!1){if(n==null||n===!0||n===!1)return""+n;let t=typeof n;if(t==="number")return At(n);if(t==="string")return e?`"${n}"`:n;if(t==="function")return"[Function "+(n.name||"anonymous")+"]";if(t==="symbol")return kt.call(n).replace(St,"Symbol($1)");let r=Ft.call(n).slice(8,-1);return r==="Date"?isNaN(n.getTime())?""+n:n.toISOString(n):r==="Error"||n instanceof Error?"["+Et.call(n)+"]":r==="RegExp"?Ot.call(n):null}function T(n,e){let t=ze(n,e);return t!==null?t:JSON.stringify(n,function(r,s){let i=ze(this[r],e);return i!==null?i:s},2)}function Re(n){return n==null?[]:[].concat(n)}var Pe,Ue,Ze,Dt=/\$\{\s*(\w+)\s*\}/g;Pe=Symbol.toStringTag;var J=class{constructor(e,t,r,s){this.name=void 0,this.message=void 0,this.value=void 0,this.path=void 0,this.type=void 0,this.params=void 0,this.errors=void 0,this.inner=void 0,this[Pe]="Error",this.name="ValidationError",this.value=t,this.path=r,this.type=s,this.errors=[],this.inner=[],Re(e).forEach(i=>{if(y.isError(i)){this.errors.push(...i.errors);let u=i.inner.length?i.inner:[i];this.inner.push(...u)}else this.errors.push(i)}),this.message=this.errors.length>1?`${this.errors.length} errors occurred`:this.errors[0]}};Ue=Symbol.hasInstance;Ze=Symbol.toStringTag;var y=class n extends Error{static formatError(e,t){let r=t.label||t.path||"this";return r!==t.path&&(t=Object.assign({},t,{path:r})),typeof e=="string"?e.replace(Dt,(s,i)=>T(t[i])):typeof e=="function"?e(t):e}static isError(e){return e&&e.name==="ValidationError"}constructor(e,t,r,s,i){let u=new J(e,t,r,s);if(i)return u;super(),this.value=void 0,this.path=void 0,this.type=void 0,this.params=void 0,this.errors=[],this.inner=[],this[Ze]="Error",this.name=u.name,this.message=u.message,this.type=u.type,this.value=u.value,this.path=u.path,this.errors=u.errors,this.inner=u.inner,Error.captureStackTrace&&Error.captureStackTrace(this,n)}static[Ue](e){return J[Symbol.hasInstance](e)||super[Symbol.hasInstance](e)}},_={default:"${path} is invalid",required:"${path} is a required field",defined:"${path} must be defined",notNull:"${path} cannot be null",oneOf:"${path} must be one of the following values: ${values}",notOneOf:"${path} must not be one of the following values: ${values}",notType:({path:n,type:e,value:t,originalValue:r})=>{let s=r!=null&&r!==t?` (cast from the value \`${T(r,!0)}\`).`:".";return e!=="mixed"?`${n} must be a \`${e}\` type, but the final value was: \`${T(t,!0)}\``+s:`${n} must match the configured type. The validated value was: \`${T(t,!0)}\``+s}},b={length:"${path} must be exactly ${length} characters",min:"${path} must be at least ${min} characters",max:"${path} must be at most ${max} characters",matches:'${path} must match the following: "${regex}"',email:"${path} must be a valid email",url:"${path} must be a valid URL",uuid:"${path} must be a valid UUID",datetime:"${path} must be a valid ISO date-time",datetime_precision:"${path} must be a valid ISO date-time with a sub-second precision of exactly ${precision} digits",datetime_offset:'${path} must be a valid ISO date-time with UTC "Z" timezone',trim:"${path} must be a trimmed string",lowercase:"${path} must be a lowercase string",uppercase:"${path} must be a upper case string"},O={min:"${path} must be greater than or equal to ${min}",max:"${path} must be less than or equal to ${max}",lessThan:"${path} must be less than ${less}",moreThan:"${path} must be greater than ${more}",positive:"${path} must be a positive number",negative:"${path} must be a negative number",integer:"${path} must be an integer"},fe={min:"${path} field must be later than ${min}",max:"${path} field must be at earlier than ${max}"},he={isValue:"${path} field must be ${value}"},de={noUnknown:"${path} field has unspecified keys: ${unknown}"},H={min:"${path} field must have at least ${min} items",max:"${path} field must have less than or equal to ${max} items",length:"${path} must have ${length} items"},qe={notType:n=>{let{path:e,value:t,spec:r}=n,s=r.types.length;if(Array.isArray(t)){if(t.length<s)return`${e} tuple value has too few items, expected a length of ${s} but got ${t.length} for value: \`${T(t,!0)}\``;if(t.length>s)return`${e} tuple value has too many items, expected a length of ${s} but got ${t.length} for value: \`${T(t,!0)}\``}return y.formatError(_.notType,n)}},Le=Object.assign(Object.create(null),{mixed:_,string:b,number:O,date:fe,object:de,array:H,boolean:he,tuple:qe}),D=n=>n&&n.__isYupSchema__,B=class n{static fromOptions(e,t){if(!t.then&&!t.otherwise)throw new TypeError("either `then:` or `otherwise:` is required for `when()` conditions");let{is:r,then:s,otherwise:i}=t,u=typeof r=="function"?r:(...a)=>a.every(l=>l===r);return new n(e,(a,l)=>{var o;let f=u(...a)?s:i;return(o=f==null?void 0:f(l))!=null?o:l})}constructor(e,t){this.fn=void 0,this.refs=e,this.refs=e,this.fn=t}resolve(e,t){let r=this.refs.map(i=>i.getValue(t==null?void 0:t.value,t==null?void 0:t.parent,t==null?void 0:t.context)),s=this.fn(r,e,t);if(s===void 0||s===e)return e;if(!D(s))throw new TypeError("conditions must return a schema object");return s.resolve(t)}},X={context:"$",value:"."};function jt(n,e){return new $(n,e)}var $=class{constructor(e,t={}){if(this.key=void 0,this.isContext=void 0,this.isValue=void 0,this.isSibling=void 0,this.path=void 0,this.getter=void 0,this.map=void 0,typeof e!="string")throw new TypeError("ref must be a string, got: "+e);if(this.key=e.trim(),e==="")throw new TypeError("ref must be a non-empty string");this.isContext=this.key[0]===X.context,this.isValue=this.key[0]===X.value,this.isSibling=!this.isContext&&!this.isValue;let r=this.isContext?X.context:this.isValue?X.value:"";this.path=this.key.slice(r.length),this.getter=this.path&&(0,g.getter)(this.path,!0),this.map=t.map}getValue(e,t,r){let s=this.isContext?r:this.isValue?e:t;return this.getter&&(s=this.getter(s||{})),this.map&&(s=this.map(s)),s}cast(e,t){return this.getValue(e,t==null?void 0:t.parent,t==null?void 0:t.context)}resolve(){return this}describe(){return{type:"ref",key:this.key}}toString(){return`Ref(${this.key})`}static isRef(e){return e&&e.__isYupRef}};$.prototype.__isYupRef=!0;var w=n=>n==null;function j(n){function e({value:t,path:r="",options:s,originalValue:i,schema:u},a,l){let{name:o,test:f,params:c,message:h,skipAbsent:d}=n,{parent:v,context:x,abortEarly:E=u.spec.abortEarly,disableStackTrace:q=u.spec.disableStackTrace}=s;function k(p){return $.isRef(p)?p.getValue(t,v,x):p}function ge(p={}){let S=Object.assign({value:t,originalValue:i,label:u.spec.label,path:p.path||r,spec:u.spec,disableStackTrace:p.disableStackTrace||q},c,p.params);for(let Te of Object.keys(S))S[Te]=k(S[Te]);let _e=new y(y.formatError(p.message||h,S),t,S.path,p.type||o,S.disableStackTrace);return _e.params=S,_e}let W=E?a:l,ee={path:r,parent:v,type:o,from:s.from,createError:ge,resolve:k,options:s,originalValue:i,schema:u},te=p=>{y.isError(p)?W(p):p?l(null):W(ge())},ve=p=>{y.isError(p)?W(p):a(p)};if(d&&w(t))return te(!0);let L;try{var we;if(L=f.call(ee,t,ee),typeof((we=L)==null?void 0:we.then)=="function"){if(s.sync)throw new Error(`Validation test of type: "${ee.type}" returned a Promise during a synchronous validate. This test will finish after the validate call has returned`);return Promise.resolve(L).then(te,ve)}}catch(p){ve(p);return}te(L)}return e.OPTIONS=n,e}function ye(n,e,t,r=t){let s,i,u;return e?((0,g.forEach)(e,(a,l,o)=>{let f=l?a.slice(1,a.length-1):a;n=n.resolve({context:r,parent:s,value:t});let c=n.type==="tuple",h=o?parseInt(f,10):0;if(n.innerType||c){if(c&&!o)throw new Error(`Yup.reach cannot implicitly index into a tuple type. the path part "${u}" must contain an index to the tuple element, e.g. "${u}[0]"`);if(t&&h>=t.length)throw new Error(`Yup.reach cannot resolve an array item at index: ${a}, in the path: ${e}. because there is no value at that index. `);s=t,t=t&&t[h],n=c?n.spec.types[h]:n.innerType}if(!o){if(!n.fields||!n.fields[f])throw new Error(`The schema does not contain the path: ${e}. (failed at: ${u} which is a type: "${n.type}")`);s=t,t=t&&t[f],n=n.fields[f]}i=f,u=l?"["+a+"]":"."+a}),{schema:n,parent:s,parentPath:i}):{parent:s,parentPath:e,schema:n}}function Ct(n,e,t,r){return ye(n,e,t,r).schema}var Q=class n extends Set{describe(){let e=[];for(let t of this.values())e.push($.isRef(t)?t.describe():t);return e}resolveAll(e){let t=[];for(let r of this.values())t.push(e(r));return t}clone(){return new n(this.values())}merge(e,t){let r=this.clone();return e.forEach(s=>r.add(s)),t.forEach(s=>r.delete(s)),r}};function C(n,e=new Map){if(D(n)||!n||typeof n!="object")return n;if(e.has(n))return e.get(n);let t;if(n instanceof Date)t=new Date(n.getTime()),e.set(n,t);else if(n instanceof RegExp)t=new RegExp(n),e.set(n,t);else if(Array.isArray(n)){t=new Array(n.length),e.set(n,t);for(let r=0;r<n.length;r++)t[r]=C(n[r],e)}else if(n instanceof Map){t=new Map,e.set(n,t);for(let[r,s]of n.entries())t.set(r,C(s,e))}else if(n instanceof Set){t=new Set,e.set(n,t);for(let r of n)t.add(C(r,e))}else if(n instanceof Object){t={},e.set(n,t);for(let[r,s]of Object.entries(n))t[r]=C(s,e)}else throw Error(`Unable to clone ${n}`);return t}var m=class{constructor(e){this.type=void 0,this.deps=[],this.tests=void 0,this.transforms=void 0,this.conditions=[],this._mutate=void 0,this.internalTests={},this._whitelist=new Q,this._blacklist=new Q,this.exclusiveTests=Object.create(null),this._typeCheck=void 0,this.spec=void 0,this.tests=[],this.transforms=[],this.withMutation(()=>{this.typeError(_.notType)}),this.type=e.type,this._typeCheck=e.check,this.spec=Object.assign({strip:!1,strict:!1,abortEarly:!0,recursive:!0,disableStackTrace:!1,nullable:!1,optional:!0,coerce:!0},e==null?void 0:e.spec),this.withMutation(t=>{t.nonNullable()})}get _type(){return this.type}clone(e){if(this._mutate)return e&&Object.assign(this.spec,e),this;let t=Object.create(Object.getPrototypeOf(this));return t.type=this.type,t._typeCheck=this._typeCheck,t._whitelist=this._whitelist.clone(),t._blacklist=this._blacklist.clone(),t.internalTests=Object.assign({},this.internalTests),t.exclusiveTests=Object.assign({},this.exclusiveTests),t.deps=[...this.deps],t.conditions=[...this.conditions],t.tests=[...this.tests],t.transforms=[...this.transforms],t.spec=C(Object.assign({},this.spec,e)),t}label(e){let t=this.clone();return t.spec.label=e,t}meta(...e){if(e.length===0)return this.spec.meta;let t=this.clone();return t.spec.meta=Object.assign(t.spec.meta||{},e[0]),t}withMutation(e){let t=this._mutate;this._mutate=!0;let r=e(this);return this._mutate=t,r}concat(e){if(!e||e===this)return this;if(e.type!==this.type&&this.type!=="mixed")throw new TypeError(`You cannot \`concat()\` schema's of different types: ${this.type} and ${e.type}`);let t=this,r=e.clone(),s=Object.assign({},t.spec,r.spec);return r.spec=s,r.internalTests=Object.assign({},t.internalTests,r.internalTests),r._whitelist=t._whitelist.merge(e._whitelist,e._blacklist),r._blacklist=t._blacklist.merge(e._blacklist,e._whitelist),r.tests=t.tests,r.exclusiveTests=t.exclusiveTests,r.withMutation(i=>{e.tests.forEach(u=>{i.test(u.OPTIONS)})}),r.transforms=[...t.transforms,...r.transforms],r}isType(e){return e==null?!!(this.spec.nullable&&e===null||this.spec.optional&&e===void 0):this._typeCheck(e)}resolve(e){let t=this;if(t.conditions.length){let r=t.conditions;t=t.clone(),t.conditions=[],t=r.reduce((s,i)=>i.resolve(s,e),t),t=t.resolve(e)}return t}resolveOptions(e){var t,r,s,i;return Object.assign({},e,{from:e.from||[],strict:(t=e.strict)!=null?t:this.spec.strict,abortEarly:(r=e.abortEarly)!=null?r:this.spec.abortEarly,recursive:(s=e.recursive)!=null?s:this.spec.recursive,disableStackTrace:(i=e.disableStackTrace)!=null?i:this.spec.disableStackTrace})}cast(e,t={}){let r=this.resolve(Object.assign({value:e},t)),s=t.assert==="ignore-optionality",i=r._cast(e,t);if(t.assert!==!1&&!r.isType(i)){if(s&&w(i))return i;let u=T(e),a=T(i);throw new TypeError(`The value of ${t.path||"field"} could not be cast to a value that satisfies the schema type: "${r.type}". 
+
+attempted value: ${u} 
+`+(a!==u?`result of cast: ${a}`:""))}return i}_cast(e,t){let r=e===void 0?e:this.transforms.reduce((s,i)=>i.call(this,s,e,this),e);return r===void 0&&(r=this.getDefault(t)),r}_validate(e,t={},r,s){let{path:i,originalValue:u=e,strict:a=this.spec.strict}=t,l=e;a||(l=this._cast(l,Object.assign({assert:!1},t)));let o=[];for(let f of Object.values(this.internalTests))f&&o.push(f);this.runTests({path:i,value:l,originalValue:u,options:t,tests:o},r,f=>{if(f.length)return s(f,l);this.runTests({path:i,value:l,originalValue:u,options:t,tests:this.tests},r,s)})}runTests(e,t,r){let s=!1,{tests:i,value:u,originalValue:a,path:l,options:o}=e,f=x=>{s||(s=!0,t(x,u))},c=x=>{s||(s=!0,r(x,u))},h=i.length,d=[];if(!h)return c([]);let v={value:u,originalValue:a,path:l,options:o,schema:this};for(let x=0;x<i.length;x++){let E=i[x];E(v,f,function(k){k&&(Array.isArray(k)?d.push(...k):d.push(k)),--h<=0&&c(d)})}}asNestedTest({key:e,index:t,parent:r,parentPath:s,originalParent:i,options:u}){let a=e!=null?e:t;if(a==null)throw TypeError("Must include `key` or `index` for nested validations");let l=typeof a=="number",o=r[a],f=Object.assign({},u,{strict:!0,parent:r,value:o,originalValue:i[a],key:void 0,[l?"index":"key"]:a,path:l||a.includes(".")?`${s||""}[${l?a:`"${a}"`}]`:(s?`${s}.`:"")+e});return(c,h,d)=>this.resolve(f)._validate(o,f,h,d)}validate(e,t){var r;let s=this.resolve(Object.assign({},t,{value:e})),i=(r=t==null?void 0:t.disableStackTrace)!=null?r:s.spec.disableStackTrace;return new Promise((u,a)=>s._validate(e,t,(l,o)=>{y.isError(l)&&(l.value=o),a(l)},(l,o)=>{l.length?a(new y(l,o,void 0,void 0,i)):u(o)}))}validateSync(e,t){var r;let s=this.resolve(Object.assign({},t,{value:e})),i,u=(r=t==null?void 0:t.disableStackTrace)!=null?r:s.spec.disableStackTrace;return s._validate(e,Object.assign({},t,{sync:!0}),(a,l)=>{throw y.isError(a)&&(a.value=l),a},(a,l)=>{if(a.length)throw new y(a,e,void 0,void 0,u);i=l}),i}isValid(e,t){return this.validate(e,t).then(()=>!0,r=>{if(y.isError(r))return!1;throw r})}isValidSync(e,t){try{return this.validateSync(e,t),!0}catch(r){if(y.isError(r))return!1;throw r}}_getDefault(e){let t=this.spec.default;return t==null?t:typeof t=="function"?t.call(this,e):C(t)}getDefault(e){return this.resolve(e||{})._getDefault(e)}default(e){return arguments.length===0?this._getDefault():this.clone({default:e})}strict(e=!0){return this.clone({strict:e})}nullability(e,t){let r=this.clone({nullable:e});return r.internalTests.nullable=j({message:t,name:"nullable",test(s){return s===null?this.schema.spec.nullable:!0}}),r}optionality(e,t){let r=this.clone({optional:e});return r.internalTests.optionality=j({message:t,name:"optionality",test(s){return s===void 0?this.schema.spec.optional:!0}}),r}optional(){return this.optionality(!0)}defined(e=_.defined){return this.optionality(!1,e)}nullable(){return this.nullability(!0)}nonNullable(e=_.notNull){return this.nullability(!1,e)}required(e=_.required){return this.clone().withMutation(t=>t.nonNullable(e).defined(e))}notRequired(){return this.clone().withMutation(e=>e.nullable().optional())}transform(e){let t=this.clone();return t.transforms.push(e),t}test(...e){let t;if(e.length===1?typeof e[0]=="function"?t={test:e[0]}:t=e[0]:e.length===2?t={name:e[0],test:e[1]}:t={name:e[0],message:e[1],test:e[2]},t.message===void 0&&(t.message=_.default),typeof t.test!="function")throw new TypeError("`test` is a required parameters");let r=this.clone(),s=j(t),i=t.exclusive||t.name&&r.exclusiveTests[t.name]===!0;if(t.exclusive&&!t.name)throw new TypeError("Exclusive tests must provide a unique `name` identifying the test");return t.name&&(r.exclusiveTests[t.name]=!!t.exclusive),r.tests=r.tests.filter(u=>!(u.OPTIONS.name===t.name&&(i||u.OPTIONS.test===s.OPTIONS.test))),r.tests.push(s),r}when(e,t){!Array.isArray(e)&&typeof e!="string"&&(t=e,e=".");let r=this.clone(),s=Re(e).map(i=>new $(i));return s.forEach(i=>{i.isSibling&&r.deps.push(i.key)}),r.conditions.push(typeof t=="function"?new B(s,t):B.fromOptions(s,t)),r}typeError(e){let t=this.clone();return t.internalTests.typeError=j({message:e,name:"typeError",skipAbsent:!0,test(r){return this.schema._typeCheck(r)?!0:this.createError({params:{type:this.schema.type}})}}),t}oneOf(e,t=_.oneOf){let r=this.clone();return e.forEach(s=>{r._whitelist.add(s),r._blacklist.delete(s)}),r.internalTests.whiteList=j({message:t,name:"oneOf",skipAbsent:!0,test(s){let i=this.schema._whitelist,u=i.resolveAll(this.resolve);return u.includes(s)?!0:this.createError({params:{values:Array.from(i).join(", "),resolved:u}})}}),r}notOneOf(e,t=_.notOneOf){let r=this.clone();return e.forEach(s=>{r._blacklist.add(s),r._whitelist.delete(s)}),r.internalTests.blacklist=j({message:t,name:"notOneOf",test(s){let i=this.schema._blacklist,u=i.resolveAll(this.resolve);return u.includes(s)?this.createError({params:{values:Array.from(i).join(", "),resolved:u}}):!0}}),r}strip(e=!0){let t=this.clone();return t.spec.strip=e,t}describe(e){let t=(e?this.resolve(e):this).clone(),{label:r,meta:s,optional:i,nullable:u}=t.spec;return{meta:s,label:r,optional:i,nullable:u,default:t.getDefault(e),type:t.type,oneOf:t._whitelist.describe(),notOneOf:t._blacklist.describe(),tests:t.tests.map(l=>({name:l.OPTIONS.name,params:l.OPTIONS.params})).filter((l,o,f)=>f.findIndex(c=>c.name===l.name)===o)}}};m.prototype.__isYupSchema__=!0;for(let n of["validate","validateSync"])m.prototype[`${n}At`]=function(e,t,r={}){let{parent:s,parentPath:i,schema:u}=ye(this,e,t,r.context);return u[n](s&&s[i],Object.assign({},r,{parent:s,path:e}))};for(let n of["equals","is"])m.prototype[n]=m.prototype.oneOf;for(let n of["not","nope"])m.prototype[n]=m.prototype.notOneOf;var Nt=()=>!0;function Ye(n){return new V(n)}var V=class extends m{constructor(e){super(typeof e=="function"?{type:"mixed",check:e}:Object.assign({type:"mixed",check:Nt},e))}};Ye.prototype=V.prototype;function Ge(){return new I}var I=class extends m{constructor(){super({type:"boolean",check(e){return e instanceof Boolean&&(e=e.valueOf()),typeof e=="boolean"}}),this.withMutation(()=>{this.transform((e,t,r)=>{if(r.spec.coerce&&!r.isType(e)){if(/^(true|1)$/i.test(String(e)))return!0;if(/^(false|0)$/i.test(String(e)))return!1}return e})})}isTrue(e=he.isValue){return this.test({message:e,name:"is-value",exclusive:!0,params:{value:"true"},test(t){return w(t)||t===!0}})}isFalse(e=he.isValue){return this.test({message:e,name:"is-value",exclusive:!0,params:{value:"false"},test(t){return w(t)||t===!1}})}default(e){return super.default(e)}defined(e){return super.defined(e)}optional(){return super.optional()}required(e){return super.required(e)}notRequired(){return super.notRequired()}nullable(){return super.nullable()}nonNullable(e){return super.nonNullable(e)}strip(e){return super.strip(e)}};Ge.prototype=I.prototype;var zt=/^(\d{4}|[+-]\d{6})(?:-?(\d{2})(?:-?(\d{2}))?)?(?:[ T]?(\d{2}):?(\d{2})(?::?(\d{2})(?:[,.](\d{1,}))?)?(?:(Z)|([+-])(\d{2})(?::?(\d{2}))?)?)?$/;function Vt(n){let e=pe(n);if(!e)return Date.parse?Date.parse(n):Number.NaN;if(e.z===void 0&&e.plusMinus===void 0)return new Date(e.year,e.month,e.day,e.hour,e.minute,e.second,e.millisecond).valueOf();let t=0;return e.z!=="Z"&&e.plusMinus!==void 0&&(t=e.hourOffset*60+e.minuteOffset,e.plusMinus==="+"&&(t=0-t)),Date.UTC(e.year,e.month,e.day,e.hour,e.minute+t,e.second,e.millisecond)}function pe(n){var e,t;let r=zt.exec(n);return r?{year:F(r[1]),month:F(r[2],1)-1,day:F(r[3],1),hour:F(r[4]),minute:F(r[5]),second:F(r[6]),millisecond:r[7]?F(r[7].substring(0,3)):0,precision:(e=(t=r[7])==null?void 0:t.length)!=null?e:void 0,z:r[8]||void 0,plusMinus:r[9]||void 0,hourOffset:F(r[10]),minuteOffset:F(r[11])}:null}function F(n,e=0){return Number(n)||e}var It=/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/,Mt=/^((https?|ftp):)?\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i,Rt=/^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|00000000-0000-0000-0000-000000000000)$/i,Pt="^\\d{4}-\\d{2}-\\d{2}",Ut="\\d{2}:\\d{2}:\\d{2}",Zt="(([+-]\\d{2}(:?\\d{2})?)|Z)",qt=new RegExp(`${Pt}T${Ut}(\\.\\d+)?${Zt}$`),Lt=n=>w(n)||n===n.trim(),Yt={}.toString();function Xe(){return new M}var M=class extends m{constructor(){super({type:"string",check(e){return e instanceof String&&(e=e.valueOf()),typeof e=="string"}}),this.withMutation(()=>{this.transform((e,t,r)=>{if(!r.spec.coerce||r.isType(e)||Array.isArray(e))return e;let s=e!=null&&e.toString?e.toString():e;return s===Yt?e:s})})}required(e){return super.required(e).withMutation(t=>t.test({message:e||_.required,name:"required",skipAbsent:!0,test:r=>!!r.length}))}notRequired(){return super.notRequired().withMutation(e=>(e.tests=e.tests.filter(t=>t.OPTIONS.name!=="required"),e))}length(e,t=b.length){return this.test({message:t,name:"length",exclusive:!0,params:{length:e},skipAbsent:!0,test(r){return r.length===this.resolve(e)}})}min(e,t=b.min){return this.test({message:t,name:"min",exclusive:!0,params:{min:e},skipAbsent:!0,test(r){return r.length>=this.resolve(e)}})}max(e,t=b.max){return this.test({name:"max",exclusive:!0,message:t,params:{max:e},skipAbsent:!0,test(r){return r.length<=this.resolve(e)}})}matches(e,t){let r=!1,s,i;return t&&(typeof t=="object"?{excludeEmptyString:r=!1,message:s,name:i}=t:s=t),this.test({name:i||"matches",message:s||b.matches,params:{regex:e},skipAbsent:!0,test:u=>u===""&&r||u.search(e)!==-1})}email(e=b.email){return this.matches(It,{name:"email",message:e,excludeEmptyString:!0})}url(e=b.url){return this.matches(Mt,{name:"url",message:e,excludeEmptyString:!0})}uuid(e=b.uuid){return this.matches(Rt,{name:"uuid",message:e,excludeEmptyString:!1})}datetime(e){let t="",r,s;return e&&(typeof e=="object"?{message:t="",allowOffset:r=!1,precision:s=void 0}=e:t=e),this.matches(qt,{name:"datetime",message:t||b.datetime,excludeEmptyString:!0}).test({name:"datetime_offset",message:t||b.datetime_offset,params:{allowOffset:r},skipAbsent:!0,test:i=>{if(!i||r)return!0;let u=pe(i);return u?!!u.z:!1}}).test({name:"datetime_precision",message:t||b.datetime_precision,params:{precision:s},skipAbsent:!0,test:i=>{if(!i||s==null)return!0;let u=pe(i);return u?u.precision===s:!1}})}ensure(){return this.default("").transform(e=>e===null?"":e)}trim(e=b.trim){return this.transform(t=>t!=null?t.trim():t).test({message:e,name:"trim",test:Lt})}lowercase(e=b.lowercase){return this.transform(t=>w(t)?t:t.toLowerCase()).test({message:e,name:"string_case",exclusive:!0,skipAbsent:!0,test:t=>w(t)||t===t.toLowerCase()})}uppercase(e=b.uppercase){return this.transform(t=>w(t)?t:t.toUpperCase()).test({message:e,name:"string_case",exclusive:!0,skipAbsent:!0,test:t=>w(t)||t===t.toUpperCase()})}};Xe.prototype=M.prototype;var Gt=n=>n!=+n;function He(){return new R}var R=class extends m{constructor(){super({type:"number",check(e){return e instanceof Number&&(e=e.valueOf()),typeof e=="number"&&!Gt(e)}}),this.withMutation(()=>{this.transform((e,t,r)=>{if(!r.spec.coerce)return e;let s=e;if(typeof s=="string"){if(s=s.replace(/\s/g,""),s==="")return NaN;s=+s}return r.isType(s)||s===null?s:parseFloat(s)})})}min(e,t=O.min){return this.test({message:t,name:"min",exclusive:!0,params:{min:e},skipAbsent:!0,test(r){return r>=this.resolve(e)}})}max(e,t=O.max){return this.test({message:t,name:"max",exclusive:!0,params:{max:e},skipAbsent:!0,test(r){return r<=this.resolve(e)}})}lessThan(e,t=O.lessThan){return this.test({message:t,name:"max",exclusive:!0,params:{less:e},skipAbsent:!0,test(r){return r<this.resolve(e)}})}moreThan(e,t=O.moreThan){return this.test({message:t,name:"min",exclusive:!0,params:{more:e},skipAbsent:!0,test(r){return r>this.resolve(e)}})}positive(e=O.positive){return this.moreThan(0,e)}negative(e=O.negative){return this.lessThan(0,e)}integer(e=O.integer){return this.test({name:"integer",message:e,skipAbsent:!0,test:t=>Number.isInteger(t)})}truncate(){return this.transform(e=>w(e)?e:e|0)}round(e){var t;let r=["ceil","floor","round","trunc"];if(e=((t=e)==null?void 0:t.toLowerCase())||"round",e==="trunc")return this.truncate();if(r.indexOf(e.toLowerCase())===-1)throw new TypeError("Only valid options for round() are: "+r.join(", "));return this.transform(s=>w(s)?s:Math[e](s))}};He.prototype=R.prototype;var Ke=new Date(""),Xt=n=>Object.prototype.toString.call(n)==="[object Date]";function be(){return new N}var N=class n extends m{constructor(){super({type:"date",check(e){return Xt(e)&&!isNaN(e.getTime())}}),this.withMutation(()=>{this.transform((e,t,r)=>!r.spec.coerce||r.isType(e)||e===null?e:(e=Vt(e),isNaN(e)?n.INVALID_DATE:new Date(e)))})}prepareParam(e,t){let r;if($.isRef(e))r=e;else{let s=this.cast(e);if(!this._typeCheck(s))throw new TypeError(`\`${t}\` must be a Date or a value that can be \`cast()\` to a Date`);r=s}return r}min(e,t=fe.min){let r=this.prepareParam(e,"min");return this.test({message:t,name:"min",exclusive:!0,params:{min:e},skipAbsent:!0,test(s){return s>=this.resolve(r)}})}max(e,t=fe.max){let r=this.prepareParam(e,"max");return this.test({message:t,name:"max",exclusive:!0,params:{max:e},skipAbsent:!0,test(s){return s<=this.resolve(r)}})}};N.INVALID_DATE=Ke;be.prototype=N.prototype;be.INVALID_DATE=Ke;function Ht(n,e=[]){let t=[],r=new Set,s=new Set(e.map(([u,a])=>`${u}-${a}`));function i(u,a){let l=(0,g.split)(u)[0];r.add(l),s.has(`${a}-${l}`)||t.push([a,l])}for(let u of Object.keys(n)){let a=n[u];r.add(u),$.isRef(a)&&a.isSibling?i(a.path,u):D(a)&&"deps"in a&&a.deps.forEach(l=>i(l,u))}return Me.default.array(Array.from(r),t).reverse()}function Ve(n,e){let t=1/0;return n.some((r,s)=>{var i;if((i=e.path)!=null&&i.includes(r))return t=s,!0}),t}function Je(n){return(e,t)=>Ve(n,e)-Ve(n,t)}var Be=(n,e,t)=>{if(typeof n!="string")return n;let r=n;try{r=JSON.parse(n)}catch{}return t.isType(r)?r:n};function K(n){if("fields"in n){let e={};for(let[t,r]of Object.entries(n.fields))e[t]=K(r);return n.setFields(e)}if(n.type==="array"){let e=n.optional();return e.innerType&&(e.innerType=K(e.innerType)),e}return n.type==="tuple"?n.optional().clone({types:n.spec.types.map(K)}):"optional"in n?n.optional():n}var Kt=(n,e)=>{let t=[...(0,g.normalizePath)(e)];if(t.length===1)return t[0]in n;let r=t.pop(),s=(0,g.getter)((0,g.join)(t),!0)(n);return!!(s&&r in s)},Ie=n=>Object.prototype.toString.call(n)==="[object Object]";function Jt(n,e){let t=Object.keys(n.fields);return Object.keys(e).filter(r=>t.indexOf(r)===-1)}var Bt=Je([]);function Qe(n){return new P(n)}var P=class extends m{constructor(e){super({type:"object",check(t){return Ie(t)||typeof t=="function"}}),this.fields=Object.create(null),this._sortErrors=Bt,this._nodes=[],this._excludedEdges=[],this.withMutation(()=>{e&&this.shape(e)})}_cast(e,t={}){var r;let s=super._cast(e,t);if(s===void 0)return this.getDefault(t);if(!this._typeCheck(s))return s;let i=this.fields,u=(r=t.stripUnknown)!=null?r:this.spec.noUnknown,a=[].concat(this._nodes,Object.keys(s).filter(c=>!this._nodes.includes(c))),l={},o=Object.assign({},t,{parent:l,__validating:t.__validating||!1}),f=!1;for(let c of a){let h=i[c],d=c in s;if(h){let v,x=s[c];o.path=(t.path?`${t.path}.`:"")+c,h=h.resolve({value:x,context:t.context,parent:l});let E=h instanceof m?h.spec:void 0,q=E==null?void 0:E.strict;if(E!=null&&E.strip){f=f||c in s;continue}v=!t.__validating||!q?h.cast(s[c],o):s[c],v!==void 0&&(l[c]=v)}else d&&!u&&(l[c]=s[c]);(d!==c in l||l[c]!==s[c])&&(f=!0)}return f?l:s}_validate(e,t={},r,s){let{from:i=[],originalValue:u=e,recursive:a=this.spec.recursive}=t;t.from=[{schema:this,value:u},...i],t.__validating=!0,t.originalValue=u,super._validate(e,t,r,(l,o)=>{if(!a||!Ie(o)){s(l,o);return}u=u||o;let f=[];for(let c of this._nodes){let h=this.fields[c];!h||$.isRef(h)||f.push(h.asNestedTest({options:t,key:c,parent:o,parentPath:t.path,originalParent:u}))}this.runTests({tests:f,value:o,originalValue:u,options:t},r,c=>{s(c.sort(this._sortErrors).concat(l),o)})})}clone(e){let t=super.clone(e);return t.fields=Object.assign({},this.fields),t._nodes=this._nodes,t._excludedEdges=this._excludedEdges,t._sortErrors=this._sortErrors,t}concat(e){let t=super.concat(e),r=t.fields;for(let[s,i]of Object.entries(this.fields)){let u=r[s];r[s]=u===void 0?i:u}return t.withMutation(s=>s.setFields(r,[...this._excludedEdges,...e._excludedEdges]))}_getDefault(e){if("default"in this.spec)return super._getDefault(e);if(!this._nodes.length)return;let t={};return this._nodes.forEach(r=>{var s;let i=this.fields[r],u=e;(s=u)!=null&&s.value&&(u=Object.assign({},u,{parent:u.value,value:u.value[r]})),t[r]=i&&"getDefault"in i?i.getDefault(u):void 0}),t}setFields(e,t){let r=this.clone();return r.fields=e,r._nodes=Ht(e,t),r._sortErrors=Je(Object.keys(e)),t&&(r._excludedEdges=t),r}shape(e,t=[]){return this.clone().withMutation(r=>{let s=r._excludedEdges;return t.length&&(Array.isArray(t[0])||(t=[t]),s=[...r._excludedEdges,...t]),r.setFields(Object.assign(r.fields,e),s)})}partial(){let e={};for(let[t,r]of Object.entries(this.fields))e[t]="optional"in r&&r.optional instanceof Function?r.optional():r;return this.setFields(e)}deepPartial(){return K(this)}pick(e){let t={};for(let r of e)this.fields[r]&&(t[r]=this.fields[r]);return this.setFields(t,this._excludedEdges.filter(([r,s])=>e.includes(r)&&e.includes(s)))}omit(e){let t=[];for(let r of Object.keys(this.fields))e.includes(r)||t.push(r);return this.pick(t)}from(e,t,r){let s=(0,g.getter)(e,!0);return this.transform(i=>{if(!i)return i;let u=i;return Kt(i,e)&&(u=Object.assign({},i),r||delete u[e],u[t]=s(i)),u})}json(){return this.transform(Be)}noUnknown(e=!0,t=de.noUnknown){typeof e!="boolean"&&(t=e,e=!0);let r=this.test({name:"noUnknown",exclusive:!0,message:t,test(s){if(s==null)return!0;let i=Jt(this.schema,s);return!e||i.length===0||this.createError({params:{unknown:i.join(", ")}})}});return r.spec.noUnknown=e,r}unknown(e=!0,t=de.noUnknown){return this.noUnknown(!e,t)}transformKeys(e){return this.transform(t=>{if(!t)return t;let r={};for(let s of Object.keys(t))r[e(s)]=t[s];return r})}camelCase(){return this.transformKeys(z.camelCase)}snakeCase(){return this.transformKeys(z.snakeCase)}constantCase(){return this.transformKeys(e=>(0,z.snakeCase)(e).toUpperCase())}describe(e){let t=(e?this.resolve(e):this).clone(),r=super.describe(e);r.fields={};for(let[i,u]of Object.entries(t.fields)){var s;let a=e;(s=a)!=null&&s.value&&(a=Object.assign({},a,{parent:a.value,value:a.value[i]})),r.fields[i]=u.describe(a)}return r}};Qe.prototype=P.prototype;function We(n){return new U(n)}var U=class extends m{constructor(e){super({type:"array",spec:{types:e},check(t){return Array.isArray(t)}}),this.innerType=void 0,this.innerType=e}_cast(e,t){let r=super._cast(e,t);if(!this._typeCheck(r)||!this.innerType)return r;let s=!1,i=r.map((u,a)=>{let l=this.innerType.cast(u,Object.assign({},t,{path:`${t.path||""}[${a}]`}));return l!==u&&(s=!0),l});return s?i:r}_validate(e,t={},r,s){var i;let u=this.innerType,a=(i=t.recursive)!=null?i:this.spec.recursive;t.originalValue!=null&&t.originalValue,super._validate(e,t,r,(l,o)=>{var f;if(!a||!u||!this._typeCheck(o)){s(l,o);return}let c=new Array(o.length);for(let d=0;d<o.length;d++){var h;c[d]=u.asNestedTest({options:t,index:d,parent:o,parentPath:t.path,originalParent:(h=t.originalValue)!=null?h:e})}this.runTests({value:o,tests:c,originalValue:(f=t.originalValue)!=null?f:e,options:t},r,d=>s(d.concat(l),o))})}clone(e){let t=super.clone(e);return t.innerType=this.innerType,t}json(){return this.transform(Be)}concat(e){let t=super.concat(e);return t.innerType=this.innerType,e.innerType&&(t.innerType=t.innerType?t.innerType.concat(e.innerType):e.innerType),t}of(e){let t=this.clone();if(!D(e))throw new TypeError("`array.of()` sub-schema must be a valid yup schema not: "+T(e));return t.innerType=e,t.spec=Object.assign({},t.spec,{types:e}),t}length(e,t=H.length){return this.test({message:t,name:"length",exclusive:!0,params:{length:e},skipAbsent:!0,test(r){return r.length===this.resolve(e)}})}min(e,t){return t=t||H.min,this.test({message:t,name:"min",exclusive:!0,params:{min:e},skipAbsent:!0,test(r){return r.length>=this.resolve(e)}})}max(e,t){return t=t||H.max,this.test({message:t,name:"max",exclusive:!0,params:{max:e},skipAbsent:!0,test(r){return r.length<=this.resolve(e)}})}ensure(){return this.default(()=>[]).transform((e,t)=>this._typeCheck(e)?e:t==null?[]:[].concat(t))}compact(e){let t=e?(r,s,i)=>!e(r,s,i):r=>!!r;return this.transform(r=>r!=null?r.filter(t):r)}describe(e){let t=(e?this.resolve(e):this).clone(),r=super.describe(e);if(t.innerType){var s;let i=e;(s=i)!=null&&s.value&&(i=Object.assign({},i,{parent:i.value,value:i.value[0]})),r.innerType=t.innerType.describe(i)}return r}};We.prototype=U.prototype;function et(n){return new Z(n)}var Z=class extends m{constructor(e){super({type:"tuple",spec:{types:e},check(t){let r=this.spec.types;return Array.isArray(t)&&t.length===r.length}}),this.withMutation(()=>{this.typeError(qe.notType)})}_cast(e,t){let{types:r}=this.spec,s=super._cast(e,t);if(!this._typeCheck(s))return s;let i=!1,u=r.map((a,l)=>{let o=a.cast(s[l],Object.assign({},t,{path:`${t.path||""}[${l}]`}));return o!==s[l]&&(i=!0),o});return i?u:s}_validate(e,t={},r,s){let i=this.spec.types;super._validate(e,t,r,(u,a)=>{var l;if(!this._typeCheck(a)){s(u,a);return}let o=[];for(let[c,h]of i.entries()){var f;o[c]=h.asNestedTest({options:t,index:c,parent:a,parentPath:t.path,originalParent:(f=t.originalValue)!=null?f:e})}this.runTests({value:a,tests:o,originalValue:(l=t.originalValue)!=null?l:e,options:t},r,c=>s(c.concat(u),a))})}describe(e){let t=(e?this.resolve(e):this).clone(),r=super.describe(e);return r.innerType=t.spec.types.map((s,i)=>{var u;let a=e;return(u=a)!=null&&u.value&&(a=Object.assign({},a,{parent:a.value,value:a.value[i]})),s.describe(a)}),r}};et.prototype=Z.prototype;function Qt(n){return new me(n)}var me=class n{constructor(e){this.type="lazy",this.__isYupSchema__=!0,this.spec=void 0,this._resolve=(t,r={})=>{let s=this.builder(t,r);if(!D(s))throw new TypeError("lazy() functions must return a valid schema");return this.spec.optional&&(s=s.optional()),s.resolve(r)},this.builder=e,this.spec={meta:void 0,optional:!1}}clone(e){let t=new n(this.builder);return t.spec=Object.assign({},this.spec,e),t}optionality(e){return this.clone({optional:e})}optional(){return this.optionality(!0)}resolve(e){return this._resolve(e.value,e)}cast(e,t){return this._resolve(e,t).cast(e,t)}asNestedTest(e){let{key:t,index:r,parent:s,options:i}=e,u=s[r!=null?r:t];return this._resolve(u,Object.assign({},i,{value:u,parent:s})).asNestedTest(e)}validate(e,t){return this._resolve(e,t).validate(e,t)}validateSync(e,t){return this._resolve(e,t).validateSync(e,t)}validateAt(e,t,r){return this._resolve(t,r).validateAt(e,t,r)}validateSyncAt(e,t,r){return this._resolve(t,r).validateSyncAt(e,t,r)}isValid(e,t){return this._resolve(e,t).isValid(e,t)}isValidSync(e,t){return this._resolve(e,t).isValidSync(e,t)}describe(e){return e?this.resolve(e).describe(e):{type:"lazy",meta:this.spec.meta,label:void 0}}meta(...e){if(e.length===0)return this.spec.meta;let t=this.clone();return t.spec.meta=Object.assign(t.spec.meta||{},e[0]),t}};function Wt(n){Object.keys(n).forEach(e=>{Object.keys(n[e]).forEach(t=>{Le[e][t]=n[e][t]})})}function er(n,e,t){if(!n||!D(n.prototype))throw new TypeError("You must provide a yup schema constructor function");if(typeof e!="string")throw new TypeError("A Method name must be provided");if(typeof t!="function")throw new TypeError("Method function must be provided");n.prototype[e]=t}window.Yup=xe;})();
+</script>
+<script>
+/* ---------- icons (Lucide-style, stroke) ---------- */
+const P={
+ heart:'<path d="M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 12 5.5 5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7z"/>',
+ send:'<path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/>',
+ nfc:'<path d="M6 8.3a8 8 0 0 1 0 7.4M10 5.5a13 13 0 0 1 0 13M14 3a18 18 0 0 1 0 18M18 1a23 23 0 0 1 0 22" />',
+ qr:'<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3M21 14v.01M14 21h.01M17 21h4v-4"/>',
+ user:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
+ link:'<path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/>',
+ menu:'<path d="M7 3v8a2 2 0 0 0 4 0V3M9 3v18M17 21V3c-2.5 1-4 4-4 8 0 2 1 3 4 3"/>',
+ 
+ grid:'<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/>',
+ refresh:'<path d="M3 12a9 9 0 0 1 15-6.7L21 8M21 3v5h-5M21 12a9 9 0 0 1-15 6.7L3 16M3 21v-5h5"/>',
+ store:'<path d="M3 9l1-5h16l1 5M4 9v11h16V9M3 9a3 3 0 0 0 6 0 3 3 0 0 0 6 0 3 3 0 0 0 6 0M10 20v-6h4v6"/>',
+ hotel:'<path d="M3 20V8l9-5 9 5v12M3 20h18M9 20v-5h6v5M8 10h.01M12 10h.01M16 10h.01"/>',
+ scissors:'<circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4 8.1 15.9M14.5 14.5 20 20M8.1 8.1 12 12"/>',
+ brief:'<rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2M2 13h20"/>',
+ spark:'<path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9zM19 16v4M17 18h4"/>',
+ card:'<rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/>',
+ scan:'<path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2M7 12h10"/>',
+ trend:'<path d="M22 7l-8.5 8.5-5-5L2 17M16 7h6v6"/>',
+ check:'<path d="M20 6 9 17l-5-5"/>',arrow:'<path d="M5 12h14M12 5l7 7-7 7"/>',
+ x:'<path d="M18 6 6 18M6 6l12 12"/>',burger:'<path d="M4 6h16M4 12h16M4 18h16"/>',
+ copy:'<rect x="8" y="8" width="13" height="13" rx="2"/><path d="M4 16V5a1 1 0 0 1 1-1h11"/>',
+ dl:'<path d="M12 3v12M7 10l5 5 5-5M4 20h16"/>',more:'<circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/>',
+ edit:'<path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',trash:'<path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14M10 11v5M14 11v5"/>',
+ plus:'<path d="M12 5v14M5 12h14"/>',plusc:'<circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/>',
+ dash:'<rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/>',
+ chart:'<path d="M3 3v18h18M8 17v-5M13 17V8M18 17v-9"/>',gear:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>',
+ eye:'<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+ eyeoff:'<path d="M9.9 4.2A10 10 0 0 1 12 4c6.4 0 10 7 10 7a17 17 0 0 1-2.2 3M6.6 6.6A17 17 0 0 0 2 11s3.6 7 10 7a9.7 9.7 0 0 0 5.4-1.6M2 2l20 20"/>',
+ phone:'<path d="M22 17v3a2 2 0 0 1-2.2 2A19.8 19.8 0 0 1 11.2 19a19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/>',
+ pin:'<path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/>',
+ globe:'<circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z"/>',at:'<circle cx="12" cy="12" r="4"/><path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-4 8"/>',
+ star:'<path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/>',
+ info:'<circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/>',alert:'<circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/>',
+ pkg:'<path d="M21 8 12 3 3 8v8l9 5 9-5zM3 8l9 5 9-5M12 13v8"/>',sliders:'<path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/>',
+ monitor:'<rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/>',chev:'<path d="m9 18 6-6-6-6"/>',logout:'<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>',
+ back:'<path d="M19 12H5M12 19l-7-7 7-7"/>',msg:'<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',contact:'<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="11" r="2"/><path d="M15 9h3M15 13h3M6 17a3 3 0 0 1 6 0"/>'
+};
+const ic=(n,c='')=>`<svg class="i ${c}" viewBox="0 0 24 24" aria-hidden="true">${P[n]}</svg>`;
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const R=' <span class="req" aria-hidden="true">*</span>';
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+
+/* ---------- Yup schemas (one place for every validation rule) ---------- */
+const Y=window.Yup;
+const msg={name:'Enter your name.',email:'Enter your email address.',emailBad:'Enter a valid email address.',pw:'Enter a password.',pwLen:'Use at least 8 characters.',url:'Enter a full link starting with https://'};
+const phoneRe=/^[6-9]\d{9}$/;
+const normPhone=v=>{let p=String(v||'').replace(/[\s\-()]/g,'');if(p.length>10)p=p.replace(/^(\+91|91|0)/,'');return p};
+const urlOk=v=>{try{return /^https?:$/.test(new URL(v).protocol)}catch{return false}};
+const yEmail=()=>Y.string().trim().required(msg.email).email(msg.emailBad);
+const S={
+ signIn:Y.object({email:yEmail(),pw:Y.string().required(msg.pw)}),
+ signUp:Y.object({name:Y.string().trim().required(msg.name),email:yEmail(),pw:Y.string().required(msg.pw).min(8,msg.pwLen)}),
+ ccBasics:Y.object({name:Y.string().trim().required('Give your card a name so you can find it later.')}),
+ ccDest:t=>Y.object(t==='profile'?{biz:Y.string().trim().required('Enter your business name.')}:{value:Y.string().trim().required(msg.url).test('url',msg.url,urlOk)}),
+ request:Y.object({
+  name:Y.string().trim().required(msg.name),
+  biz:Y.string().trim().required('Enter your business name.'),
+  email:yEmail(),
+  phone:Y.string().transform(normPhone).required('Enter your phone number.').matches(phoneRe,{message:'Enter a valid 10-digit mobile number.',excludeEmptyString:true}),
+  type:Y.string().required('Choose your business type.'),
+  qty:Y.string().required('Choose how many cards.'),
+  dests:Y.array().of(Y.string()).min(1,'Choose at least one option.'),
+  ok:Y.boolean().oneOf([true],'Please confirm to continue.')
+ })
+};
+/* returns { fieldPath: firstErrorMessage } or {} when valid */
+function validate(schema,values){try{schema.validateSync(values,{abortEarly:false});return{}}catch(e){const m={};(e.inner&&e.inner.length?e.inner:[e]).forEach(x=>{if(x.path&&!m[x.path])m[x.path]=x.message});return m}}
+
+/* ---------- brand + mockups ---------- */
+const mark=`<svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#4a3fc4"/><path d="M9.5 11.5h13M16 11.5V22" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/><path d="M20.5 18.2a4.2 4.2 0 0 1 2.4 3.8" stroke="#fff" stroke-opacity=".55" stroke-width="1.8" stroke-linecap="round" fill="none"/></svg>`;
+const logo=(to='#/')=>`<a class="logo" href="${to}" aria-label="Tapwe home">${mark}<span>Tapwe</span></a>`;
+/* Decorative QR-style pattern (design mockup only, NOT scannable) */
+function qr(seed='ab12cd'){
+  let h=0;for(const ch of seed)h=(h*31+ch.charCodeAt(0))>>>0;
+  const rnd=()=>{h^=h<<13;h>>>=0;h^=h>>>17;h^=h<<5;h>>>=0;return h/4294967296};
+  const N=25,cells=[];
+  const finder=(x,y)=>x<8&&y<8||x>N-9&&y<8||x<8&&y>N-9;
+  for(let y=0;y<N;y++)for(let x=0;x<N;x++){if(!finder(x,y)&&rnd()>.52)cells.push(`<rect x="${x}" y="${y}" width="1" height="1"/>`)}
+  const f=(x,y)=>`<rect x="${x}.5" y="${y}.5" width="6" height="6" fill="none" stroke="#1c1b22" stroke-width="1"/><rect x="${x+2}" y="${y+2}" width="3" height="3"/>`;
+  return `<svg viewBox="0 0 ${N} ${N}" fill="#1c1b22" shape-rendering="crispEdges" role="img" aria-label="QR code preview (design placeholder)">${cells.join('')}${f(0,0)}${f(N-7,0)}${f(0,N-7)}</svg>`;
+}
+const nfcGlyph=`<svg class="i nfc" viewBox="0 0 24 24" aria-hidden="true">${P.nfc}</svg>`;
+const nfcTap=`<svg class="pc-nfc" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="14" y="24" width="20" height="21" rx="4"/><path d="M20 30h8"/><path d="M17 17a10 10 0 0 1 14 0M12.5 12.5a16.5 16.5 0 0 1 23 0M8 8a23 23 0 0 1 32 0"/></svg>`;
+const leafSvg=`<svg class="pc-leaves" viewBox="0 0 200 320" aria-hidden="true"><g fill="#6f8f4e" opacity=".55">${[[18,40,-30,1],[40,90,-60,.8],[10,150,-20,.9],[30,215,-50,.7],[170,30,200,.9],[186,100,230,.8],[165,170,205,1],[182,240,235,.7]].map(([x,y,r,k])=>`<path transform="translate(${x} ${y}) rotate(${r}) scale(${k})" d="M0 0C14-18 34-18 46 0 34 18 14 18 0 0Z"/>`).join('')}</g></svg>`;
+const hatSvg=`<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 30v-2a8 8 0 0 1 2-15 9 9 0 0 1 16 0 8 8 0 0 1 2 15v2"/><path d="M14 30h20v8a2 2 0 0 1-2 2H16a2 2 0 0 1-2-2zM20 34v2M24 34v2M28 34v2"/></svg>`;
+const wave=`<svg class="pc-wave" viewBox="0 0 200 60" preserveAspectRatio="none" aria-hidden="true"><path d="M0 28C30 6 60 6 100 26s70 22 100 0v34H0z" fill="#fff" fill-opacity=".1"/><path d="M0 40C40 22 70 24 110 38s60 8 90-6v28H0z" fill="#fff" fill-opacity=".1"/></svg>`;
+const PCT={
+ brand:{h:['Tap or scan','to connect'],b:`<svg viewBox="0 0 32 32" aria-hidden="true">${mark.replace(/^<svg[^>]*>/,'').replace(/<\/svg>$/,'').replace(/fill="#4a3fc4"/,'fill="currentColor"').replace(/stroke="#fff"/g,'stroke="#fff"')}</svg>`,t:'TAP YOUR PHONE',d:wave},
+ insta:{h:['Follow us','on Instagram'],b:ic('at'),t:'TAP YOUR PHONE',d:`${wave}<i class="pc-ic" style="left:9%;top:27%;--r:-12deg">${ic('heart')}</i><i class="pc-ic" style="right:8%;top:30%;--r:14deg">${ic('send')}</i><i class="pc-ic" style="right:12%;bottom:26%;--r:8deg">${ic('user')}</i>`},
+ menu:{h:['OUR','MENU'],b:hatSvg,t:'SCAN TO EXPLORE',d:leafSvg},
+ review:{h:['Leave us','your review','on Google'],b:ic('star'),t:'TAP YOUR PHONE',d:wave}
+};
+const tapCard=(theme='brand',o={})=>{const T=PCT[theme]||PCT.brand;return `<div class="pc pc-${theme}" role="img" aria-label="Tapwe smart card preview: ${T.h.join(' ')}, with QR code and NFC tap"><div class="pc-d" aria-hidden="true">${T.d}</div><div class="pc-top"><span class="pc-badge">${T.b}</span><h4 class="pc-h">${T.h.map(x=>`<span>${x}</span>`).join('')}</h4></div><div class="pc-body"><div class="pc-qr">${qr(o.id||'ab12cd'+theme)}</div></div><div class="pc-foot"><span class="pc-tap">${T.t}</span>${nfcTap}<span class="pc-by">powered by <b>Tapwe</b></span></div></div>`};
+const fan3=()=>`<div class="fan3">${[['insta','Social'],['menu','Menu'],['review','Reviews']].map(([t,l],i)=>`<figure class="f f${i+1}">${tapCard(t)}<figcaption>${l}</figcaption></figure>`).join('')}</div>`;
+const expTheme={business:'brand',menu:'menu',feedback:'review',social:'insta',link:'brand'};
+const demoTheme={menu:'menu',social:'insta',feedback:'review',profile:'brand'};
+const profileInner=`<div class="av">YB</div><div class="nm">Your Business</div><div class="sb">Café · Open until 10 pm</div><div class="lk"><div>${ic('phone')}Call</div><div>${ic('pin')}Map</div><div>${ic('at')}Social</div><div>${ic('globe')}Website</div></div><div class="fb">${ic('star')}Leave feedback</div><div class="pbtn">${ic('user')}Save contact</div>`;
+const phoneWith=(inner,id='')=>`<div class="phone" role="img" aria-label="Smartphone showing a digital business page"><div class="notch"></div><div class="scr" ${id?`id="${id}"`:''}>${inner}</div></div>`;
+const phone=()=>phoneWith(profileInner);
+const heroMock=()=>`<div class="hm"><div class="bg"></div><div class="ph">${phoneWith(demoHTML('menu'))}</div><div class="cd c1">${tapCard('brand')}</div><div class="cd c2">${tapCard('menu')}</div>
+<div class="fchip ok" style="top:2%;left:0"><i>${ic('check')}</i>Menu opened</div>
+<div class="fchip hm2" style="top:27%;left:3%;animation-delay:-2s"><i>${ic('nfc')}</i>Tap detected</div>
+<div class="fchip ok hm2" style="bottom:0;right:8%;animation-delay:-3.5s"><i>${ic('user')}</i>Scanned at table</div>
+<div class="tap" aria-hidden="true"><i></i><b>${ic('nfc')}</b></div></div>`;
+
+/* ---------- content ---------- */
+const features=[['nfc','NFC Tap Technology','Customers tap the card on a compatible phone to open your page. No app needed.'],['qr','QR Code Access','Every card also carries a QR code for phones without NFC or for scanning at a distance.'],['user','Digital Business Profile','Share contact details, hours, and links from one clean, mobile-friendly page.'],['link','Smart Links and Destinations','Point a card to your website, Instagram, a form, or any link you choose.'],['menu','Menus and Feedback','Show a menu or open a feedback form right when the customer is there.'],['grid','Easy Card Management','Name, organise, and review all your cards from one simple dashboard.'],['refresh','Update Destinations Anytime','Change where a card points whenever you like. No reprinting required.']];
+const steps=[['card','Choose Your Card','Get your smart card with NFC and QR.'],['scan','Tap or Scan','Customers use their phones to open your digital destination.'],['trend','Connect and Grow','Share business information, menus, and links.']];
+const cases=[['menu','Restaurants and cafés','Menus and feedback.','#c2410c','#fff0e6'],['store','Retail stores','Business information and social links.','#0e7490','#e3f5f9'],['hotel','Hotels and hospitality','Guest information and feedback.','#6d28d9','#efe8ff'],['scissors','Salons and clinics','Contact details and appointment links.','#be185d','#fde7f1'],['brief','Professionals','Digital business profiles and contact sharing.','#1d4ed8','#e6eeff'],['spark','Creators','Social media and portfolio links.','#15803d','#e4f5ea']];
+const cta=()=>`<section style="padding:0 0 80px"><div class="wrap"><div class="band rv"><h2>Make Every Connection Count.</h2><p>Bring your business card, digital presence, and customer connections together with Tapwe.</p><div class="row2"><a class="btn btn-w lg" href="#/request">Request a Card</a><a class="btn btn-o lg" href="#/sign-up">Get Started</a></div></div></div></section>`;
+
+/* ---------- team (edit these entries; remove `placeholder:true` once real details are added) ---------- */
+const team=[
+ {name:'Founder name',role:'Founder',bio:'A short line about the founder and why Tapwe exists.',placeholder:true},
+ {name:'Co-founder name',role:'Co-founder',bio:'A short line about the co-founder and what they lead.',placeholder:true}
+];
+const initials=n=>n.split(/\s+/).filter(Boolean).slice(0,2).map(w=>w[0]).join('').toUpperCase();
+const teamSection=()=>`<section class="s" id="team"><div class="wrap"><div class="sh rv"><div class="eyebrow">Team</div><h2>The people behind Tapwe</h2></div>
+<div class="team">${team.map(t=>`<article class="card person rv"><div class="av" aria-hidden="true">${esc(initials(t.name))}</div><div style="min-width:0"><h3>${esc(t.name)}</h3><div class="role">${esc(t.role)}</div>${t.placeholder?'<span class="badge warn" style="margin-top:8px">Placeholder, editable</span>':''}<p>${esc(t.bio)}</p></div></article>`).join('')}</div></div></section>`;
+
+/* ---------- marketing shell ---------- */
+const links=[['Features','#/features'],['How It Works','#/how-it-works'],['Use Cases','#/#use-cases'],['Pricing','#/pricing'],['Request Card','#/request']];
+function shell(route,body){
+  return `<header class="top"><div class="wrap"><div class="bar">${logo()}
+  <nav class="main" aria-label="Main">${links.map(([l,h])=>`<a href="${h}" class="${h==='#/'+route?'on':''}">${l}</a>`).join('')}</nav>
+  <div class="actions"><a class="btn btn-g" href="#/sign-in">Sign In</a><a class="btn btn-p" href="#/sign-up">Get Started</a></div>
+  <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="mnav">${ic('burger')}</button></div></div>
+  <div id="mnav"><nav aria-label="Mobile">${links.map(([l,h])=>`<a class="l" href="${h}">${l}</a>`).join('')}</nav><div class="two"><a class="btn btn-s lg" href="#/sign-in">Sign In</a><a class="btn btn-p lg" href="#/sign-up">Get Started</a></div></div></header>
+  <main id="main" class="page">${body}</main>
+  <footer class="foot"><div class="wrap"><div class="fgrid"><div style="max-width:300px">${logo()}<p class="muted" style="margin-top:16px;font-size:14px">Smart NFC and QR cards that connect your business to the digital world with a simple tap.</p></div>
+  <div><h3>Product</h3><ul><li><a href="#/features">Features</a></li><li><a href="#/how-it-works">How It Works</a></li><li><a href="#/pricing">Pricing</a></li><li><a href="#/request">Request a Card</a></li><li><a href="#/#team">Team</a></li><li><a href="#/app">Dashboard preview</a></li></ul></div>
+  <div><h3>Use cases</h3><ul><li><a href="#/#use-cases">Restaurants and cafés</a></li><li><a href="#/#use-cases">Retail stores</a></li><li><a href="#/#use-cases">Salons and clinics</a></li><li><a href="#/#use-cases">Professionals and creators</a></li></ul></div>
+  <div><h3>Support</h3><ul><li><a href="#/support">Contact (coming soon)</a></li><li><a href="#/privacy">Privacy Policy</a></li><li><a href="#/terms">Terms and Conditions</a></li></ul></div></div>
+  <div class="copy">© ${new Date().getFullYear()} Tapwe. All rights reserved.</div></div></footer>`;
+}
+
+/* ---------- pages ---------- */
+const pages={};
+const tag=['Restaurants','Cafés','Hotels','Retail shops','Salons','Clinics','Freelancers','Professionals','Creators'];
+const marquee=()=>{const row=tag.map(t=>`<span>${ic('nfc')}${t}</span>`).join('');return `<div class="marq" aria-label="Built for restaurants, cafés, hotels, retail shops, salons, clinics, freelancers, professionals and creators"><div class="tr" aria-hidden="true">${row}${row}</div></div>`};
+const demoTabs=[['menu','Menu','menu','Show your menu the moment a customer taps.'],['social','Social','at','Send people to Instagram or any social page.'],['feedback','Feedback','star','Open a feedback form while the visit is fresh.'],['profile','Profile','user','Share contact details and links.']];
+function demoHTML(k){
+ if(k==='menu')return `<div class="nm" style="margin-top:0;text-align:left;font-size:15px">Café menu</div><div class="sb" style="text-align:left">Sample items</div><div class="mi">${['Filter coffee','Cold coffee','Veg sandwich','Chocolate brownie'].map(x=>`<div>${x}<span>${ic('chev')}</span></div>`).join('')}</div><div class="pbtn" style="background:#fff;color:var(--ink);border:1px solid var(--line)">View full menu</div>`;
+ if(k==='social')return `<div class="av">YB</div><div class="nm">Follow Your Business</div><div class="sb">Find us online</div><div style="margin-top:14px">${[['at','Instagram'],['globe','Website'],['pin','Google Maps']].map(([i,l])=>`<div class="fb">${ic(i)}${l}<span style="margin-left:auto">${ic('chev')}</span></div>`).join('')}</div>`;
+ if(k==='feedback')return `<div class="big" style="margin-top:28px">How was your visit?</div><div class="sb">Tap a star to rate</div><div class="stars">${[1,2,3,4].map(()=>ic('star','f')).join('')}${ic('star')}</div><div class="fb" style="margin-top:12px;color:var(--ink3)">Tell us more (optional)</div><div class="pbtn">Submit feedback</div>`;
+ return profileInner;
+}
+const demoSection=()=>`<section class="s" id="demo"><div class="wrap demo"><div class="rv"><div class="eyebrow">One card, any destination</div><h2>We set it up. <span class="gt">You just tap.</span></h2><p class="lead">Tell us what your card should open. Our team configures it, adds your link and QR code, and hands it over ready to use. Need a change later? Ask us and we update it, with no reprinting.</p>
+<div class="dtabs" role="tablist" aria-label="Choose a destination to preview">${demoTabs.map(([k,l,i,d],n)=>`<button class="dtab" role="tab" data-dtab="${k}" aria-selected="${n===0}"><span class="ico">${ic(i)}</span><span><b>${l}</b><span class="d">${d}</span></span></button>`).join('')}</div></div>
+<div class="stage rv" style="--d:.1s"><div class="sg"><div class="sc" id="dcard">${tapCard(demoTheme.menu)}</div>${phoneWith(demoHTML('menu'),'dscr')}</div><div class="urlb">${ic('link')}<code>tapwe.example/c/ab12cd</code><span>Same link · now opens <b id="dnow">Menu</b></span></div></div></div></section>`;
+const bh=(i,t,d)=>`<div class="bt"><span class="ico">${ic(i)}</span><h3>${t}</h3><p>${d}</p></div>`;
+const bento=()=>`<div class="bento">
+<div class="bc c3 rv">${bh('nfc','NFC Tap Technology','Customers tap the card on a compatible phone to open your page. No app needed.')}<div class="bv"><div class="rip"><i></i><i></i><i></i><b>${ic('nfc')}</b></div></div></div>
+<div class="bc c3 rv" style="--d:.08s">${bh('qr','QR Code Access','Every card also carries a QR code for phones without NFC or for scanning at a distance.')}<div class="bv"><div class="qrs">${qr('tapwe-qr')}<u></u></div></div></div>
+<div class="bc rv">${bh('user','Digital Business Profile','Share contact details, hours, and links from one clean, mobile-friendly page.')}<div class="bv"><div class="mini"><div>${ic('phone')}Call<span class="sp faint">Contact</span></div><div>${ic('pin')}Map<span class="sp faint">Location</span></div><div>${ic('at')}Social<span class="sp faint">Links</span></div></div></div></div>
+<div class="bc rv" style="--d:.08s">${bh('link','Smart Links and Destinations','Point a card to your website, Instagram, a form, or any link you choose.')}<div class="bv"><div class="mini"><div>${ic('globe')}Website</div><div>${ic('at')}Instagram</div><div>${ic('msg')}Google Form</div></div></div></div>
+<div class="bc rv" style="--d:.16s">${bh('menu','Menus and Feedback','Show a menu or open a feedback form right when the customer is there.')}<div class="bv"><div class="mini"><div>${ic('menu')}Menu<span class="sp">${ic('chev')}</span></div><div>${ic('star','f')}${ic('star','f')}${ic('star','f')}${ic('star','f')}${ic('star')}</div></div></div></div>
+<div class="bc c3 rv" style="--d:.08s">${bh('grid','Easy Card Management','Name, organise, and review all your cards from one simple dashboard.')}<div class="bv"><div class="mini">${[['Front desk','Active'],['Table menu','Active'],['Feedback','Draft']].map(([a,b])=>`<div>${a}<span class="sp badge ${b==='Active'?'ok':''}">${b}</span></div>`).join('')}</div></div></div>
+<div class="bc c3 rv" style="--d:.16s">${bh('refresh','We Handle the Setup','Our team configures your card and updates where it points whenever you ask. No reprinting required.')}<div class="bv"><div class="swap"><span>Menu</span>${ic('arrow')}<span class="on">Festival offer</span><span class="faint" style="width:100%;text-align:center;border:0;background:none;box-shadow:none;padding:0">Same card, new destination</span></div></div></div>
+</div>`;
+pages['']=()=>shell('',`
+<div class="hero-wrap"><div class="wrap"><section class="hero"><div class="hl">
+<div class="pillb"><b>NFC + QR</b>Smart business cards</div>
+<h1>One Tap. <span class="gt">Endless Possibilities.</span></h1>
+<p class="lead">Connect your business to the digital world with smart NFC and QR cards. Share your profile, menu, social links, and feedback forms with a simple tap or scan.</p>
+<div class="cta"><a class="btn btn-p lg" href="#/sign-up">Get Started ${ic('arrow')}</a><a class="btn btn-s lg" href="#/how-it-works">See How It Works</a></div>
+<ul class="trust"><li>${ic('check')}No app needed for customers</li><li>${ic('check')}One permanent link per card</li><li>${ic('check')}Change destinations anytime</li></ul></div>${heroMock()}</section></div></div>
+${marquee()}
+<section class="s" id="how"><div class="wrap"><div class="sh rv"><div class="eyebrow">How it works</div><h2>Three steps from card to connection</h2></div>
+<ol class="how">${steps.map(([i,t,d],n)=>`<li class="rv" style="--d:${n*.1}s"><div class="n">${ic(i)}</div><span class="k">STEP 0${n+1}</span><h3>${t}</h3><p>${d}</p></li>`).join('')}</ol></div></section>
+${demoSection()}
+<section class="s alt" id="features"><div class="wrap"><div class="sh rv"><div class="eyebrow">Features</div><h2>Everything a card needs to do</h2><p>One physical card, one permanent link, and the tools to point it wherever your business needs.</p></div>${bento()}</div></section>
+<section class="s" id="use-cases"><div class="wrap"><div class="sh rv"><div class="eyebrow">Use cases</div><h2>Made for businesses that meet customers in person</h2></div>
+<div class="g3">${cases.map(([i,t,d,c,cb],n)=>`<div class="card uc rv" style="--c:${c};--cb:${cb};--d:${(n%3)*.08}s"><span class="ico">${ic(i)}</span><h3>${t}</h3><p>${d}</p></div>`).join('')}</div></div></section>
+<section class="s alt"><div class="wrap showcase"><div class="rv"><div class="eyebrow">The card</div><h2>A premium card with a <span class="gt">permanent link</span> inside</h2>
+<p class="lead">Every Tapwe card is a printed PVC card with an NFC chip and a QR code. Both open the same permanent card URL, so you choose the destination once and change it whenever you need.</p>
+<ul class="ticks">${['NFC tap and QR scan open the same link','We configure it and update it for you, no reprinting','Ready-made styles for social, menu and review cards'].map(t=>`<li>${ic('check')}${t}</li>`).join('')}</ul>
+<div class="chip">${ic('qr')}tapwe.example/c/ab12cd</div><p class="hint" style="margin-top:8px;font-size:12px">Example link, for illustration only.</p></div>
+<div class="panel rv" style="--d:.1s"><div style="display:grid;grid-template-columns:1.25fr 1fr;gap:24px;align-items:center" class="sc2">${fan3()}<div style="max-width:220px;width:100%;margin:auto">${phone()}</div></div></div></div></section>
+${teamSection()}
+${cta()}`);
+
+const reqTypes=['Restaurant or café','Hotel','Retail shop','Salon','Clinic','Freelancer or professional','Creator','Other'];
+const reqQty=['1','2 to 5','6 to 10','11 to 25','26 to 50','More than 50'];
+const reqDest=[['Menu','menu'],['Social links','at'],['Feedback form','star'],['Business profile','user'],['Website or link','globe']];
+const reqErr=id=>`<div class="err" id="${id}" role="alert"></div>`;
+pages['request']=()=>shell('request',`<div class="hero-wrap"><div class="wrap"><section class="rq">
+<div class="rv"><div class="eyebrow">Request a card</div><h1>Get your own <span class="gt">Tapwe card</span></h1>
+<p class="lead">Tell us about your business and what you want your card to open. We will use these details to set up your card.</p>
+<ol><li><i>1</i><span><b>Send your request</b><span class="d">Share your business details and what the card should open.</span></span></li><li><i>2</i><span><b>We review it</b><span class="d">We check your details and get in touch to confirm.</span></span></li><li><i>3</i><span><b>Your card is set up</b><span class="d">One permanent link, with an NFC chip and a QR code.</span></span></li></ol>
+<div class="mock">${fan3()}</div></div>
+<div class="card rqc rv" style="--d:.1s" id="rqbox"><form id="reqf" novalidate><h2>Your details</h2><p class="hint" style="margin-top:-8px">Fields marked <span class="req">*</span> are required.</p>
+<div class="two"><div class="field"><label for="rq-name">Full name${R}</label><input class="input" id="rq-name" autocomplete="name" aria-required="true">${reqErr('rq-name-e')}</div>
+<div class="field"><label for="rq-biz">Business name${R}</label><input class="input" id="rq-biz" autocomplete="organization" aria-required="true">${reqErr('rq-biz-e')}</div></div>
+<div class="two"><div class="field"><label for="rq-email">Email${R}</label><input class="input" id="rq-email" type="email" autocomplete="email" placeholder="you@business.com" aria-required="true">${reqErr('rq-email-e')}</div>
+<div class="field"><label for="rq-phone">Phone or WhatsApp${R}</label><input class="input" id="rq-phone" type="tel" autocomplete="tel" placeholder="10-digit mobile number" aria-required="true"><div class="hint" id="rq-phone-h">We may call or message you about this request.</div>${reqErr('rq-phone-e')}</div></div>
+<div class="two"><div class="field"><label for="rq-type">Business type${R}</label><select class="input" id="rq-type" aria-required="true"><option value="">Select one</option>${reqTypes.map(t=>`<option>${t}</option>`).join('')}</select>${reqErr('rq-type-e')}</div>
+<div class="field"><label for="rq-qty">How many cards?${R}</label><select class="input" id="rq-qty">${reqQty.map(t=>`<option>${t}</option>`).join('')}</select></div></div>
+<fieldset style="border:0;padding:0"><legend class="legend">What should the card open?${R}</legend><div class="pills" id="rq-dest">${reqDest.map(([l,i])=>`<label class="pill"><input type="checkbox" name="rqd" value="${l}">${ic(i)}${l}</label>`).join('')}</div><div class="hint" style="margin-top:6px">Pick one or more. You can change this later.</div>${reqErr('rq-dest-e')}</fieldset>
+<div class="two"><div class="field"><label for="rq-city">City <span class="faint" style="font-weight:400">(optional)</span></label><input class="input" id="rq-city" autocomplete="address-level2"></div><div></div></div>
+<div class="field"><label for="rq-note">Anything else? <span class="faint" style="font-weight:400">(optional)</span></label><textarea class="input" id="rq-note" rows="3"></textarea></div>
+<div><label class="chk"><input type="checkbox" id="rq-ok"><span>I agree to be contacted about this request.${R}</span></label>${reqErr('rq-ok-e')}</div>
+<button class="btn btn-p lg" type="submit" id="rqbtn">Send request</button>
+<p class="faint" style="text-align:center;font-size:12px">Design preview only. Nothing is sent or stored yet.</p></form></div>
+</section></div></div>`);
+
+pages['features']=()=>{
+ const rows=[['nfc','NFC tap','Hold a compatible phone near the card and your page opens. There is nothing to install and nothing to pair.',['Works with NFC-enabled phones','Opens in the phone’s browser','Chip holds the card’s permanent link'],`<div style="max-width:270px;margin:auto">${tapCard('brand')}</div>`],
+ ['qr','QR codes','Each card carries a QR code that leads to the same permanent link as the NFC chip, so every phone can connect.',['Scan with the regular camera app','Same link as the NFC chip','Download the QR from your dashboard'],`<div style="max-width:270px;margin:auto">${tapCard('review')}</div>`],
+ ['user','Digital profiles','Build a simple mobile page with your contact details, hours, social links, and the actions customers use most.',['Contact and location actions','Social and website links','Feedback and review links'],`<div style="width:190px;margin:auto">${phone()}</div>`],
+ ['link','Smart destinations','Decide what a tap opens: a profile, a menu, a form, or a website. Switch it any time.',['Profile, URL, menu, or form','Change without reprinting','One permanent card URL'],`<div style="display:grid;gap:10px;max-width:340px;margin:auto">${[['Digital profile','Active'],['Menu link','Active'],['Feedback form','Draft']].map(([a,b])=>`<div class="card" style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;font-size:14px"><span>${a}</span><span class="badge ${b==='Active'?'ok':''}">${b}</span></div>`).join('')}<div class="chip" style="margin:0;justify-self:center">${ic('link')}tapwe.example/c/ab12cd</div></div>`],
+ ['grid','Card management','See all of your cards in one place, check their status, and request a change whenever you need one.',['Clear status for every card','Request changes in a few clicks','Organised by card name'],`<div class="card" style="padding:16px;max-width:360px;margin:auto"><b style="font-size:14px">My Cards</b>${[['Front desk','Active'],['Table menu','Active'],['Feedback','Draft']].map(([a,b])=>`<div style="display:flex;justify-content:space-between;padding:10px 0;border-top:1px solid var(--line);margin-top:10px;font-size:14px"><span>${a}</span><span class="badge ${b==='Active'?'ok':''}">${b}</span></div>`).join('')}<p class="hint" style="font-size:12px;margin-top:8px">Demo data</p></div>`]];
+ return shell('features',`<div class="pagehead"><div class="wrap"><div class="eyebrow">Features</div><h1>One card. A few simple tools.</h1><p>Tapwe keeps things plain: a physical card, a permanent link, and a dashboard to decide where it goes.</p></div></div>
+ <div class="wrap" style="padding-top:40px;padding-bottom:40px">${rows.map(([i,t,d,pts,v],n)=>`<section class="frow rv ${n%2?'rev':''}"><div class="txt"><span class="ico">${ic(i)}</span><h2>${t}</h2><p class="lead">${d}</p><ul class="ticks">${pts.map(p=>`<li>${ic('check')}${p}</li>`).join('')}</ul></div><div class="panel">${v}</div></section>`).join('')}</div>${cta()}`);
+};
+
+pages['how-it-works']=()=>{
+ const f=[['pkg','Receive your card','Your Tapwe card arrives with an NFC chip and a QR code, both tied to its own permanent link.'],['sliders','Choose a destination','In your dashboard, pick what the card opens: a profile, menu, form, or website.'],['nfc','Customer taps','They hold their phone near the card. NFC-enabled phones open the link right away.'],['scan','Or scans the QR','No NFC? They point the camera at the QR code and get the same page.'],['monitor','Your page opens','The configured destination loads in their browser. Change it later and the same card follows.']];
+ return shell('how-it-works',`<div class="pagehead"><div class="wrap"><div class="eyebrow">How it works</div><h1>From card to connection, step by step</h1><p>No apps, no accounts for your customers. Just a tap or a scan.</p></div></div>
+ <div class="wrap" style="padding-top:64px;padding-bottom:80px"><ol class="flow" style="list-style:none;padding:0">${f.map(([i,t,d],n)=>`<li class="card"><div style="display:flex;justify-content:space-between;align-items:center"><span class="ico">${ic(i)}</span><span class="faint" style="font-size:14px;font-weight:500">0${n+1}</span></div><h3>${t}</h3><p>${d}</p></li>`).join('')}</ol>
+ <div class="card" style="padding:32px;margin-top:56px"><h2 style="font-size:20px">One permanent link</h2><p class="muted" style="margin-top:8px;max-width:680px">The NFC chip and the QR code both point to the same card URL. That URL never changes, so the printed card stays valid even when you point it somewhere new.</p></div></div>${cta()}`);
+};
+
+pages['pricing']=()=>{
+ const plans=[['Plan A','Placeholder for a starter plan.',3],['Plan B','Placeholder for a growing business.',4,1],['Plan C','Placeholder for multi-location teams.',3]];
+ return shell('pricing',`<div class="pagehead"><div class="wrap"><div class="eyebrow">Pricing</div><h1>Simple plans, coming soon</h1><p>Pricing has not been announced yet. This layout is ready for plans once they are defined.</p></div></div>
+ <div class="wrap" style="padding-top:56px;padding-bottom:80px"><div class="note" role="note">${ic('info')}<span>Placeholder content. Plan names, prices, and features are editable examples, and no plan is currently available.</span></div>
+ <div class="g3">${plans.map(([n,b,k,f])=>`<div class="card plan ${f?'f':''}"><div style="display:flex;justify-content:space-between;align-items:center"><h2 style="font-size:18px">${n}</h2>${f?'<span class="badge brand">Placeholder highlight</span>':''}</div><div class="price">₹ — <small>/ editable</small></div><p class="muted" style="font-size:14px;margin-top:8px">${b}</p><ul>${Array(k).fill(`<li>${ic('check')}Feature placeholder</li>`).join('')}</ul><a class="btn ${f?'btn-p':'btn-s'}" style="width:100%" href="#/sign-up">Get Started</a></div>`).join('')}</div></div>`);
+};
+
+const legal={privacy:['Privacy Policy','The Privacy Policy will be published here before launch.'],terms:['Terms and Conditions','The Terms and Conditions will be published here before launch.'],support:['Support and contact','Support and contact details will be added here once available.']};
+Object.entries(legal).forEach(([k,[t,d]])=>pages[k]=()=>shell(k,`<div class="pagehead"><div class="wrap"><div class="eyebrow">Tapwe</div><h1>${t}</h1><p>${d}</p></div></div><div style="height:240px"></div>`));
+
+function auth(mode){
+ const up=mode==='up';
+ return `<div class="authw page"><aside class="authl">${logo()}<div><h2>${up?'We set up your card. You just tap.':'Welcome back to your cards.'}</h2><p>${up?'Create an account to follow your card request. Our team configures the card and delivers it ready to use.':'Sign in to view your cards and request changes.'}</p><div class="authv"><div class="a1">${tapCard('insta')}</div><div class="a3">${tapCard('brand')}</div><div class="a2">${tapCard('menu')}</div></div></div><span class="faint" style="color:rgb(255 255 255/.55);font-size:13px">One Tap. Endless Possibilities.</span></aside>
+ <div class="authr auth">${logo()}<div class="box"><h1>${up?'Create your account':'Sign in'}</h1><p class="sub">${up?'Track your card requests and changes.':'Enter your details to manage your cards.'}</p>
+ <form id="authf" novalidate>${up?`<div class="field"><label for="name">Full name${R}</label><input class="input" id="name" autocomplete="name" aria-required="true"><div class="err" id="name-e" role="alert"></div></div>`:''}
+ <div class="field"><label for="email">Email${R}</label><input class="input" id="email" type="email" autocomplete="email" placeholder="you@business.com" aria-required="true"><div class="err" id="email-e" role="alert"></div></div>
+ <div class="field"><label for="pw">Password${R}</label><div class="pwd"><input class="input" id="pw" type="password" autocomplete="${up?'new-password':'current-password'}"><button type="button" id="pwt" aria-label="Show password">${ic('eye')}</button></div>${up?'<div class="hint" id="pw-h">At least 8 characters.</div>':''}<div class="err" id="pw-e" role="alert"></div></div>
+ <button class="btn btn-p lg" type="submit" id="sbtn">${up?'Create Account':'Sign In'}</button><p class="faint" style="text-align:center;font-size:12px">Design preview only. No real sign-in happens.</p></form>
+ <p class="alt">${up?'Already have an account? <a href="#/sign-in">Sign in</a>':'New to Tapwe? <a href="#/sign-up">Create an account</a>'}</p></div></div></div>`;
+}
+pages['sign-in']=()=>auth('in');pages['sign-up']=()=>auth('up');
+
+/* ---------- dashboard ---------- */
+const destLabels={profile:'Digital profile',url:'Website or link',menu:'Menu',form:'Feedback form'};
+const seed=()=>[{id:'ab12cd',name:'Front desk card',status:'Active',type:'profile',dest:'Digital profile'},{id:'k9f2xq',name:'Table menu',status:'Active',type:'menu',dest:'https://example.com/menu'},{id:'m4t8zr',name:'Feedback card',status:'Draft',type:'form',dest:'https://forms.example.com/feedback'}];
+let cards=seed(), filter='all', cardsView='loading', openMenu=null;
+const cardUrl=id=>`https://tapwe.example/c/${id}`;
+const nav=[['','Overview','dash'],['cards','My Cards','card'],['create','Request a Card','plusc'],['qr','QR Code','qr'],['profile','Digital Profile','user'],['destinations','Destinations','link'],['analytics','Analytics','chart'],['settings','Account Settings','gear']];
+const sidenav=sub=>`<nav aria-label="Dashboard">${nav.map(([k,l,i])=>`<a href="#/app${k?'/'+k:''}" class="${k===sub?'on':''}" ${k===sub?'aria-current="page"':''}>${ic(i)}${l}</a>`).join('')}</nav>`;
+function dash(sub,title,desc,body,action=''){
+ return `<div class="app page"><aside class="side">${logo()}${sidenav(sub)}<span class="badge warn" style="align-self:flex-start;margin-top:16px">Demo data</span></aside>
+ <div class="apmain"><header class="atop"><button class="btn icon btn-g menu-btn" id="dopen" aria-label="Open navigation">${ic('burger')}</button><span class="faint" style="font-size:14px">Dashboard preview</span>
+ <div style="position:relative"><button class="user" id="umenu" aria-haspopup="menu" aria-expanded="false"><i>D</i>Demo User</button></div></header>
+ <div class="drawer" id="drawer" role="dialog" aria-modal="true" aria-label="Navigation"><div class="sc" id="dclose"></div><div class="pn"><div style="display:flex;justify-content:space-between;align-items:center">${logo()}<button class="btn icon btn-g" id="dclose2" aria-label="Close navigation">${ic('x')}</button></div><div style="margin-top:24px">${sidenav(sub)}</div></div></div>
+ <main class="acontent" id="main"><div class="ptitle"><div><h1>${title}</h1>${desc?`<p>${desc}</p>`:''}</div>${action}</div>${body}</main></div></div>`;
+}
+const statusBadge=s=>`<span class="badge ${s==='Active'?'ok':s==='Paused'?'warn':''}">${s}</span>`;
+const newBtn=`<a class="btn btn-p" href="#/app/create">${ic('plus')}Request Card</a>`;
+const emptyCards=(extra='')=>`<div class="empty"><span class="ico">${ic('card')}</span><h2>No cards yet</h2><p>Request your first card. We configure it and deliver it ready to use.</p><div class="row"><a class="btn btn-p" href="#/app/create">Request a Card</a>${extra}</div></div>`;
+const table=list=>`<div class="twrap"><table><caption class="sr">Your cards (demo data)</caption><thead><tr><th scope="col">Card name</th><th scope="col">Card ID</th><th scope="col">Status</th><th scope="col">Destination</th><th scope="col"><span class="sr">Actions</span></th></tr></thead><tbody>${list.map(c=>`<tr><td style="font-weight:500">${esc(c.name)}</td><td class="id">${c.id}</td><td>${statusBadge(c.status)}</td><td class="dest">${esc(c.dest)}</td><td class="act" style="position:relative"><button class="btn icon btn-g" data-menu="${c.id}" aria-haspopup="menu" aria-label="Actions for ${esc(c.name)}">${ic('more')}</button></td></tr>`).join('')}</tbody></table></div>`;
+
+const dpages={};
+dpages['']=()=>dash('','Overview','A quick look at your cards. All figures here are demo data.',`<div class="promo"><div><h2>Need another card?</h2><p>Tell us what you need. Our team configures it, adds the link and QR code, and delivers it to you.</p><a class="btn btn-w" href="#/app/create">Request a Card ${ic('arrow')}</a></div><div class="pm">${tapCard('insta')}</div></div><div class="stats">${[['Total cards',cards.length,'card'],['Active',cards.filter(c=>c.status==='Active').length,'check'],['Drafts',cards.filter(c=>c.status==='Draft').length,'edit']].map(([l,v,i])=>`<div class="card"><span class="ico">${ic(i)}</span><p>${l}</p><b>${v}</b></div>`).join('')}</div><h2 style="font-size:18px;margin:40px 0 16px">Recent cards</h2>${cards.length?table(cards.slice(0,5)):emptyCards()}`,newBtn);
+dpages['cards']=()=>{
+ const list=cards.filter(c=>filter==='all'||c.status.toLowerCase()===filter);
+ let b=`<div class="tabs" role="tablist" aria-label="Filter cards by status">${['all','active','draft','paused'].map(t=>`<button role="tab" data-filter="${t}" aria-selected="${filter===t}">${t}</button>`).join('')}</div>`;
+ if(cardsView==='loading')b+=`<div aria-busy="true" aria-label="Loading cards"><div class="skel"></div><div class="skel"></div><div class="skel"></div></div>`;
+ else if(cardsView==='error')b+=`<div class="empty"><span class="ico">${ic('alert')}</span><h2>We couldn’t load your cards</h2><p>Check your connection and try again.</p><div class="row"><button class="btn btn-s" data-state="loading">${ic('refresh')}Try again</button></div></div>`;
+ else if(!cards.length)b+=emptyCards(`<button class="btn btn-s" id="restore">Load demo cards</button>`);
+ else if(!list.length)b+=`<div class="empty"><span class="ico">${ic('card')}</span><h2>No ${filter} cards</h2><p>Try a different filter.</p></div>`;
+ else b+=table(list);
+ if(cardsView==='ready')b+=`<p class="faint" style="margin-top:24px;font-size:14px">Preview the other states: <button style="color:var(--b600);font-weight:500" data-state="loading">loading</button> · <button style="color:var(--b600);font-weight:500" data-state="error">error</button> · <button style="color:var(--b600);font-weight:500" id="clearall">empty</button></p>`;
+ return dash('cards','My Cards','Every card, its permanent ID, and where it points.',b,newBtn);
+};
+/* create card */
+const exps=[['business','Business card','Share contact details and links.','contact','profile'],['menu','Menu','Open a menu for customers.','menu','menu'],['feedback','Feedback','Collect reviews or responses.','msg','form'],['social','Social profile','Send people to your social page.','at','url'],['link','Custom link','Open any website or page.','link','url']];
+const cc={step:0,name:'',exp:'business',type:'profile',value:'',biz:'',id:'',err:{},saving:false,tab:'nfc'};
+const rid=()=>Math.random().toString(36).slice(2,8);
+function ccBody(){
+ const s=cc.step,e=cc.err;
+ let f='';
+ if(s===0)f=`<div style="display:grid;gap:24px"><div class="field"><label for="cn">Card name${R}</label><input class="input ${e.name?'bad':''}" id="cn" value="${esc(cc.name)}" ${e.name?'aria-invalid="true" aria-describedby="cn-e"':''}>${e.name?`<div class="err" id="cn-e" role="alert">${e.name}</div>`:'<div class="hint">Only you see this, for example “Front desk”.</div>'}</div>
+ <fieldset style="border:0;padding:0"><legend class="legend">Card experience${R}</legend><div class="opts">${exps.map(([k,l,d,i])=>`<label class="opt"><input type="radio" name="exp" value="${k}" ${cc.exp===k?'checked':''}>${ic(i)}<span><b>${l}</b><span>${d}</span></span></label>`).join('')}</div></fieldset></div>`;
+ if(s===1){
+  const prof=cc.type==='profile';
+  f=`<div style="display:grid;gap:24px"><fieldset style="border:0;padding:0"><legend class="legend">Destination type${R}</legend><div class="pills">${Object.entries(destLabels).map(([k,l])=>`<label class="pill"><input type="radio" name="dt" value="${k}" ${cc.type===k?'checked':''}>${l}</label>`).join('')}</div></fieldset>
+  ${prof?`<div class="field"><label for="biz">Business name${R}</label><input class="input ${e.biz?'bad':''}" id="biz" value="${esc(cc.biz)}">${e.biz?`<div class="err" role="alert">${e.biz}</div>`:'<div class="hint">You can add contact details and links in Digital Profile after saving.</div>'}</div>`
+  :`<div class="field"><label for="dv">Link${R}</label><input class="input ${e.value?'bad':''}" id="dv" value="${esc(cc.value)}" placeholder="https://example.com">${e.value?`<div class="err" role="alert">${e.value}</div>`:`<div class="hint">Example: https://example.com/menu</div>`}</div>`}</div>`;
+ }
+ if(s===2)f=`<div style="display:grid;gap:24px"><div class="qrbox"><div class="q">${qr(cc.id)}</div><div style="min-width:0;flex:1"><b style="font-size:14px;font-weight:500">Permanent card URL</b><div class="url">${cardUrl(cc.id)}</div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn btn-s sm" data-copy="${cardUrl(cc.id)}">${ic('copy')}Copy URL</button><button class="btn btn-s sm" id="dlqr">${ic('dl')}Download QR (SVG)</button></div><p class="hint" style="font-size:12px;margin-top:12px">The NFC chip and this QR code open the same link. The QR here is a design placeholder, not scannable.</p></div></div>
+ <div><div class="tabs" role="tablist" style="margin:0"><button role="tab" data-ctab="nfc" aria-selected="${cc.tab==='nfc'}">NFC programming</button><button role="tab" data-ctab="qr" aria-selected="${cc.tab==='qr'}">Printing the QR</button></div>
+ <div class="ptab">${cc.tab==='nfc'?`<b style="color:var(--ink)">Write the URL to your card’s NFC chip</b><ol><li>Copy the permanent card URL above.</li><li>Open any NFC writing app on an NFC-capable phone.</li><li>Choose to write a URL record and paste the link.</li><li>Hold the card against the phone until the app confirms the write.</li><li>Tap the card to test that it opens the right page.</li></ol><p class="faint" style="margin-top:12px">Tapwe does not write to cards from this website yet.</p>`:'Download the SVG and send it to your printer. SVG stays sharp at any size.'}</div></div></div>`;
+ const dd=cc.type==='profile'?(cc.biz.trim()||'Your digital profile'):(cc.value.trim()||'Not set yet');
+ return `<div id="ccwrap"><ol class="progress" aria-label="Progress">${['Basics','Destination','Preview and QR'].map((t,i)=>`<li class="${i===s?'on':i<s?'done':''}" ${i===s?'aria-current="step"':''}>${i<s?'✓ ':''}${i+1}. ${t}</li>`).join('')}</ol>
+ <div class="cc"><div class="card f">${f}<div class="nav-btns"><button class="btn btn-g" id="cback" ${s===0?'disabled':''}>${ic('back')}Back</button>${s<2?`<button class="btn btn-p" id="cnext">Continue ${ic('arrow')}</button>`:`<button class="btn btn-p" id="csave">${cc.saving?'<span class="spin"></span>':''}Save card</button>`}</div></div>
+ <aside aria-label="Card preview"><p class="muted" style="font-size:14px;font-weight:500;margin-bottom:12px">Preview</p><div id="ccprev" style="max-width:230px;margin:0 auto 20px">${tapCard(expTheme[cc.exp]||'brand',{id:cc.id})}</div><dl class="sum"><div><dt>Name</dt><dd>${esc(cc.name.trim()||'Untitled card')}</dd></div><div><dt>Opens</dt><dd>${destLabels[cc.type]}</dd></div><div><dt>Target</dt><dd>${esc(dd)}</dd></div></dl></aside></div></div>`;
+}
+dpages['create']=()=>dash('create','Request a Card','You tell us what you need. We do the configuration.',`<div class="card" style="padding:32px;max-width:760px"><div class="g3" style="display:grid;gap:20px">${[['msg','1. Tell us what you need','Share your business details and what the card should open, such as a menu, social page or review link.'],['sliders','2. We configure it','Our team sets up the destination, your page and the QR code. You do not need to configure anything.'],['card','3. We deliver it','Your finished card is handed over ready to tap. Ask us any time to change where it points.']].map(([i,t,d])=>`<div style="display:flex;gap:14px"><span class="ico" style="flex:none;width:40px;height:40px">${ic(i)}</span><div><h3 style="font-size:16px">${t}</h3><p class="muted" style="margin-top:4px">${d}</p></div></div>`).join('')}</div><div class="row" style="margin-top:28px"><a class="btn btn-p" href="#/request">Request a Card ${ic('arrow')}</a></div></div>`);
+dpages['qr']=()=>{
+ const sel=cards.find(c=>c.id===(location.hash.split('?card=')[1]))||cards[0];
+ const b=!sel?`<div class="empty"><span class="ico">${ic('qr')}</span><h2>No cards yet</h2><p>Request a card and we will set up its QR code.</p><div class="row"><a class="btn btn-p" href="#/app/create">Request a Card</a></div></div>`:
+ `<div class="card" style="padding:24px"><div class="field" style="max-width:320px;margin-bottom:24px"><label for="qsel">Card</label><select class="input" id="qsel">${cards.map(c=>`<option value="${c.id}" ${c.id===sel.id?'selected':''}>${esc(c.name)}</option>`).join('')}</select></div>
+ <div class="qrbox"><div class="q">${qr(sel.id)}</div><div style="min-width:0;flex:1"><b style="font-size:14px;font-weight:500">Permanent card URL</b><div class="url">${cardUrl(sel.id)}</div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn btn-s sm" data-copy="${cardUrl(sel.id)}">${ic('copy')}Copy URL</button><button class="btn btn-s sm" id="dlqr">${ic('dl')}Download QR (SVG)</button></div><p class="hint" style="font-size:12px;margin-top:12px">Design placeholder QR, not scannable.</p></div></div></div>`;
+ return dash('qr','QR Code','Download or copy the link for any card.',b);
+};
+dpages['profile']=()=>dash('profile','Digital Profile','The page customers see when a card points to your profile.',`<div class="cc"><div class="card f"><form id="pform" style="display:grid;gap:20px"><div class="field"><label for="pn">Business name</label><input class="input" id="pn" value="Your Business"></div><div class="field"><label for="pt">Short description</label><input class="input" id="pt" value="Café · Open until 10 pm"></div><div class="field"><label for="pp">Phone</label><input class="input" id="pp" type="tel"></div><div class="field"><label for="pw2">Website</label><input class="input" id="pw2" type="url" placeholder="https://"></div><div><button class="btn btn-p" type="submit">Save profile</button></div></form></div>
+ <aside><p class="muted" style="font-size:14px;font-weight:500;margin-bottom:12px">Live preview</p><div style="max-width:220px">${phone()}</div></aside></div>`);
+dpages['destinations']=()=>dash('destinations','Destinations','Where each card sends people. To change one, request it from My Cards.',cards.length?`<div class="stack">${cards.map(c=>`<div class="card row-card"><div style="min-width:0"><b style="font-weight:500">${esc(c.name)}</b><p class="muted" style="font-size:14px;overflow:hidden;text-overflow:ellipsis">${esc(c.dest)}</p></div><span class="badge brand">${destLabels[c.type]}</span></div>`).join('')}</div>`:emptyCards(),`<a class="btn btn-s" href="#/app/cards">Go to My Cards</a>`);
+dpages['analytics']=()=>{const d=[['Mon',12],['Tue',18],['Wed',9],['Thu',24],['Fri',30],['Sat',38],['Sun',21]],m=38;return dash('analytics','Analytics','Taps and scans per day.',`<div class="card" style="padding:24px"><b style="font-size:14px;font-weight:500">Opens this week (sample numbers)</b><ul class="bars" aria-label="Opens per day, demo data">${d.map(([a,v])=>`<li><span>${v}</span><i style="height:${v/m*100}%"></i>${a}</li>`).join('')}</ul><p class="faint" style="font-size:14px;margin-top:24px">Real analytics will appear here once cards are in use.</p></div>`,'<span class="badge warn">Demo data</span>');};
+dpages['settings']=()=>dash('settings','Account Settings','Update your name and email.',`<div class="card" style="padding:24px;max-width:520px"><form id="sform" style="display:grid;gap:20px"><div class="field"><label for="an">Full name</label><input class="input" id="an" value="Demo User"></div><div class="field"><label for="ae">Email</label><input class="input" id="ae" type="email" value="demo@example.com"></div><div><button class="btn btn-p" type="submit">Save changes</button></div></form></div>`);
+
+/* ---------- helpers ---------- */
+function toast(msg,tone='ok'){const t=document.createElement('div');t.className='toast '+(tone==='ok'?'':'error');t.setAttribute('role','status');t.innerHTML=`${ic(tone==='ok'?'check':'alert')}<span>${esc(msg)}</span><button class="btn icon btn-g sm" aria-label="Dismiss notification" style="width:28px;height:28px">${ic('x')}</button>`;$('button',t).onclick=()=>t.remove();$('#toasts').append(t);setTimeout(()=>t.remove(),3600)}
+async function copy(t){
+ try{await navigator.clipboard.writeText(t);toast('Card URL copied to clipboard.')}
+ catch{try{const a=document.createElement('textarea');a.value=t;a.style.cssText='position:fixed;opacity:0';document.body.append(a);a.select();const ok=document.execCommand('copy');a.remove();ok?toast('Card URL copied to clipboard.'):toast('Could not copy. Select the URL and copy it manually.','error')}catch{toast('Could not copy. Select the URL and copy it manually.','error')}}}
+function dialog(html){const d=$('#dlg');d.innerHTML=html;d.showModal();return d}
+function closeMenu(){$$('.menu').forEach(m=>m.remove());openMenu=null;$$('[data-menu],#umenu').forEach(b=>b.setAttribute('aria-expanded','false'))}
+function downloadQr(id){const s=$('.q svg');if(!s)return toast('QR code is not ready yet.','error');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([new XMLSerializer().serializeToString(s)],{type:'image/svg+xml'}));a.download=`tapwe-${id}.svg`;a.click();toast('QR code downloaded as SVG.')}
+let loadT;
+function loadCards(){cardsView='loading';clearTimeout(loadT);loadT=setTimeout(()=>{cardsView='ready';if(curSub()==='cards')render()},650)}
+const curSub=()=>{const p=location.hash.replace(/^#\/?/,'').split('?')[0].split('/');return p[0]==='app'?(p[1]||''):null};
+
+/* ---------- router ---------- */
+function route(){const h=location.hash.replace(/^#\/?/,'');const [path,anchor]=h.split('#');return{path:path.split('?')[0].replace(/\/$/,''),anchor}}
+function render(){
+ closeMenu();clearInterval(demoT);
+ const {path,anchor}=route();
+ let html;
+ if(path.startsWith('app')){const sub=path.split('/')[1]||'';html=(dpages[sub]||dpages[''])()}
+ else if(path==='sign-in'||path==='sign-up')html=pages[path]();
+ else html=(pages[path]||pages[''])();
+ $('#view').innerHTML=html;
+ bind();reveal();
+ if(anchor)requestAnimationFrame(()=>document.getElementById(anchor)?.scrollIntoView({behavior:'smooth'}));
+ else if(!render.keep)window.scrollTo(0,0);
+ render.keep=false;
+}
+window.addEventListener('hashchange',()=>{const s=curSub();if(s==='cards')loadCards();if(s==='create'&&location.hash.indexOf('keep')<0&&!render.cc){}render()});
+
+function bindReq(){
+ const f=$('#reqf');
+ const map={name:'rq-name',biz:'rq-biz',email:'rq-email',phone:'rq-phone',type:'rq-type',qty:'rq-qty',dests:'rq-dest',ok:'rq-ok'};
+ const set=(id,m)=>{const e=$('#'+id+'-e'),el=$('#'+id);if(e)e.textContent=m||'';if(el){el.classList.toggle('bad',!!m);m?el.setAttribute('aria-invalid','true'):el.removeAttribute('aria-invalid')}return !m};
+ const focusId=id=>{const el=$('#'+id);(el.matches('input,select,textarea')?el:$('input',el)).focus()};
+ /* clear a field's error as soon as the user fixes it */
+ const live=e=>{const t=e.target;const id=t.name==='rqd'?'rq-dest':t.id;if(Object.values(map).includes(id)&&$('#'+id+'-e')?.textContent)set(id,'')};
+ f.addEventListener('input',live);f.addEventListener('change',live);
+ f.onsubmit=ev=>{ev.preventDefault();
+  const vals={name:$('#rq-name').value,biz:$('#rq-biz').value,email:$('#rq-email').value,phone:$('#rq-phone').value,type:$('#rq-type').value,qty:$('#rq-qty').value,dests:$$('input[name=rqd]:checked').map(i=>i.value),ok:$('#rq-ok').checked};
+  const er=validate(S.request,vals),bad=[];
+  Object.entries(map).forEach(([k,id])=>{if(!set(id,er[k]||''))bad.push(id)});
+  if(bad.length){focusId(bad[0]);return}
+  const b=$('#rqbtn');b.disabled=true;b.innerHTML='<span class="spin"></span>Sending';
+  setTimeout(()=>{
+   $('#rqbox').innerHTML=`<div class="rqok"><div class="big">${ic('check')}</div><h2>Request received</h2><p>Thanks, ${esc(vals.name.trim().split(/\s+/)[0])}. This is a design preview, so nothing was actually sent.</p><dl><div><dt>Business</dt><dd>${esc(vals.biz.trim())}</dd></div><div><dt>Cards</dt><dd>${esc(vals.qty)}</dd></div><div><dt>Card opens</dt><dd>${esc(vals.dests.join(', '))}</dd></div></dl><div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:24px"><a class="btn btn-s" href="#/">Back to home</a><button class="btn btn-p" id="rqagain">Submit another request</button></div></div>`;
+   toast('Request received (demo).');$('#rqbox').scrollIntoView({behavior:'smooth',block:'center'});$('#rqagain').onclick=()=>{render.keep=true;render()}},700)};
+}
+function reveal(){const els=$$('.rv');if(!('IntersectionObserver' in window)||matchMedia('(prefers-reduced-motion:reduce)').matches){els.forEach(e=>e.classList.add('in'));return}
+ const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{rootMargin:'0px 0px -6% 0px',threshold:.06});els.forEach(e=>io.observe(e))}
+let demoT;
+function bind(){
+ if($('#reqf'))bindReq();
+ if($('#dscr')){const keys=demoTabs.map(t=>t[0]);let cur=0;
+  const show=k=>{cur=keys.indexOf(k);$$('[data-dtab]').forEach(b=>b.setAttribute('aria-selected',b.dataset.dtab===k));const sc=$('#dscr');sc.innerHTML=demoHTML(k);sc.classList.remove('fade');void sc.offsetWidth;sc.classList.add('fade');$('#dnow').textContent=demoTabs[cur][1];const dc=$('#dcard');if(dc)dc.innerHTML=tapCard(demoTheme[k])};
+  $$('[data-dtab]').forEach(b=>b.onclick=()=>{clearInterval(demoT);show(b.dataset.dtab)});
+  if(!matchMedia('(prefers-reduced-motion:reduce)').matches)demoT=setInterval(()=>show(keys[(cur+1)%keys.length]),4200)}
+ const b=$('#burger');if(b)b.onclick=()=>{const o=$('#mnav').classList.toggle('open');b.setAttribute('aria-expanded',o);b.setAttribute('aria-label',o?'Close menu':'Open menu');b.innerHTML=ic(o?'x':'burger')};
+ $$('#mnav a').forEach(a=>a.addEventListener('click',()=>$('#mnav').classList.remove('open')));
+ /* auth */
+ const af=$('#authf');if(af){const up=!!$('#name');
+  $('#pwt').onclick=()=>{const p=$('#pw');const s=p.type==='password';p.type=s?'text':'password';$('#pwt').innerHTML=ic(s?'eyeoff':'eye');$('#pwt').setAttribute('aria-label',s?'Hide password':'Show password')};
+  af.onsubmit=e=>{e.preventDefault();const er=validate(up?S.signUp:S.signIn,{name:up?$('#name').value:'',email:$('#email').value,pw:$('#pw').value});
+   ['name','email','pw'].forEach(k=>{const el=$('#'+(k==='pw'?'pw':k)),m=$('#'+k+'-e');if(!el)return;m.textContent=er[k]||'';el.classList.toggle('bad',!!er[k]);er[k]?el.setAttribute('aria-invalid','true'):el.removeAttribute('aria-invalid')});
+   if(Object.keys(er).length)return;
+   const sb=$('#sbtn');sb.disabled=true;sb.innerHTML='<span class="spin"></span>'+sb.textContent;
+   setTimeout(()=>{toast(up?'Demo account created.':'Signed in to the demo dashboard.');location.hash='#/app'},700)}}
+ /* dashboard chrome */
+ const dopen=$('#dopen');if(dopen){const dr=$('#drawer');dopen.onclick=()=>dr.classList.add('open');$('#dclose').onclick=$('#dclose2').onclick=()=>dr.classList.remove('open');$$('#drawer a').forEach(a=>a.onclick=()=>dr.classList.remove('open'))}
+ const um=$('#umenu');if(um)um.onclick=e=>{e.stopPropagation();if(openMenu==='user')return closeMenu();closeMenu();openMenu='user';um.setAttribute('aria-expanded','true');um.parentElement.insertAdjacentHTML('beforeend',`<div class="menu" role="menu" style="right:0;top:44px"><a role="menuitem" href="#/app/settings">${ic('gear')}Account Settings</a><a role="menuitem" href="#/">${ic('logout')}Sign out</a></div>`)};
+ /* cards table */
+ $$('[data-filter]').forEach(t=>t.onclick=()=>{filter=t.dataset.filter;render.keep=true;render()});
+ $$('[data-state]').forEach(t=>t.onclick=()=>{if(t.dataset.state==='loading'){loadCards();render.keep=true;render()}else{cardsView='error';render.keep=true;render()}});
+ const ca=$('#clearall');if(ca)ca.onclick=()=>{cards=[];render.keep=true;render()};
+ const rs=$('#restore');if(rs)rs.onclick=()=>{cards=seed();render.keep=true;render()};
+ $$('[data-menu]').forEach(btn=>btn.onclick=e=>{e.stopPropagation();const id=btn.dataset.menu;if(openMenu===id)return closeMenu();closeMenu();openMenu=id;btn.setAttribute('aria-expanded','true');
+  btn.parentElement.insertAdjacentHTML('beforeend',`<div class="menu" role="menu" style="top:44px"><button role="menuitem" data-a="copy">${ic('copy')}Copy card URL</button><a role="menuitem" href="#/app/qr?card=${id}">${ic('qr')}View QR code</a><button role="menuitem" data-a="edit">${ic('edit')}Request a change</button><hr><button role="menuitem" class="dng" data-a="del">${ic('trash')}Delete card</button></div>`);
+  const c=cards.find(x=>x.id===id);
+  $('.menu [data-a=copy]').onclick=()=>{closeMenu();copy(cardUrl(id))};
+  $('.menu [data-a=edit]').onclick=()=>{closeMenu();const d=dialog(`<h2>Request a change</h2><p>${esc(c.name)} keeps the same card URL. Tell us what it should open and our team will update it.</p><form method="dialog" id="ef"><div class="field"><label for="ed">What should it open?${R}</label><input class="input" id="ed" placeholder="e.g. our new menu link"></div><div class="row"><button class="btn btn-s" type="button" id="ecancel">Cancel</button><button class="btn btn-p" type="submit">Send request</button></div></form>`);
+   $('#ecancel').onclick=()=>d.close();$('#ef').onsubmit=e=>{e.preventDefault();const v=$('#ed').value.trim();if(!v)return;d.close();toast('Change request sent. Our team will update it.');render.keep=true;render()}};
+  $('.menu [data-a=del]').onclick=()=>{closeMenu();const d=dialog(`<h2>Delete this card?</h2><p>“${esc(c.name)}” will be removed from this demo list.</p><form method="dialog"><div class="row"><button class="btn btn-s" type="button" id="dcancel">Cancel</button><button class="btn btn-d" type="submit">Delete card</button></div></form>`);
+   $('#dcancel').onclick=()=>d.close();$('#dlg form').onsubmit=e=>{e.preventDefault();cards=cards.filter(x=>x.id!==id);d.close();toast('Card deleted.');render.keep=true;render()}}});
+ const qs=$('#qsel');if(qs)qs.onchange=()=>{location.hash='#/app/qr?card='+qs.value};
+ /* create card */
+ if($('#ccwrap'))bindCC();
+ /* simple forms */
+ const pf=$('#pform');if(pf)pf.onsubmit=e=>{e.preventDefault();toast('Profile saved (demo).')};
+ const sf=$('#sform');if(sf)sf.onsubmit=e=>{e.preventDefault();toast('Account details saved (demo).')};
+}
+function bindCC(){
+ const redraw=()=>{$('#ccwrap').outerHTML=ccBody();bindCC()};
+ $$('input[name=exp]').forEach(r=>r.onchange=()=>{cc.exp=r.value;cc.type=exps.find(e=>e[0]===r.value)[4];cc.err={};const pv=$('#ccprev');if(pv)pv.innerHTML=tapCard(expTheme[cc.exp]||'brand',{id:cc.id})});
+ $$('input[name=dt]').forEach(r=>r.onchange=()=>{cc.type=r.value;cc.err={};redraw()});
+ $$('[data-ctab]').forEach(t=>t.onclick=()=>{cc.tab=t.dataset.ctab;redraw()});
+ const sync=()=>{const n=$('#cn');if(n)cc.name=n.value;const b=$('#biz');if(b)cc.biz=b.value;const v=$('#dv');if(v)cc.value=v.value};
+ $$('#ccwrap input.input').forEach(i=>i.oninput=()=>{sync();const nm=$('.sum div:nth-child(1) dd');if(nm)nm.textContent=cc.name.trim()||'Untitled card';const tg=$('.sum div:nth-child(3) dd');if(tg)tg.textContent=cc.type==='profile'?(cc.biz.trim()||'Your digital profile'):(cc.value.trim()||'Not set yet')});
+ const nx=$('#cnext');if(nx)nx.onclick=()=>{sync();const e={};
+  if(cc.step===0)Object.assign(e,validate(S.ccBasics,{name:cc.name}));
+  if(cc.step===1)Object.assign(e,validate(S.ccDest(cc.type),{biz:cc.biz,value:cc.value}));
+  cc.err=e;if(!Object.keys(e).length)cc.step++;redraw();const f=$('#ccwrap .input.bad');if(f)f.focus()};
+ const bk=$('#cback');if(bk)bk.onclick=()=>{sync();cc.step=Math.max(0,cc.step-1);cc.err={};redraw()};
+ const sv=$('#csave');if(sv)sv.onclick=()=>{cc.saving=true;redraw();setTimeout(()=>{cards.unshift({id:cc.id,name:cc.name.trim(),status:'Active',type:cc.type,dest:cc.type==='profile'?'Profile: '+cc.biz.trim():cc.value.trim()});
+  Object.assign(cc,{step:0,name:'',exp:'business',type:'profile',value:'',biz:'',id:'',err:{},saving:false,tab:'nfc'});toast('Card created. Its permanent URL is ready to use.');location.hash='#/app/cards'},700)};
+}
+document.addEventListener('click',e=>{
+ if(openMenu&&!e.target.closest('.menu'))closeMenu();
+ const c=e.target.closest('[data-copy]');if(c)return copy(c.dataset.copy);
+ if(e.target.closest('#dlqr'))downloadQr(curSub()==='create'?cc.id:($('#qsel')?.value||''))});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMenu()});
+document.documentElement.classList.add('js');
+if(curSub()==='cards')loadCards();
+render();
+</script>
+</body>
+</html>
