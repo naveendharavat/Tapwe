@@ -1,6 +1,6 @@
 import { useSearchParams } from 'react-router'
 import { QRCodePreview } from '../../components/cards/QRCodePreview'
-import { qrSvgMarkup } from '../../components/cards/qrSvg'
+import { downloadQrSvg } from '../../components/cards/downloadQr'
 import { PageTitle } from '../../components/dashboard/PageTitle'
 import { useCopyCardUrl } from '../../components/dashboard/useCopyCardUrl'
 import { useToast } from '../../components/toast/toast-context'
@@ -64,12 +64,7 @@ function CardQr({ card }: { card: Card }) {
 
   const download = async () => {
     try {
-      const blob = new Blob([await qrSvgMarkup(card.url)], { type: 'image/svg+xml' })
-      const link = document.createElement('a')
-      link.href = URL.createObjectURL(blob)
-      link.download = `tapwe-${card.code}.svg`
-      link.click()
-      URL.revokeObjectURL(link.href)
+      await downloadQrSvg(card.url, card.code)
       toast('QR code downloaded as SVG.')
     } catch {
       toast('Could not create the QR code. Please try again.', 'error')

@@ -1,4 +1,5 @@
 import * as Y from 'yup'
+import type { CardStatus, DestinationType } from '../services/cards/cards.types'
 
 export const msg = {
   name: 'Enter your name.',
@@ -85,6 +86,27 @@ export const changeRequestSchema = Y.object({
   message: Y.string().trim().required('Tell us what the card should open.').max(500),
 })
 export type ChangeRequestValues = Y.InferType<typeof changeRequestSchema>
+
+const CARD_STATUSES: readonly CardStatus[] = ['draft', 'active', 'paused']
+const DESTINATION_TYPES: readonly DestinationType[] = ['profile', 'url', 'menu', 'form']
+
+export const adminCardSchema = Y.object({
+  name: Y.string().trim().required('Give the card a name.').max(120, 'Keep the name under 120 characters.'),
+  ownerEmail: Y.string()
+    .trim()
+    .default('')
+    .test('email', msg.emailBad, (v) => !v || Y.string().email().isValidSync(v)),
+  status: Y.mixed<CardStatus>().oneOf(CARD_STATUSES).required(),
+  destinationType: Y.mixed<DestinationType>().oneOf(DESTINATION_TYPES).required(),
+  destinationUrl: Y.string()
+    .trim()
+    .default('')
+    .when('destinationType', {
+      is: 'profile',
+      otherwise: (s) => s.test('url', msg.url, (v) => !!v && isHttpUrl(v)),
+    }),
+})
+export type AdminCardValues = Y.InferType<typeof adminCardSchema>
 
 /** `{ field: firstMessage }` for every invalid field, or `{}` when valid. */
 export function firstErrors(schema: Y.AnyObjectSchema, values: unknown): Record<string, string> {

@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CardsService } from '../cards/cards.service.js';
+import { ChangeRequestResponse, toChangeRequestResponse } from './change-requests.mapper.js';
 import { ChangeRequestsRepository } from './change-requests.repository.js';
 import { ChangeRequest, ChangeRequestStatus } from './entities/change-request.entity.js';
 
@@ -16,14 +17,15 @@ export class ChangeRequestsService {
     return { id };
   }
 
-  list(status?: ChangeRequestStatus): Promise<ChangeRequest[]> {
-    return this.changeRequests.findAll(status);
+  async list(status?: ChangeRequestStatus): Promise<ChangeRequestResponse[]> {
+    const requests = await this.changeRequests.findAll(status);
+    return requests.map(toChangeRequestResponse);
   }
 
-  async updateStatus(id: number, status: ChangeRequestStatus): Promise<ChangeRequest> {
+  async updateStatus(id: number, status: ChangeRequestStatus): Promise<ChangeRequestResponse> {
     await this.findOrFail(id);
     await this.changeRequests.updateStatus(id, status);
-    return this.findOrFail(id);
+    return toChangeRequestResponse(await this.findOrFail(id));
   }
 
   private async findOrFail(id: number): Promise<ChangeRequest> {

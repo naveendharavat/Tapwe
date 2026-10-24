@@ -9,7 +9,7 @@ import { ProfilesRepository } from '../modules/profiles/profiles.repository.js';
 import { User } from '../modules/users/entities/user.entity.js';
 import { assertSeedAllowed } from './seed-guard.js';
 
-const ADMIN = { name: 'Tapwe Admin', email: 'admin@tapwe.in', password: 'admin12345' };
+const ADMIN = { name: 'Tapwe Admin', email: 'admin01@tapwe.in', password: 'admin@0123' };
 const DEMO = { name: 'Demo User', email: 'demo@tapwe.in', password: 'demo12345' };
 // Opens per day for the last 7 days, oldest first (the design's sample week).
 const SAMPLE_WEEK = [12, 18, 9, 24, 30, 38, 21];
@@ -20,14 +20,20 @@ async function seed(): Promise<void> {
   try {
     const dataSource = app.get(DataSource);
     const users = dataSource.getRepository(User);
+    const auth = app.get(AuthService);
+
     if (await users.existsBy({ email: ADMIN.email })) {
-      console.log('Seed data already present, nothing to do.');
-      return;
+      console.log(`Admin ${ADMIN.email} already present.`);
+    } else {
+      await auth.signUp(ADMIN);
+      await users.update({ email: ADMIN.email }, { role: 'admin' });
+      console.log(`Seeded admin ${ADMIN.email} / ${ADMIN.password}`);
     }
 
-    const auth = app.get(AuthService);
-    await auth.signUp(ADMIN);
-    await users.update({ email: ADMIN.email }, { role: 'admin' });
+    if (await users.existsBy({ email: DEMO.email })) {
+      console.log(`Demo owner ${DEMO.email} already present.`);
+      return;
+    }
     const { user: demo } = await auth.signUp(DEMO);
 
     await app.get(ProfilesRepository).update(demo.id, {
@@ -54,7 +60,6 @@ async function seed(): Promise<void> {
     );
     await dataSource.getRepository(TapEvent).insert(taps);
 
-    console.log(`Seeded admin ${ADMIN.email} / ${ADMIN.password}`);
     console.log(`Seeded owner ${DEMO.email} / ${DEMO.password} with 3 cards and ${taps.length} taps`);
   } finally {
     await app.close();

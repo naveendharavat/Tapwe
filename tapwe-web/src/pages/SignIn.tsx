@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
 import { Link, Navigate, useLocation, useNavigate } from 'react-router'
-import { useAuth } from '../auth/auth-context'
+import { homePath, useAuth } from '../auth/auth-context'
 import { AuthLayout } from '../components/auth/AuthLayout'
 import { PasswordInput } from '../components/auth/PasswordInput'
 import { useToast } from '../components/toast/toast-context'
@@ -16,20 +16,20 @@ export default function SignIn() {
   const { user, signIn } = useAuth()
   const { toast } = useToast()
   const navigate = useNavigate()
-  const from = (useLocation().state as { from?: string } | null)?.from ?? '/app'
+  const from = (useLocation().state as { from?: string } | null)?.from
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<SignInValues>({ resolver: yupResolver(signInSchema), defaultValues: { email: '', password: '' } })
 
-  if (user) return <Navigate to="/app" replace />
+  if (user) return <Navigate to={homePath(user)} replace />
 
   const onSubmit = async (values: SignInValues) => {
     try {
-      await signIn(values)
+      const signedIn = await signIn(values)
       toast('Signed in.')
-      navigate(from, { replace: true })
+      navigate(from ?? homePath(signedIn), { replace: true })
     } catch (error) {
       toast(getErrorMessage(error), 'error')
     }

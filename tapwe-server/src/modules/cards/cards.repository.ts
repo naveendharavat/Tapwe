@@ -1,13 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { EntityManager, IsNull, Repository } from 'typeorm';
-import { Card } from './entities/card.entity.js';
+import { EntityManager, FindOptionsWhere, ILike, IsNull, Repository } from 'typeorm';
+import { Card, CardStatus } from './entities/card.entity.js';
 
 export type NewCard = Pick<
   Card,
   'code' | 'name' | 'userId' | 'ownerEmail' | 'status' | 'destinationType' | 'destinationUrl'
 >;
 export type CardChanges = Partial<Omit<NewCard, 'code'>>;
+export interface CardFilter {
+  status?: CardStatus;
+  search?: string;
+}
 
 @Injectable()
 export class CardsRepository {
@@ -42,6 +46,14 @@ export class CardsRepository {
 
   findAllForUser(userId: number): Promise<Card[]> {
     return this.repo().find({ where: { userId }, order: { createdAt: 'DESC', code: 'ASC' } });
+  }
+
+  /** All cards, newest first; `search` matches name, code or owner email, ignoring case. */
+  findAll({ status, search }: CardFilter): Promise<Card[]> {
+    const base: FindOptionsWhere<Card> = status ? { status } : {};
+    const term = search ? ILike(`%${search.replace(/[\\%_]/g, '\\$&')}%`) : undefined;
+    const where = term ? [{ ...base, name: term }, { ...base, code: term }, { ...base, ownerEmail: term }] : base;
+    return this.repo().find({ where, order: { createdAt: 'DESC', code: 'ASC' } });
   }
 
   async update(code: string, changes: CardChanges): Promise<void> {

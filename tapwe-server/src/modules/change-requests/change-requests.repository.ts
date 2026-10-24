@@ -12,11 +12,16 @@ export class ChangeRequestsRepository {
   }
 
   findAll(status?: ChangeRequestStatus): Promise<ChangeRequest[]> {
-    return this.repo.find({ where: status ? { status } : {}, order: { createdAt: 'DESC', id: 'DESC' } });
+    return this.repo.find({
+      where: status ? { status } : {},
+      relations: { card: true },
+      withDeleted: true,
+      order: { createdAt: 'DESC', id: 'DESC' },
+    });
   }
 
   findById(id: number): Promise<ChangeRequest | null> {
-    return this.repo.findOneBy({ id });
+    return this.repo.findOne({ where: { id }, relations: { card: true }, withDeleted: true });
   }
 
   async updateStatus(id: number, status: ChangeRequestStatus): Promise<void> {

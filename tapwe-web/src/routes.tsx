@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react'
 import { Navigate, Route, Routes } from 'react-router'
 import { RequireAuth } from './auth/RequireAuth'
 import { DashboardLayout } from './components/layout/DashboardLayout'
+import { ADMIN_NAV, OWNER_NAV } from './components/layout/nav'
 import { MarketingLayout } from './components/layout/MarketingLayout'
 
 const Home = lazy(() => import('./pages/Home'))
@@ -21,6 +22,10 @@ const Profile = lazy(() => import('./pages/dashboard/Profile'))
 const Destinations = lazy(() => import('./pages/dashboard/Destinations'))
 const Analytics = lazy(() => import('./pages/dashboard/Analytics'))
 const Settings = lazy(() => import('./pages/dashboard/Settings'))
+const AdminOverview = lazy(() => import('./pages/admin/AdminOverview'))
+const AdminCards = lazy(() => import('./pages/admin/AdminCards'))
+const AdminCardRequests = lazy(() => import('./pages/admin/AdminCardRequests'))
+const AdminChangeRequests = lazy(() => import('./pages/admin/AdminChangeRequests'))
 
 export function AppRoutes() {
   return (
@@ -44,8 +49,8 @@ export function AppRoutes() {
         <Route
           path="app"
           element={
-            <RequireAuth>
-              <DashboardLayout />
+            <RequireAuth role="owner">
+              <DashboardLayout nav={OWNER_NAV} label="Dashboard" settingsPath="/app/settings" />
             </RequireAuth>
           }
         >
@@ -57,6 +62,20 @@ export function AppRoutes() {
           <Route path="destinations" element={<Destinations />} />
           <Route path="analytics" element={<Analytics />} />
           <Route path="settings" element={<Settings />} />
+        </Route>
+
+        <Route
+          path="admin"
+          element={
+            <RequireAuth role="admin">
+              <DashboardLayout nav={ADMIN_NAV} label="Admin" />
+            </RequireAuth>
+          }
+        >
+          <Route index element={<AdminOverview />} />
+          <Route path="cards" element={<AdminCards />} />
+          <Route path="card-requests" element={<AdminCardRequests />} />
+          <Route path="change-requests" element={<AdminChangeRequests />} />
         </Route>
 
         <Route path="*" element={<Navigate to="/" replace />} />

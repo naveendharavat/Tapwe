@@ -437,3 +437,11 @@ header.top{box-shadow:0 1px 0 rgb(255 255 255/.6) inset}
 .pub .lk a:hover{border-color:#cbcbfa}.pub .lk svg{color:var(--b600);font-size:18px}
 .pub .save{margin-top:20px;width:100%}
 .pub .by{margin-top:auto;padding-top:48px;text-align:center;font-size:13px;color:var(--ink3)}
+
+/* Admin dashboard */
+.stats.four{grid-template-columns:repeat(4,1fr)}
+.toolbar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px}
+.toolbar .tabs{margin-bottom:0}.toolbar .input{max-width:300px}
+.alist{list-style:none;padding:0;margin:0;border:1px solid var(--line);border-radius:var(--rl);background:var(--surface)}
+.alist li{display:flex;flex-direction:column;gap:2px;padding:14px 18px;border-top:1px solid var(--line);font-size:14px}.alist li:first-child{border-top:0}
+@media(max-width:900px){.stats.four{grid-template-columns:repeat(2,1fr)}.toolbar .input{max-width:none}}

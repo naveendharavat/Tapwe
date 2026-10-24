@@ -5,7 +5,7 @@ import {
   ListChangeRequestsQueryDto,
   UpdateChangeRequestStatusDto,
 } from '../change-requests/dto/change-request-status.dto.js';
-import { ChangeRequest } from '../change-requests/entities/change-request.entity.js';
+import { ChangeRequestResponse } from '../change-requests/change-requests.mapper.js';
 
 @Roles('admin')
 @Controller('admin/change-requests')
@@ -13,7 +13,7 @@ export class AdminChangeRequestsController {
   constructor(private readonly changeRequests: ChangeRequestsService) {}
 
   @Get()
-  list(@Query() query: ListChangeRequestsQueryDto): Promise<ChangeRequest[]> {
+  list(@Query() query: ListChangeRequestsQueryDto): Promise<ChangeRequestResponse[]> {
     return this.changeRequests.list(query.status);
   }
 
@@ -21,7 +21,7 @@ export class AdminChangeRequestsController {
   updateStatus(
     @Param('id', ParseIntPipe) id: number,
     @Body() dto: UpdateChangeRequestStatusDto,
-  ): Promise<ChangeRequest> {
+  ): Promise<ChangeRequestResponse> {
     return this.changeRequests.updateStatus(id, dto.status);
   }
 }

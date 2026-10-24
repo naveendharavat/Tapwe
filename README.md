@@ -35,7 +35,7 @@ yarn dev
 Demo logins created by `yarn seed`:
 
 - Owner: `demo@tapwe.in` / `demo12345` — 3 cards (`ab12cd` profile, `k9f2xq` menu link, `m4t8zr` draft) and a week of taps
-- Admin: `admin@tapwe.in` / `admin12345`
+- Admin: `admin01@tapwe.in` / `admin@0123` — signs in on the same page and lands on the admin dashboard (`/admin`)
 
 Try the public card page: <http://localhost:5173/c/ab12cd> (profile), `/c/k9f2xq` (redirects), `/c/m4t8zr` (not active yet).
 
@@ -52,17 +52,17 @@ docker stop tapwe-pg-test
 
 ## How a card gets to its owner
 
-There is no admin screen in v1; the team uses the admin API with an admin token:
+Customers sign up and sign in at `/sign-in`; admins sign in on the same page and land on the admin dashboard at `/admin`:
 
-```bash
-# Provision a card for the customer's email (they may not have an account yet)
-curl -X POST localhost:4000/admin/cards -H "Authorization: Bearer $ADMIN_TOKEN" -H 'content-type: application/json' \
-  -d '{"name":"Table menu","ownerEmail":"owner@cafe.in","status":"active","destinationType":"menu","destinationUrl":"https://cafe.in/menu"}'
-```
+- **Card requests**: everything sent through the website's "Request a card" form. Mark each one contacted or fulfilled, and use **Create card** to start a card for that customer.
+- **Cards**: every card from every customer. Create a card for a customer's email (they may not have an account yet; it appears in their dashboard as soon as they sign up), then edit its name, owner, status and where it opens. Copy its link or download its QR code for printing.
+- **Change requests**: customers asking to repoint a card. **Edit card**, then **Mark done**.
 
-The card appears in that owner's dashboard as soon as they sign up (or right away if they already have an account). Other admin routes: `GET/PATCH /admin/card-requests` (incoming requests), `GET/PATCH /admin/change-requests` (owners asking to repoint a card; mark `done` once updated), `PATCH /admin/cards/:code` (rename, repoint, reassign or clear `ownerEmail`).
+To make another account an admin, set its `role` to `admin` in the `users` table.
 
 ## Before launch
+
+- Change the seeded admin password, or delete the demo accounts: their passwords are published in this README.
 
 - Replace the placeholder founders in `tapwe-web/src/content/team.ts`.
 - Pricing, Privacy, Terms and Support pages still hold the design's placeholder copy.

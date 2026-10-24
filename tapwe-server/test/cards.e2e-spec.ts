@@ -134,7 +134,7 @@ describe('Cards (e2e)', () => {
       .set(bearer(admin))
       .send({ ownerEmail: null })
       .expect(200)
-      .expect((r) => expect(r.body).toMatchObject({ ownerEmail: null, userId: null }));
+      .expect((r) => expect(r.body).toMatchObject({ ownerEmail: null, claimed: false }));
   });
 
   it('forbids owners from provisioning', async () => {

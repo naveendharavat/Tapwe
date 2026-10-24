@@ -24,6 +24,30 @@ function Protected() {
   )
 }
 
+function RoleRoutes() {
+  return (
+    <Routes>
+      <Route path="/sign-in" element={<p>Sign in page</p>} />
+      <Route
+        path="/app"
+        element={
+          <RequireAuth role="owner">
+            <p>Owner dashboard</p>
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="/admin"
+        element={
+          <RequireAuth role="admin">
+            <p>Admin dashboard</p>
+          </RequireAuth>
+        }
+      />
+    </Routes>
+  )
+}
+
 describe('RequireAuth', () => {
   const mock = new MockAdapter(api)
   afterEach(() => mock.reset())
@@ -44,5 +68,19 @@ describe('RequireAuth', () => {
 
     expect(await screen.findByText('Sign in page')).toBeInTheDocument()
     expect(getToken()).toBeNull()
+  })
+
+  it('sends an owner who opens the admin area to their own dashboard', async () => {
+    setToken('owner-token')
+    mock.onGet('/auth/me').reply(200, user)
+    renderApp(<RoleRoutes />, { route: '/admin' })
+    expect(await screen.findByText('Owner dashboard')).toBeInTheDocument()
+  })
+
+  it('sends an admin who opens the owner dashboard to the admin area', async () => {
+    setToken('admin-token')
+    mock.onGet('/auth/me').reply(200, { ...user, role: 'admin' })
+    renderApp(<RoleRoutes />, { route: '/app' })
+    expect(await screen.findByText('Admin dashboard')).toBeInTheDocument()
   })
 })

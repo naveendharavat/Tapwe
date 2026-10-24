@@ -4,26 +4,15 @@ import { useAuth } from '../../auth/auth-context'
 import { initials } from '../../lib/initials'
 import { Dropdown } from '../ui/Dropdown'
 import { Icon } from '../ui/Icon'
-import type { IconName } from '../ui/icons'
 import { Logo } from '../ui/Logo'
 import { Skeleton } from '../ui/EmptyState'
+import type { NavItem } from './nav'
 
-const NAV: Array<[to: string, label: string, icon: IconName]> = [
-  ['/app', 'Overview', 'dash'],
-  ['/app/cards', 'My Cards', 'card'],
-  ['/app/create', 'Request a Card', 'plusc'],
-  ['/app/qr', 'QR Code', 'qr'],
-  ['/app/profile', 'Digital Profile', 'user'],
-  ['/app/destinations', 'Destinations', 'link'],
-  ['/app/analytics', 'Analytics', 'chart'],
-  ['/app/settings', 'Account Settings', 'gear'],
-]
-
-function SideNav({ onNavigate }: { onNavigate?: () => void }) {
+function SideNav({ nav, onNavigate }: { nav: NavItem[]; onNavigate?: () => void }) {
   return (
     <nav aria-label="Dashboard">
-      {NAV.map(([to, label, icon]) => (
-        <NavLink key={to} to={to} end={to === '/app'} className={({ isActive }) => (isActive ? 'on' : '')} onClick={onNavigate}>
+      {nav.map(([to, label, icon], i) => (
+        <NavLink key={to} to={to} end={i === 0} className={({ isActive }) => (isActive ? 'on' : '')} onClick={onNavigate}>
           <Icon name={icon} />
           {label}
         </NavLink>
@@ -32,7 +21,13 @@ function SideNav({ onNavigate }: { onNavigate?: () => void }) {
   )
 }
 
-export function DashboardLayout() {
+interface DashboardLayoutProps {
+  nav: NavItem[]
+  label: string
+  settingsPath?: string
+}
+
+export function DashboardLayout({ nav, label, settingsPath }: DashboardLayoutProps) {
   const { user, signOut } = useAuth()
   const navigate = useNavigate()
   const [drawerOpen, setDrawerOpen] = useState(false)
@@ -42,7 +37,7 @@ export function DashboardLayout() {
     <div className="app page">
       <aside className="side">
         <Logo />
-        <SideNav />
+        <SideNav nav={nav} />
       </aside>
       <div className="apmain">
         <header className="atop">
@@ -50,7 +45,7 @@ export function DashboardLayout() {
             <Icon name="burger" />
           </button>
           <span className="faint" style={{ fontSize: 14 }}>
-            Dashboard
+            {label}
           </span>
           <Dropdown
             menuStyle={{ right: 0 }}
@@ -63,10 +58,12 @@ export function DashboardLayout() {
           >
             {(close) => (
               <>
-                <NavLink role="menuitem" to="/app/settings" onClick={close}>
-                  <Icon name="gear" />
-                  Account Settings
-                </NavLink>
+                {settingsPath && (
+                  <NavLink role="menuitem" to={settingsPath} onClick={close}>
+                    <Icon name="gear" />
+                    Account Settings
+                  </NavLink>
+                )}
                 <button
                   type="button"
                   role="menuitem"
@@ -94,7 +91,7 @@ export function DashboardLayout() {
               </button>
             </div>
             <div style={{ marginTop: 24 }}>
-              <SideNav onNavigate={closeDrawer} />
+              <SideNav nav={nav} onNavigate={closeDrawer} />
             </div>
           </div>
         </div>

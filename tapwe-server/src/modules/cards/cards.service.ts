@@ -4,8 +4,8 @@ import { HTTP_URL_MESSAGE } from '../../common/validators/is-http-url.validator.
 import { AppConfig } from '../../config/configuration.js';
 import { ProfilesRepository } from '../profiles/profiles.repository.js';
 import { UsersRepository } from '../users/users.repository.js';
-import { CardChanges, CardsRepository } from './cards.repository.js';
-import { CardResponse, toCardResponse } from './cards.mapper.js';
+import { CardChanges, CardFilter, CardsRepository } from './cards.repository.js';
+import { AdminCardResponse, CardResponse, toAdminCardResponse, toCardResponse } from './cards.mapper.js';
 import { ProvisionCardDto } from './dto/provision-card.dto.js';
 import { UpdateCardDto } from './dto/update-card.dto.js';
 import { Card, DestinationType } from './entities/card.entity.js';
@@ -47,6 +47,15 @@ export class CardsService {
     const card = await this.cards.findOwned(code, userId);
     if (!card) throw new NotFoundException('Card not found.');
     return card;
+  }
+
+  async listAll(filter: CardFilter): Promise<AdminCardResponse[]> {
+    const cards = await this.cards.findAll(filter);
+    return cards.map((card) => this.toAdminResponse(card));
+  }
+
+  toAdminResponse(card: Card): AdminCardResponse {
+    return toAdminCardResponse(card, this.config.get('publicCardBaseUrl', { infer: true }));
   }
 
   async provision(dto: ProvisionCardDto): Promise<Card> {

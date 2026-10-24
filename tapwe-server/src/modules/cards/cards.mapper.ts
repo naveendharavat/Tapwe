@@ -11,6 +11,20 @@ export interface CardResponse {
   createdAt: Date;
 }
 
+/** What the Tapwe team sees: every card, who it belongs to, and whether that person has signed up yet. */
+export interface AdminCardResponse {
+  code: string;
+  name: string;
+  ownerEmail: string | null;
+  claimed: boolean;
+  status: CardStatus;
+  destinationType: DestinationType;
+  destinationUrl: string | null;
+  url: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export function cardUrl(baseUrl: string, code: string): string {
   return `${baseUrl.replace(/\/$/, '')}/c/${code}`;
 }
@@ -31,5 +45,20 @@ export function toCardResponse(card: Card, baseUrl: string, businessName: string
     destinationLabel,
     url: cardUrl(baseUrl, card.code),
     createdAt: card.createdAt,
+  };
+}
+
+export function toAdminCardResponse(card: Card, baseUrl: string): AdminCardResponse {
+  return {
+    code: card.code,
+    name: card.name,
+    ownerEmail: card.ownerEmail,
+    claimed: card.userId !== null,
+    status: card.status,
+    destinationType: card.destinationType,
+    destinationUrl: card.destinationUrl,
+    url: cardUrl(baseUrl, card.code),
+    createdAt: card.createdAt,
+    updatedAt: card.updatedAt,
   };
 }

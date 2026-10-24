@@ -1,9 +1,10 @@
 import type { ReactNode } from 'react'
 import { Navigate, useLocation } from 'react-router'
 import { Skeleton } from '../components/ui/EmptyState'
-import { useAuth } from './auth-context'
+import type { UserRole } from '../services/auth/auth.types'
+import { homePath, useAuth } from './auth-context'
 
-export function RequireAuth({ children }: { children: ReactNode }) {
+export function RequireAuth({ role, children }: { role?: UserRole; children: ReactNode }) {
   const { user, isLoading } = useAuth()
   const location = useLocation()
 
@@ -17,5 +18,6 @@ export function RequireAuth({ children }: { children: ReactNode }) {
     )
   }
   if (!user) return <Navigate to="/sign-in" replace state={{ from: location.pathname }} />
+  if (role && user.role !== role) return <Navigate to={homePath(user)} replace />
   return children
 }

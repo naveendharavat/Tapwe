@@ -1,6 +1,9 @@
 import { createContext, useContext } from 'react'
 import type { SignInRequest, SignUpRequest, User } from '../services/auth/auth.types'
 
+/** Where each kind of account lands after signing in. */
+export const homePath = (user: Pick<User, 'role'>) => (user.role === 'admin' ? '/admin' : '/app')
+
 export interface AuthState {
   user: User | null
   isLoading: boolean
