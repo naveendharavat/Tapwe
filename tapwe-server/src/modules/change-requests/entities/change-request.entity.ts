@@ -23,6 +23,6 @@ export class ChangeRequest {
   @Column({ type: 'enum', enum: CHANGE_REQUEST_STATUSES, default: 'open' })
   status: ChangeRequestStatus;
 
-  @CreateDateColumn({ name: 'created_at' })
+  @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
   createdAt: Date;
 }

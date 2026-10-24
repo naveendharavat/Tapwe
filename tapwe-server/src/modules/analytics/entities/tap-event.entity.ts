@@ -14,7 +14,7 @@ export class TapEvent {
   @JoinColumn({ name: 'card_code' })
   card?: Card;
 
-  @CreateDateColumn({ name: 'happened_at' })
+  @CreateDateColumn({ name: 'happened_at', type: 'timestamptz' })
   happenedAt: Date;
 
   @Column({ name: 'user_agent', type: 'varchar', length: 300, nullable: true })

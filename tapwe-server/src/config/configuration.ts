@@ -9,6 +9,7 @@ export interface AppConfig {
     user: string;
     password: string;
     name: string;
+    ssl: boolean;
   };
   jwt: {
     secret: string;
@@ -23,10 +24,11 @@ export default (): AppConfig => ({
   isTest: process.env.NODE_ENV === 'test',
   db: {
     host: process.env.DB_HOST ?? 'localhost',
-    port: Number(process.env.DB_PORT ?? 3306),
+    port: Number(process.env.DB_PORT ?? 5432),
     user: process.env.DB_USER ?? 'tapwe',
     password: process.env.DB_PASSWORD ?? 'tapwe',
     name: process.env.DB_NAME ?? 'tapwe',
+    ssl: process.env.DB_SSL === 'true',
   },
   jwt: {
     secret: process.env.JWT_SECRET ?? '',

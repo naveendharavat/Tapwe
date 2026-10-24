@@ -1,5 +1,8 @@
 import { INestApplication } from '@nestjs/common';
 import { App } from 'supertest/types.js';
+import { DataSource } from 'typeorm';
+import { addDays, toIndiaDate } from '../src/common/utils/india-date.js';
+import { TapEvent } from '../src/modules/analytics/entities/tap-event.entity.js';
 import { api, bearer, createAdmin, createTestApp, signUpOwner } from './utils/test-app.js';
 
 describe('Public card resolution + analytics (e2e)', () => {
@@ -76,5 +79,25 @@ describe('Public card resolution + analytics (e2e)', () => {
     const res = await api(app).get('/analytics/summary').set(bearer(owner)).expect(200);
     expect(res.body.perDay).toHaveLength(7);
     expect(res.body.totals).toEqual({ cards: 3, active: 2, drafts: 0, taps: 2 });
+  });
+
+  it('buckets taps by IST calendar day and skips taps before the window', async () => {
+    const code = await provision({ name: 'Edges', status: 'active', destinationType: 'profile' });
+    const today = toIndiaDate(new Date());
+    const from = addDays(today, -6);
+    const istMidnight = (date: string) => Date.parse(`${date}T00:00:00+05:30`);
+    await app
+      .get(DataSource)
+      .getRepository(TapEvent)
+      .insert([
+        { cardCode: code, happenedAt: new Date(istMidnight(from) - 60_000) },
+        { cardCode: code, happenedAt: new Date(istMidnight(from) + 60_000) },
+        { cardCode: code, happenedAt: new Date(istMidnight(today) + 30 * 60_000) },
+      ]);
+
+    const res = await api(app).get('/analytics/summary').set(bearer(owner)).expect(200);
+    expect(res.body.perDay[0]).toEqual({ date: from, count: 1 });
+    expect(res.body.perDay[6]).toEqual({ date: today, count: 3 });
+    expect(res.body.totals.taps).toBe(4);
   });
 });

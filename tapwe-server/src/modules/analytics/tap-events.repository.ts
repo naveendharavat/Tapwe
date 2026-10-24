@@ -19,15 +19,16 @@ export class TapEventsRepository {
 
   /** Taps on the user's cards per IST day, from `fromDate` (inclusive) onward. */
   async countPerDay(userId: number, fromDate: string): Promise<DailyCount[]> {
-    const day = `DATE(CONVERT_TZ(tap.happened_at, '+00:00', '${IST_OFFSET}'))`;
+    const ist = `INTERVAL '${IST_OFFSET}'`;
+    const day = `to_char(tap.happened_at AT TIME ZONE ${ist}, 'YYYY-MM-DD')`;
     const rows = await this.repo
       .createQueryBuilder('tap')
       .innerJoin('tap.card', 'card')
-      .select(`DATE_FORMAT(${day}, '%Y-%m-%d')`, 'date')
+      .select(day, 'date')
       .addSelect('COUNT(*)', 'count')
       .where('card.userId = :userId', { userId })
-      .andWhere(`${day} >= :fromDate`, { fromDate })
-      .groupBy('date')
+      .andWhere(`tap.happened_at >= CAST(:fromDate AS timestamp) AT TIME ZONE ${ist}`, { fromDate })
+      .groupBy(day)
       .getRawMany<{ date: string; count: string }>();
     return rows.map((row) => ({ date: row.date, count: Number(row.count) }));
   }

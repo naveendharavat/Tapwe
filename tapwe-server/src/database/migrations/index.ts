@@ -1,3 +1,3 @@
-import { Init1792753135719 } from './1792753135719-Init.js';
+import { Init1792838598391 } from './1792838598391-Init.js';
 
-export const migrations = [Init1792753135719];
+export const migrations = [Init1792838598391];

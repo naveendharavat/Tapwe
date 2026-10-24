@@ -1,6 +1,6 @@
 import { buildTypeOrmOptions } from './typeorm.config.js';
 
-const db = { host: 'localhost', port: 3306, user: 'tapwe', password: 'tapwe', name: 'tapwe' };
+const db = { host: 'localhost', port: 5432, user: 'tapwe', password: 'tapwe', name: 'tapwe', ssl: false };
 
 describe('buildTypeOrmOptions', () => {
   it('refuses to drop a database that is not a test database', () => {

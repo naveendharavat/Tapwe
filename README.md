@@ -5,25 +5,23 @@ Smart NFC + QR business cards. Each printed card opens one permanent link (`/c/<
 | Folder | What it is |
 |---|---|
 | `tapwe-web/` | React 19 + TypeScript + Vite site: marketing pages, request form, owner dashboard, public card page |
-| `tapwe-server/` | NestJS 12 + TypeORM + MySQL REST API |
+| `tapwe-server/` | NestJS 12 + TypeORM + Postgres (Supabase) REST API |
 | `docs/design/tapwe-design.html` | The approved UI design (open in a browser) |
 | `docs/superpowers/` | Design spec and implementation plan |
 
 ## Run it locally
 
-Requirements: Node 22+, Yarn 1, MySQL 8+.
+Requirements: Node 22+, Yarn 1, a Postgres 14+ database (Supabase works).
 
 ```bash
-# 1. Database (once)
-mysql -uroot -e "CREATE DATABASE tapwe; CREATE DATABASE tapwe_test;
-  CREATE USER 'tapwe'@'localhost' IDENTIFIED BY 'tapwe';
-  GRANT ALL ON tapwe.* TO 'tapwe'@'localhost'; GRANT ALL ON tapwe_test.* TO 'tapwe'@'localhost';"
+# 1. Database: in Supabase open the project → Connect → Session pooler,
+#    and copy host / port / user / database / password into tapwe-server/.env (DB_SSL=true).
 
 # 2. API — http://localhost:4000
 cd tapwe-server
 yarn install
-cp .env.example .env          # then set JWT_SECRET to a long random string
-yarn migration:run
+cp .env.example .env          # fill in the DB_* values and a long random JWT_SECRET
+yarn migration:run            # creates the tables
 yarn seed                     # demo data (safe to re-run)
 yarn start:dev
 
@@ -43,9 +41,13 @@ Try the public card page: <http://localhost:5173/c/ab12cd> (profile), `/c/k9f2xq
 
 ## Tests
 
+The e2e tests rebuild a throwaway Postgres on port 5433 (they never read the DB settings in `.env`):
+
 ```bash
-cd tapwe-server && yarn test && yarn test:e2e   # e2e uses the tapwe_test database
+docker run -d --rm --name tapwe-pg-test -p 5433:5432 -e POSTGRES_USER=tapwe -e POSTGRES_PASSWORD=tapwe -e POSTGRES_DB=tapwe_test postgres:16-alpine
+cd tapwe-server && yarn test && yarn test:e2e
 cd tapwe-web && yarn test
+docker stop tapwe-pg-test
 ```
 
 ## How a card gets to its owner

@@ -26,7 +26,7 @@ export class CardRequest {
   @Column({ length: 30 })
   quantity: string;
 
-  @Column({ type: 'json' })
+  @Column({ type: 'jsonb' })
   destinations: string[];
 
   @Column({ type: 'varchar', length: 120, nullable: true })
@@ -41,6 +41,6 @@ export class CardRequest {
   @Column({ type: 'enum', enum: CARD_REQUEST_STATUSES, default: 'new' })
   status: CardRequestStatus;
 
-  @CreateDateColumn({ name: 'created_at' })
+  @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
   createdAt: Date;
 }

@@ -25,6 +25,6 @@ export class Profile {
   @Column({ type: 'varchar', length: 500, nullable: true })
   website: string | null;
 
-  @UpdateDateColumn({ name: 'updated_at' })
+  @UpdateDateColumn({ name: 'updated_at', type: 'timestamptz' })
   updatedAt: Date;
 }
