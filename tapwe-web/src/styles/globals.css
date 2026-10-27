@@ -9,7 +9,7 @@
   --dev:0 40px 70px -30px rgb(35 29 98/.35),0 12px 24px -12px rgb(28 27 34/.2);
 }
 *{box-sizing:border-box;margin:0}
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+html{-webkit-text-size-adjust:100%}
 body{background:var(--canvas);color:var(--ink);font:400 16px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 h1,h2,h3,h4{letter-spacing:-.02em;text-wrap:balance;line-height:1.15}
 p{text-wrap:pretty}
@@ -446,6 +446,7 @@ header.top{box-shadow:0 1px 0 rgb(255 255 255/.6) inset}
 .qrbox .q .qr-real{width:160px;height:160px}
 .empty-page{min-height:100vh;display:grid;place-items:center;padding:40px 16px;background:var(--canvas)}
 .empty-page .empty{max-width:440px;width:100%}
+section[id]{scroll-margin-top:64px}
 .skip:focus{position:absolute;left:12px;top:12px;z-index:99;width:auto;height:auto;clip:auto;background:#fff;padding:8px 12px;border-radius:8px}
 .btn.full{width:100%}
 /* public card page (built from the design's phone profile screen) */

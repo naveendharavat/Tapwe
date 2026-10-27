@@ -9,6 +9,7 @@ const Home = lazy(() => import('./pages/Home'))
 const Features = lazy(() => import('./pages/Features'))
 const HowItWorks = lazy(() => import('./pages/HowItWorks'))
 const Pricing = lazy(() => import('./pages/Pricing'))
+const Team = lazy(() => import('./pages/Team'))
 const Request = lazy(() => import('./pages/Request'))
 const Legal = lazy(() => import('./pages/Legal'))
 const SignIn = lazy(() => import('./pages/SignIn'))
@@ -36,6 +37,7 @@ export function AppRoutes() {
           <Route index element={<Home />} />
           <Route path="features" element={<Features />} />
           <Route path="how-it-works" element={<HowItWorks />} />
+          <Route path="team" element={<Team />} />
           <Route path="pricing" element={<Pricing />} />
           <Route path="request" element={<Request />} />
           <Route path="privacy" element={<Legal page="privacy" />} />
