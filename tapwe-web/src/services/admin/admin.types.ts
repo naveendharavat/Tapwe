@@ -1,3 +1,4 @@
+import type { UserRole } from "../auth/auth.types";
 import type { CardStatus, DestinationType } from "../cards/cards.types";
 
 export interface AdminCard {
@@ -60,3 +61,14 @@ export const CARD_REQUEST_STATUS_LABELS: Record<CardRequestStatus, string> = {
   contacted: "Contacted",
   fulfilled: "Fulfilled",
 };
+
+export interface AdminUser {
+  id: number;
+  name: string;
+  email: string;
+  role: UserRole;
+  businessName: string | null;
+  phone: string | null;
+  cardCount: number;
+  createdAt: string;
+}

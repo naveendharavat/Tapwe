@@ -1,7 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EntityManager, Repository } from 'typeorm';
-import { User } from './entities/user.entity.js';
+import { Card } from '../cards/entities/card.entity.js';
+import { Profile } from '../profiles/entities/profile.entity.js';
+import { User, UserRole } from './entities/user.entity.js';
+
+export interface UserWithStats {
+  id: number;
+  name: string;
+  email: string;
+  role: UserRole;
+  businessName: string | null;
+  phone: string | null;
+  cardCount: number;
+  createdAt: Date;
+}
 
 @Injectable()
 export class UsersRepository {
@@ -9,6 +22,28 @@ export class UsersRepository {
 
   private repo(manager?: EntityManager) {
     return manager ? manager.getRepository(User) : this.base;
+  }
+
+  /** Every account, newest first, with its profile contact details and how many live cards it owns. */
+  async findAllWithStats(): Promise<UserWithStats[]> {
+    const rows = await this.repo()
+      .createQueryBuilder('user')
+      .leftJoin(Profile, 'profile', 'profile.userId = user.id')
+      .leftJoin(Card, 'card', 'card.userId = user.id AND card.deletedAt IS NULL')
+      .select('user.id', 'id')
+      .addSelect('user.name', 'name')
+      .addSelect('user.email', 'email')
+      .addSelect('user.role', 'role')
+      .addSelect('profile.businessName', 'businessName')
+      .addSelect('profile.phone', 'phone')
+      .addSelect('COUNT(card.code)', 'cardCount')
+      .addSelect('user.createdAt', 'createdAt')
+      .groupBy('user.id')
+      .addGroupBy('profile.id')
+      .orderBy('user.createdAt', 'DESC')
+      .addOrderBy('user.id', 'DESC')
+      .getRawMany<Omit<UserWithStats, 'cardCount'> & { cardCount: string }>();
+    return rows.map((row) => ({ ...row, cardCount: Number(row.cardCount) }));
   }
 
   findById(id: number): Promise<User | null> {

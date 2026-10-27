@@ -26,6 +26,7 @@ const AdminOverview = lazy(() => import('./pages/admin/AdminOverview'))
 const AdminCards = lazy(() => import('./pages/admin/AdminCards'))
 const AdminCardRequests = lazy(() => import('./pages/admin/AdminCardRequests'))
 const AdminChangeRequests = lazy(() => import('./pages/admin/AdminChangeRequests'))
+const AdminUsers = lazy(() => import('./pages/admin/AdminUsers'))
 
 export function AppRoutes() {
   return (
@@ -76,6 +77,7 @@ export function AppRoutes() {
           <Route path="cards" element={<AdminCards />} />
           <Route path="card-requests" element={<AdminCardRequests />} />
           <Route path="change-requests" element={<AdminChangeRequests />} />
+          <Route path="users" element={<AdminUsers />} />
         </Route>
 
         <Route path="*" element={<Navigate to="/" replace />} />

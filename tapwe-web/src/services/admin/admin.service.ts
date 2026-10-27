@@ -1,6 +1,7 @@
 import { api } from '../api'
 import type {
   AdminCard,
+  AdminUser,
   CardFilter,
   CardInput,
   CardRequest,
@@ -22,6 +23,11 @@ export class AdminService {
 
   static async updateCard(code: string, body: CardInput): Promise<AdminCard> {
     const { data } = await api.patch<AdminCard>(`/admin/cards/${code}`, body)
+    return data
+  }
+
+  static async listUsers(): Promise<AdminUser[]> {
+    const { data } = await api.get<AdminUser[]>('/admin/users')
     return data
   }
 

@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
-import { Link, Navigate, useNavigate } from 'react-router'
-import { useAuth } from '../auth/auth-context'
+import { Link, useNavigate } from 'react-router'
+import { homePath, useAuth } from '../auth/auth-context'
 import { AuthLayout } from '../components/auth/AuthLayout'
 import { PasswordInput } from '../components/auth/PasswordInput'
 import { useToast } from '../components/toast/toast-context'
@@ -13,7 +13,7 @@ import { signUpSchema, type SignUpValues } from '../lib/validation'
 import { getErrorMessage } from '../services/api'
 
 export default function SignUp() {
-  const { user, signUp } = useAuth()
+  const { user, signUp, signOut } = useAuth()
   const { toast } = useToast()
   const navigate = useNavigate()
   const {
@@ -22,7 +22,27 @@ export default function SignUp() {
     formState: { errors, isSubmitting },
   } = useForm<SignUpValues>({ resolver: yupResolver(signUpSchema), defaultValues: { name: '', email: '', password: '' } })
 
-  if (user) return <Navigate to="/app" replace />
+  if (user) {
+    return (
+      <AuthLayout
+        asideTitle="We set up your card. You just tap."
+        asideText="Create an account to follow your card request. Our team configures the card and delivers it ready to use."
+        title="You’re already signed in"
+        subtitle={`Signed in as ${user.email}. Sign out first to create a different account.`}
+        footer={
+          <>
+            Or go back to <Link to={homePath(user)}>your dashboard</Link>
+          </>
+        }
+      >
+        <div style={{ marginTop: 24 }}>
+          <Button variant="p" size="lg" onClick={signOut}>
+            Sign out
+          </Button>
+        </div>
+      </AuthLayout>
+    )
+  }
 
   const onSubmit = async (values: SignUpValues) => {
     try {

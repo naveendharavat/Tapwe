@@ -72,8 +72,26 @@ describe('Admin (e2e)', () => {
     expect(res.body[0]).toMatchObject({ cardCode: menu.code, cardName: expect.any(String), message: 'New menu link', status: 'open' });
   });
 
+  it('lists every account with its profile details and live card count, newest first', async () => {
+    await api(app).put('/profile').set(bearer(owner)).send({ businessName: 'Owner Café', phone: '9876543210' }).expect(200);
+
+    const res = await api(app).get('/admin/users').set(bearer(admin)).expect(200);
+    expect(res.body.map((u: { email: string }) => u.email)).toEqual(['owner@cafe.in', 'admin@tapwe.in']);
+    expect(res.body[0]).toEqual({
+      id: expect.any(Number),
+      name: 'Owner',
+      email: 'owner@cafe.in',
+      role: 'owner',
+      businessName: 'Owner Café',
+      phone: '9876543210',
+      cardCount: 2,
+      createdAt: expect.any(String),
+    });
+    expect(res.body[1]).toMatchObject({ role: 'admin', businessName: null, phone: null, cardCount: 0 });
+  });
+
   it('keeps every admin route closed to owners', async () => {
-    for (const path of ['/admin/cards', '/admin/card-requests', '/admin/change-requests']) {
+    for (const path of ['/admin/cards', '/admin/card-requests', '/admin/change-requests', '/admin/users']) {
       await api(app).get(path).set(bearer(owner)).expect(403);
     }
   });

@@ -5,11 +5,11 @@ import { Icon } from '../ui/Icon'
 import { Logo } from '../ui/Logo'
 
 const MARKETING_LINKS: Array<[label: string, to: string]> = [
+  ['Home', '/'],
   ['Features', '/features'],
   ['How It Works', '/how-it-works'],
-  ['Use Cases', '/#use-cases'],
+  ['Team', '/#team'],
   ['Pricing', '/pricing'],
-  ['Request Card', '/request'],
 ]
 
 export function Navbar() {
@@ -30,11 +30,8 @@ export function Navbar() {
             ))}
           </nav>
           <div className="actions">
-            <LinkButton variant="g" to="/sign-in">
-              Sign In
-            </LinkButton>
-            <LinkButton variant="p" to="/sign-up">
-              Get Started
+            <LinkButton variant="p" to="/request">
+              Request a Card
             </LinkButton>
           </div>
           <button
@@ -58,11 +55,8 @@ export function Navbar() {
           ))}
         </nav>
         <div className="two">
-          <LinkButton variant="s" size="lg" to="/sign-in" onClick={close}>
-            Sign In
-          </LinkButton>
-          <LinkButton variant="p" size="lg" to="/sign-up" onClick={close}>
-            Get Started
+          <LinkButton variant="p" size="lg" to="/request" onClick={close}>
+            Request a Card
           </LinkButton>
         </div>
       </div>

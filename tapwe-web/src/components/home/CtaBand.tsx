@@ -11,8 +11,8 @@ export function CtaBand() {
             <LinkButton variant="w" size="lg" to="/request">
               Request a Card
             </LinkButton>
-            <LinkButton variant="o" size="lg" to="/sign-up">
-              Get Started
+            <LinkButton variant="o" size="lg" to="/how-it-works">
+              See How It Works
             </LinkButton>
           </div>
         </div>

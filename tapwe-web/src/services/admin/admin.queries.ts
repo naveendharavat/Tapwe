@@ -7,6 +7,7 @@ export const adminKeys = {
   cardList: (filter: CardFilter) => [...adminKeys.cards, filter] as const,
   cardRequests: ['admin', 'card-requests'] as const,
   changeRequests: ['admin', 'change-requests'] as const,
+  users: ['admin', 'users'] as const,
 }
 
 export function useAdminCards(filter: CardFilter = {}) {
@@ -51,4 +52,8 @@ export function useUpdateChangeRequestStatus() {
     mutationFn: ({ id, status }: { id: number; status: ChangeRequestStatus }) => AdminService.updateChangeRequestStatus(id, status),
     onSuccess: () => void queryClient.invalidateQueries({ queryKey: adminKeys.changeRequests }),
   })
+}
+
+export function useAdminUsers() {
+  return useQuery({ queryKey: adminKeys.users, queryFn: AdminService.listUsers })
 }

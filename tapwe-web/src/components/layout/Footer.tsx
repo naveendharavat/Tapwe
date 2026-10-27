@@ -1,5 +1,6 @@
 import { Link } from 'react-router'
 import { Logo } from '../ui/Logo'
+import { SupportPhones } from './SupportPhones'
 
 const COLUMNS: Array<[heading: string, links: Array<[label: string, to: string]>]> = [
   [
@@ -25,7 +26,7 @@ const COLUMNS: Array<[heading: string, links: Array<[label: string, to: string]>
   [
     'Support',
     [
-      ['Contact (coming soon)', '/support'],
+      ['Contact us', '/support'],
       ['Privacy Policy', '/privacy'],
       ['Terms and Conditions', '/terms'],
     ],
@@ -43,6 +44,9 @@ export function Footer() {
             <Logo />
             <p className="muted" style={{ marginTop: 16, fontSize: 14 }}>
               Smart NFC and QR cards that connect your business to the digital world with a simple tap.
+            </p>
+            <p className="muted" style={{ marginTop: 12, fontSize: 14 }}>
+              Questions? Call <SupportPhones />
             </p>
           </div>
           {COLUMNS.map(([heading, links]) => (

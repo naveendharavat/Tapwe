@@ -1,13 +1,28 @@
-import { Bento } from '../components/home/Bento'
+import { AboutSection } from '../components/home/AboutSection'
+import { CardExperiences } from '../components/home/CardExperiences'
+import { CardJourney } from '../components/home/CardJourney'
 import { CtaBand } from '../components/home/CtaBand'
 import { DemoSection } from '../components/home/DemoSection'
 import { Hero } from '../components/home/Hero'
 import { HowSteps } from '../components/home/HowSteps'
 import { Marquee } from '../components/home/Marquee'
-import { Showcase } from '../components/home/Showcase'
+import { Pills } from '../components/home/Pills'
 import { TeamSection } from '../components/home/TeamSection'
 import { UseCases } from '../components/home/UseCases'
+import { WaysIn } from '../components/home/WaysIn'
+import { WhyChoose } from '../components/home/WhyChoose'
+import { WhyTapwe } from '../components/home/WhyTapwe'
+import type { IconName } from '../components/ui/icons'
 import { useReveal } from '../hooks/useReveal'
+
+const HIGHLIGHTS: Array<[IconName, string]> = [
+  'NFC enabled',
+  'QR on every card',
+  'Durable PVC card',
+  'Any destination',
+  'Set up by our team',
+  'No app for customers',
+].map((label): [IconName, string] => ['check', label])
 
 export default function Home() {
   useReveal()
@@ -15,21 +30,22 @@ export default function Home() {
     <>
       <Hero />
       <Marquee />
+      <WhyTapwe />
       <HowSteps />
+      <WaysIn />
       <DemoSection />
-      <section className="s alt" id="features">
+      <AboutSection />
+      <TeamSection />
+      <section className="s" style={{ paddingTop: 0 }}>
         <div className="wrap">
-          <div className="sh rv">
-            <div className="eyebrow">Features</div>
-            <h2>Everything a card needs to do</h2>
-            <p>One physical card, one permanent link, and the tools to point it wherever your business needs.</p>
-          </div>
-          <Bento />
+          <Pills items={HIGHLIGHTS} />
         </div>
       </section>
+      <CtaBand />
+      <CardExperiences />
+      <CardJourney />
       <UseCases />
-      <Showcase />
-      <TeamSection />
+      <WhyChoose />
       <CtaBand />
     </>
   )

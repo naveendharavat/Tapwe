@@ -18,4 +18,5 @@ export const ADMIN_NAV: NavItem[] = [
   ['/admin/cards', 'Cards', 'card'],
   ['/admin/card-requests', 'Card requests', 'pkg'],
   ['/admin/change-requests', 'Change requests', 'edit'],
+  ['/admin/users', 'Users', 'user'],
 ]

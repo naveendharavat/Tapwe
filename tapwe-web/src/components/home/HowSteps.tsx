@@ -1,33 +1,44 @@
+import { Fragment } from 'react'
 import { Icon } from '../ui/Icon'
 import type { IconName } from '../ui/icons'
 import { revealDelay } from '../../lib/cssVars'
 
-const STEPS: Array<[IconName, string, string]> = [
-  ['card', 'Choose Your Card', 'Get your smart card with NFC and QR.'],
-  ['scan', 'Tap or Scan', 'Customers use their phones to open your digital destination.'],
-  ['trend', 'Connect and Grow', 'Share business information, menus, and links.'],
+const STEPS: Array<[IconName, string, string, string]> = [
+  ['msg', 'Request', 'Tell us about your business and what the card should open.', 'You share the details'],
+  ['sliders', 'Configure', 'Our team sets up the destination, page and QR code.', 'We do the setup'],
+  ['nfc', 'Tap', 'Customers tap or scan and your page opens instantly.', 'They connect'],
 ]
 
 export function HowSteps() {
   return (
-    <section className="s" id="how">
+    <section className="s alt" id="how">
       <div className="wrap">
         <div className="sh rv">
           <div className="eyebrow">How it works</div>
-          <h2>Three steps from card to connection</h2>
+          <h2>
+            From request to <span className="gt">tap</span>
+          </h2>
+          <p>Three simple stages. The configuration is our job, not yours.</p>
         </div>
-        <ol className="how">
-          {STEPS.map(([icon, title, text], n) => (
-            <li key={title} className="rv" style={revealDelay(n * 0.1)}>
-              <div className="n">
-                <Icon name={icon} />
+        <div className="arc">
+          {STEPS.map(([icon, title, text, who], n) => (
+            <Fragment key={title}>
+              {n > 0 && (
+                <div className="ar" aria-hidden="true">
+                  <Icon name="arrow" />
+                </div>
+              )}
+              <div className="a rv" style={revealDelay(n * 0.1)}>
+                <span className="ico">
+                  <Icon name={icon} />
+                </span>
+                <h3>{title}</h3>
+                <p>{text}</p>
+                <b>{who}</b>
               </div>
-              <span className="k">STEP 0{n + 1}</span>
-              <h3>{title}</h3>
-              <p>{text}</p>
-            </li>
+            </Fragment>
           ))}
-        </ol>
+        </div>
       </div>
     </section>
   )

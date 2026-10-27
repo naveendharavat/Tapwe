@@ -2,9 +2,8 @@ import { PhoneMockup } from '../cards/PhoneMockup'
 import { SmartCardPreview } from '../cards/SmartCardPreview'
 import { LinkButton } from '../ui/Button'
 import { Icon } from '../ui/Icon'
+import { ArrowLink } from './ArrowLink'
 import { DemoScreen } from './DemoScreens'
-
-const TRUST = ['No app needed for customers', 'One permanent link per card', 'Change destinations anytime']
 
 function HeroMock() {
   return (
@@ -62,25 +61,21 @@ export function Hero() {
               One Tap. <span className="gt">Endless Possibilities.</span>
             </h1>
             <p className="lead">
-              Connect your business to the digital world with smart NFC and QR cards. Share your profile, menu, social
-              links, and feedback forms with a simple tap or scan.
+              Connect your business to the digital world with smart NFC and QR cards. Share your menu, profile, social
+              links and feedback forms with a simple tap or scan. We set it all up for you.
             </p>
             <div className="cta">
-              <LinkButton variant="p" size="lg" to="/sign-up">
-                Get Started <Icon name="arrow" />
+              <LinkButton variant="p" size="lg" to="/request">
+                Request a Card <Icon name="arrow" />
               </LinkButton>
               <LinkButton variant="s" size="lg" to="/how-it-works">
                 See How It Works
               </LinkButton>
             </div>
-            <ul className="trust">
-              {TRUST.map((t) => (
-                <li key={t}>
-                  <Icon name="check" />
-                  {t}
-                </li>
-              ))}
-            </ul>
+            <div className="hlinks">
+              <ArrowLink to="/features">Explore features</ArrowLink>
+              <ArrowLink to="/#demo">See it in action</ArrowLink>
+            </div>
           </div>
           <HeroMock />
         </section>
