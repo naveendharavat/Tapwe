@@ -26,7 +26,7 @@ export function WaysIn() {
               </div>
             </div>
             <h3>NFC tap</h3>
-            <p>Hold a compatible phone near the card and your page opens. Nothing to install and nothing to pair.</p>
+            <p>Hold a phone near the card and your page opens. Nothing to install.</p>
             <ArrowLink to="/features">Learn about NFC</ArrowLink>
           </div>
           <div className="jc rv" style={revealDelay(0.1)}>
@@ -36,7 +36,7 @@ export function WaysIn() {
               </div>
             </div>
             <h3>QR code</h3>
-            <p>Every card carries a QR code to the same permanent link, so any phone with a camera can connect.</p>
+            <p>Every card has a QR code to the same link, so any phone camera works.</p>
             <ArrowLink to="/features">Learn about QR</ArrowLink>
           </div>
         </div>

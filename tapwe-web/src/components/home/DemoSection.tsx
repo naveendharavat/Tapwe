@@ -38,8 +38,8 @@ export function DemoSection() {
             We set it up. <span className="gt">You just tap.</span>
           </h2>
           <p className="lead">
-            Tell us what your card should open. Our team configures it, adds your link and QR code, and hands it over
-            ready to use. Need a change later? Ask us and we update it, with no reprinting.
+            Tell us what the card should open. We configure it and hand it over ready to use. Need a change later? Just
+            ask, with no reprinting.
           </p>
           <div className="dtabs" role="tablist" aria-label="Choose a destination to preview">
             {DEMO_TABS.map(([key, text, icon, description]) => (

@@ -4,9 +4,9 @@ import type { IconName } from '../ui/icons'
 import { revealDelay } from '../../lib/cssVars'
 
 const STEPS: Array<[IconName, string, string, string]> = [
-  ['msg', 'Request', 'Tell us about your business and what the card should open.', 'You share the details'],
-  ['sliders', 'Configure', 'Our team sets up the destination, page and QR code.', 'We do the setup'],
-  ['nfc', 'Tap', 'Customers tap or scan and your page opens instantly.', 'They connect'],
+  ['msg', 'Request', 'Tell us about your business and what to show.', 'You share the details'],
+  ['sliders', 'Configure', 'We set up your page, link and QR code.', 'We do the setup'],
+  ['nfc', 'Tap', 'Customers tap or scan. Your page opens.', 'They connect'],
 ]
 
 export function HowSteps() {
@@ -18,7 +18,7 @@ export function HowSteps() {
           <h2>
             From request to <span className="gt">tap</span>
           </h2>
-          <p>Three simple stages. The configuration is our job, not yours.</p>
+          <p>We handle the setup. You hand over the card.</p>
         </div>
         <div className="arc">
           {STEPS.map(([icon, title, text, who], n) => (

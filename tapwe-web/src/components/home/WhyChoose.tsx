@@ -3,9 +3,9 @@ import { Icon } from '../ui/Icon'
 import type { IconName } from '../ui/icons'
 
 const REASONS: Array<[IconName, string, string]> = [
-  ['sliders', 'We do the setup', 'No dashboards to learn. Our team configures and updates your card.'],
-  ['phone', 'Nothing for customers to install', 'They tap or scan and the page opens in their phone’s browser.'],
-  ['refresh', 'Change it, never reprint', 'The card keeps its permanent link while the destination changes.'],
+  ['sliders', 'We do the setup', 'No dashboards to learn. We configure and update your card.'],
+  ['phone', 'Nothing for customers to install', 'The page opens in the phone’s browser.'],
+  ['refresh', 'Change it, never reprint', 'The card keeps its link while the destination changes.'],
 ]
 
 export function WhyChoose() {

@@ -11,22 +11,22 @@ type Experience = { title: string; text: string; points: string[]; theme: CardTh
 const EXPERIENCES: Experience[] = [
   {
     title: 'Menu cards for restaurants',
-    text: 'Put your full menu one tap away. Guests see it on their own phone, and you change it whenever the menu does.',
-    points: ['Cream card style made for tables', 'Scan to explore, no printed menus to replace', 'Update dishes without reprinting'],
+    text: 'Put your full menu one tap away on every guest’s phone.',
+    points: ['Card style made for tables', 'No printed menus to replace', 'Update dishes without reprinting'],
     theme: 'menu',
     demo: 'menu',
   },
   {
     title: 'Social cards for growth',
-    text: 'Turn every customer into a follower. One tap opens your Instagram or any social page.',
-    points: ['Follow-us style card', 'Link to Instagram, website and maps', 'Change the link for every campaign'],
+    text: 'Turn customers into followers. One tap opens your Instagram or social page.',
+    points: ['Follow-us card style', 'Link to Instagram, website or maps', 'Change the link for any campaign'],
     theme: 'insta',
     demo: 'social',
   },
   {
     title: 'Review cards for reputation',
-    text: 'Ask for feedback while the visit is fresh. Customers tap and land on your review or feedback page.',
-    points: ['Review style card with a clear prompt', 'Opens a review link or feedback form', 'Perfect for the counter or table'],
+    text: 'Ask for feedback while the visit is fresh. One tap opens your review page.',
+    points: ['Clear review prompt', 'Opens a review link or feedback form', 'Ideal for the counter or table'],
     theme: 'review',
     demo: 'feedback',
   },
@@ -51,7 +51,7 @@ export function CardExperiences() {
           <h2>
             One card. <span className="gt">Three popular ways</span> to use it.
           </h2>
-          <p>Ready-made card styles for the moments that matter most to in-person businesses.</p>
+          <p>Ready-made card styles for the moments that matter.</p>
         </div>
         {EXPERIENCES.map(({ title, text, points, theme, demo }, i) => (
           <div key={title} className={`dd ${i % 2 ? 'rev' : ''} rv`}>

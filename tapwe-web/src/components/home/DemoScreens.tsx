@@ -3,40 +3,54 @@ import type { IconName } from '../ui/icons'
 import { ProfileScreen } from '../cards/PhoneMockup'
 import type { DemoKey } from './demo-content'
 
-const MENU_ITEMS = ['Filter coffee', 'Cold coffee', 'Veg sandwich', 'Chocolate brownie']
+const MENU_ITEMS: Array<[name: string, detail: string, price: string]> = [
+  ['Filter coffee', 'Fresh South Indian brew', '₹80'],
+  ['Paneer wrap', 'Grilled, with mint chutney', '₹180'],
+  ['Veg sandwich', 'Toasted, with fries', '₹140'],
+  ['Cold coffee', 'Iced, with cream', '₹150'],
+]
+const MENU_TABS = ['Popular', 'Mains', 'Drinks', 'Sweets']
 const SOCIAL_LINKS: Array<[IconName, string]> = [
   ['at', 'Instagram'],
   ['globe', 'Website'],
   ['pin', 'Google Maps'],
 ]
 
+export function MenuScreen() {
+  return (
+    <>
+      <div className="mh">
+        <b>Sample Café</b>
+        <span>Sample menu</span>
+      </div>
+      <div className="mt">
+        {MENU_TABS.map((tab, i) => (
+          <i key={tab} className={i === 0 ? 'on' : ''}>
+            {tab}
+          </i>
+        ))}
+      </div>
+      <div className="mlist">
+        {MENU_ITEMS.map(([name, detail, price]) => (
+          <div key={name} className="mrow">
+            <span>
+              <b>{name}</b>
+              <small>{detail}</small>
+            </span>
+            <em>{price}</em>
+          </div>
+        ))}
+      </div>
+      <div className="pbtn" style={{ background: '#fff', color: 'var(--ink)', border: '1px solid var(--line)' }}>
+        View full menu
+      </div>
+    </>
+  )
+}
+
 /** What the phone shows for each destination in the design's demo. */
 export function DemoScreen({ demo }: { demo: DemoKey }) {
-  if (demo === 'menu') {
-    return (
-      <>
-        <div className="nm" style={{ marginTop: 0, textAlign: 'left', fontSize: 15 }}>
-          Café menu
-        </div>
-        <div className="sb" style={{ textAlign: 'left' }}>
-          Sample items
-        </div>
-        <div className="mi">
-          {MENU_ITEMS.map((item) => (
-            <div key={item}>
-              {item}
-              <span>
-                <Icon name="chev" />
-              </span>
-            </div>
-          ))}
-        </div>
-        <div className="pbtn" style={{ background: '#fff', color: 'var(--ink)', border: '1px solid var(--line)' }}>
-          View full menu
-        </div>
-      </>
-    )
-  }
+  if (demo === 'menu') return <MenuScreen />
   if (demo === 'social') {
     return (
       <>

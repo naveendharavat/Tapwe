@@ -1,7 +1,7 @@
 import type { CSSProperties, ReactNode } from 'react'
 import { cssVars } from '../../lib/cssVars'
 import { Icon } from '../ui/Icon'
-import type { IconName } from '../ui/icons'
+import { ICON_PATHS, type IconName } from '../ui/icons'
 import { QRCodePreview } from './QRCodePreview'
 
 export type CardTheme = 'brand' | 'insta' | 'menu' | 'review'
@@ -42,12 +42,16 @@ const BrandBadge = () => (
   </svg>
 )
 
-const NfcTap = () => (
-  <svg className="pc-nfc" viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-    <rect x="14" y="24" width="20" height="21" rx="4" />
-    <path d="M20 30h8" />
-    <path d="M17 17a10 10 0 0 1 14 0M12.5 12.5a16.5 16.5 0 0 1 23 0M8 8a23 23 0 0 1 32 0" />
-  </svg>
+const TapIcon = () => (
+  <svg
+    viewBox="2 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2.3"
+    strokeLinecap="round"
+    aria-hidden="true"
+    dangerouslySetInnerHTML={{ __html: ICON_PATHS.nfc }}
+  />
 )
 
 const floatIcon = (name: IconName, style: CSSProperties) => (
@@ -56,12 +60,11 @@ const floatIcon = (name: IconName, style: CSSProperties) => (
   </i>
 )
 
-const THEMES: Record<CardTheme, { heading: string[]; badge: ReactNode; tap: string; decor: ReactNode }> = {
-  brand: { heading: ['Tap or scan', 'to connect'], badge: <BrandBadge />, tap: 'TAP YOUR PHONE', decor: <Wave /> },
+const THEMES: Record<CardTheme, { heading: string[]; badge: ReactNode; pill?: string; decor: ReactNode }> = {
+  brand: { heading: ['Tap or scan', 'to connect'], badge: <BrandBadge />, decor: <Wave /> },
   insta: {
     heading: ['Follow us', 'on Instagram'],
     badge: <Icon name="at" />,
-    tap: 'TAP YOUR PHONE',
     decor: (
       <>
         <Wave />
@@ -71,8 +74,8 @@ const THEMES: Record<CardTheme, { heading: string[]; badge: ReactNode; tap: stri
       </>
     ),
   },
-  menu: { heading: ['OUR', 'MENU'], badge: <ChefHat />, tap: 'SCAN TO EXPLORE', decor: <Leaves /> },
-  review: { heading: ['Leave us', 'your review', 'on Google'], badge: <Icon name="star" />, tap: 'TAP YOUR PHONE', decor: <Wave /> },
+  menu: { heading: ['OUR', 'MENU'], badge: <ChefHat />, pill: 'SCAN TO EXPLORE', decor: <Leaves /> },
+  review: { heading: ['Leave us', 'your review', 'on Google'], badge: <Icon name="star" />, decor: <Wave /> },
 }
 
 interface SmartCardPreviewProps {
@@ -103,8 +106,13 @@ export function SmartCardPreview({ theme = 'brand', seed }: SmartCardPreviewProp
         </div>
       </div>
       <div className="pc-foot">
-        <span className="pc-tap">{t.tap}</span>
-        <NfcTap />
+        {t.pill && <span className="pc-pill">{t.pill}</span>}
+        <div className="pc-tz">
+          <span className="pc-tzi">
+            <TapIcon />
+          </span>
+          <span className="pc-tzt">TAP HERE</span>
+        </div>
         <span className="pc-by">
           powered by <b>Tapwe</b>
         </span>

@@ -1,52 +1,12 @@
-import { PhoneMockup } from '../cards/PhoneMockup'
-import { SmartCardPreview } from '../cards/SmartCardPreview'
 import { LinkButton } from '../ui/Button'
 import { Icon } from '../ui/Icon'
-import { ArrowLink } from './ArrowLink'
-import { DemoScreen } from './DemoScreens'
+import { TapHero } from './TapHero'
 
-function HeroMock() {
-  return (
-    <div className="hm">
-      <div className="bg" />
-      <div className="ph">
-        <PhoneMockup>
-          <DemoScreen demo="menu" />
-        </PhoneMockup>
-      </div>
-      <div className="cd c1">
-        <SmartCardPreview theme="brand" />
-      </div>
-      <div className="cd c2">
-        <SmartCardPreview theme="menu" />
-      </div>
-      <div className="fchip ok" style={{ top: '2%', left: 0 }}>
-        <i>
-          <Icon name="check" />
-        </i>
-        Menu opened
-      </div>
-      <div className="fchip hm2" style={{ top: '27%', left: '3%', animationDelay: '-2s' }}>
-        <i>
-          <Icon name="nfc" />
-        </i>
-        Tap detected
-      </div>
-      <div className="fchip ok hm2" style={{ bottom: 0, right: '8%', animationDelay: '-3.5s' }}>
-        <i>
-          <Icon name="user" />
-        </i>
-        Scanned at table
-      </div>
-      <div className="tap" aria-hidden="true">
-        <i />
-        <b>
-          <Icon name="nfc" />
-        </b>
-      </div>
-    </div>
-  )
-}
+const TICKS: Array<[title: string, text: string]> = [
+  ['Works on any phone', 'NFC tap or QR scan.'],
+  ['Opens instantly', 'No app and no typing.'],
+  ['Set up for you', 'Tell us what to show.'],
+]
 
 export function Hero() {
   return (
@@ -61,8 +21,8 @@ export function Hero() {
               One Tap. <span className="gt">Endless Possibilities.</span>
             </h1>
             <p className="lead">
-              Connect your business to the digital world with smart NFC and QR cards. Share your menu, profile, social
-              links and feedback forms with a simple tap or scan. We set it all up for you.
+              A smart card that opens your menu, social page or review link with one tap. No app needed. We set it up
+              for you.
             </p>
             <div className="cta">
               <LinkButton variant="p" size="lg" to="/request">
@@ -72,12 +32,20 @@ export function Hero() {
                 See How It Works
               </LinkButton>
             </div>
-            <div className="hlinks">
-              <ArrowLink to="/features">Explore features</ArrowLink>
-              <ArrowLink to="/#demo">See it in action</ArrowLink>
-            </div>
+            <ul className="tk">
+              {TICKS.map(([title, text]) => (
+                <li key={title}>
+                  <span className="ck">
+                    <Icon name="check" />
+                  </span>
+                  <span>
+                    <b style={{ color: 'var(--ink)', fontWeight: 600 }}>{title}.</b> {text}
+                  </span>
+                </li>
+              ))}
+            </ul>
           </div>
-          <HeroMock />
+          <TapHero />
         </section>
       </div>
     </div>
