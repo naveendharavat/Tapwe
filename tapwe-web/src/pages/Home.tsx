@@ -2,6 +2,7 @@ import { AboutSection } from '../components/home/AboutSection'
 import { CardExperiences } from '../components/home/CardExperiences'
 import { CardJourney } from '../components/home/CardJourney'
 import { CtaBand } from '../components/home/CtaBand'
+import { CustomersStrip } from '../components/home/CustomersStrip'
 import { DemoSection } from '../components/home/DemoSection'
 import { Hero } from '../components/home/Hero'
 import { HowSteps } from '../components/home/HowSteps'
@@ -30,6 +31,7 @@ export default function Home() {
     <>
       <Hero />
       <Marquee />
+      <CustomersStrip />
       <WhyTapwe />
       <HowSteps />
       <WaysIn />

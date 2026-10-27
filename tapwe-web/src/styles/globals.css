@@ -527,6 +527,11 @@ header.top{box-shadow:0 1px 0 rgb(255 255 255/.6) inset}
 section[id]{scroll-margin-top:64px}
 .skip:focus{position:absolute;left:12px;top:12px;z-index:99;width:auto;height:auto;clip:auto;background:#fff;padding:8px 12px;border-radius:8px}
 .btn.full{width:100%}
+.cust{padding:56px 0 0;text-align:center}
+.cust-row{list-style:none;padding:0;margin:4px 0 0;display:flex;flex-wrap:wrap;justify-content:center;gap:16px}
+.cust-row li{display:inline-flex;align-items:center;gap:14px;padding:14px 24px 14px 14px;background:var(--surface);border:1px solid var(--line);border-radius:18px;box-shadow:var(--sh);text-align:left}
+.cust-av{width:52px;height:52px;flex:none;border-radius:14px;background:var(--b50);color:var(--b700);display:grid;place-items:center;font-size:18px;font-weight:700;object-fit:contain}
+.cust-row b{display:block;font-size:17px;font-weight:700}.cust-row small{display:flex;align-items:center;gap:6px;margin-top:3px;font-size:14px;color:var(--ink2)}.cust-row small svg{color:#f5a524;fill:currentColor}
 .tm-group{text-align:center;font-size:26px;font-weight:700;letter-spacing:-.02em;margin:0 0 28px}
 /* public card page (built from the design's phone profile screen) */
 .pub{min-height:100vh;background:var(--canvas);display:flex;justify-content:center;padding:48px 16px 32px}
