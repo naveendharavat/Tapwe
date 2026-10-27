@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import googleReviewCard from '../assets/google-review-card.jpg'
 import { PhoneMockup, ProfileScreen } from '../components/cards/PhoneMockup'
 import { SmartCardPreview } from '../components/cards/SmartCardPreview'
 import { CtaBand } from '../components/home/CtaBand'
@@ -42,9 +43,14 @@ const ROWS: FeatureRow[] = [
     text: 'Each card carries a QR code that leads to the same permanent link as the NFC chip, so every phone can connect.',
     points: ['Scan with the regular camera app', 'Same link as the NFC chip', 'Download the QR from your dashboard'],
     visual: (
-      <div style={{ maxWidth: 270, margin: 'auto' }}>
-        <SmartCardPreview theme="review" />
-      </div>
+      <img
+        src={googleReviewCard}
+        alt="Tapwe review card with a QR code and NFC tap area, asking customers to leave a Google review"
+        width={1024}
+        height={1024}
+        loading="lazy"
+        style={{ display: 'block', width: '100%', maxWidth: 440, height: 'auto', margin: 'auto', borderRadius: 24 }}
+      />
     ),
   },
   {

@@ -22,7 +22,7 @@ svg.i{width:1em;height:1em;stroke:currentColor;fill:none;stroke-width:1.8;stroke
 .wrap{max-width:1152px;margin:0 auto;padding:0 24px}
 @media(max-width:640px){.wrap{padding:0 16px}}
 .muted{color:var(--ink2)}.faint{color:var(--ink3)}
-.eyebrow{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--b600);margin-bottom:12px}
+.eyebrow{font-size:20px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--b600);margin-bottom:16px}
 
 /* buttons */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:40px;padding:0 16px;border-radius:var(--r);font-size:14px;font-weight:500;white-space:nowrap;transition:background .15s,border-color .15s,color .15s;border:1px solid transparent}
@@ -484,7 +484,7 @@ header.top{box-shadow:0 1px 0 rgb(255 255 255/.6) inset}
 .thw{position:relative;display:block}.thw .th{position:absolute;left:50%;top:0;margin-left:-260px}
 .th-steps b{color:inherit!important;background:rgb(124 92 240/.22)!important}
 
-.pc-body{padding:3cqw 21cqw 1cqw}.pc-review .pc-body{padding:5cqw 19cqw}
+.pc-body{padding:3cqw 21cqw 1cqw}.pc-review .pc-body{margin:0;background:none;padding:3cqw 21cqw 1cqw}.pc-review .pc-qr{padding:5cqw;box-shadow:0 3cqw 8cqw -3cqw rgb(0 0 0/.4)}
 .pc-foot{gap:1.6cqw;padding:0 7cqw 5cqw}
 .pc-tz{display:grid;justify-items:center;gap:2.2cqw}
 .pc-tzi{position:relative;width:14cqw;height:14cqw;border-radius:50%;background:#fff;color:var(--ac);display:grid;place-items:center;box-shadow:0 0 0 1.5cqw rgb(255 255 255/.28),0 0 0 3.4cqw rgb(255 255 255/.12)}.pc-tzi svg{width:62%;height:62%}
@@ -509,6 +509,16 @@ header.top{box-shadow:0 1px 0 rgb(255 255 255/.6) inset}
 @media(prefers-reduced-motion:reduce){.th-page .mrow{animation:none;opacity:1}}
 .phone .mt,.phone .mh,.phone .mlist{flex:none}.phone .mlist{margin-bottom:10px}
 
+.tmg{display:grid;grid-template-columns:repeat(2,1fr);gap:80px;max-width:940px;margin:0 auto}
+.tmc{position:relative;background:#fff;border:1px solid var(--line);border-radius:24px;box-shadow:var(--sh);overflow:hidden;transition:transform .25s,box-shadow .25s}.tmc:hover{transform:translateY(-4px);box-shadow:var(--lift)}
+.tmb{height:104px;background:radial-gradient(260px 120px at 15% 0,rgb(124 92 240/.6),transparent 62%),radial-gradient(240px 120px at 100% 100%,rgb(193 79 216/.45),transparent 60%),var(--b900);position:relative}
+.tmb:before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgb(255 255 255/.18) 1px,transparent 1px);background-size:18px 18px}
+.tmr{position:absolute;right:16px;top:16px;padding:5px 12px;border-radius:99px;background:rgb(255 255 255/.16);border:1px solid rgb(255 255 255/.28);color:#fff;font-size:12px;font-weight:600;letter-spacing:.04em}
+.tma{width:96px;height:96px;border-radius:50%;margin:-48px 0 0 28px;position:relative;border:4px solid #fff;background:linear-gradient(135deg,#5a4fd8,#c14fd8) center/cover;display:grid;place-items:center;color:#fff;font-size:30px;font-weight:700;letter-spacing:.02em;box-shadow:0 14px 26px -12px rgb(90 79 216/.6)}
+.tmx{padding:16px 28px 28px}.tmx h3{font-size:22px;font-weight:700;letter-spacing:-.02em}.tmx .role{margin-top:4px;font-size:14px;font-weight:600;color:var(--b600)}.tmx p{margin-top:14px;font-size:15.5px;line-height:1.65;color:var(--ink2)}
+.tmt{list-style:none;padding:0;margin:18px 0 0;display:flex;flex-wrap:wrap;gap:8px}.tmt li{padding:6px 12px;border-radius:99px;background:var(--b50,#f1eefc);border:1px solid var(--b100);font-size:12.5px;font-weight:600;color:var(--b700)}
+@media(max-width:700px){.tmg{grid-template-columns:1fr;gap:28px}}
+
 /* ===== app additions (not in the static prototype) ===== */
 .qr-real{width:100%;height:100%}.qr-real svg{display:block;width:100%;height:100%}
 .qrbox .q .qr-real{width:160px;height:160px}
@@ -517,6 +527,7 @@ header.top{box-shadow:0 1px 0 rgb(255 255 255/.6) inset}
 section[id]{scroll-margin-top:64px}
 .skip:focus{position:absolute;left:12px;top:12px;z-index:99;width:auto;height:auto;clip:auto;background:#fff;padding:8px 12px;border-radius:8px}
 .btn.full{width:100%}
+.tm-group{text-align:center;font-size:26px;font-weight:700;letter-spacing:-.02em;margin:0 0 28px}
 /* public card page (built from the design's phone profile screen) */
 .pub{min-height:100vh;background:var(--canvas);display:flex;justify-content:center;padding:48px 16px 32px}
 .pub .box{width:100%;max-width:420px;display:flex;flex-direction:column}
