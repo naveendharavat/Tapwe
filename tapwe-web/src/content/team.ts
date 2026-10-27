@@ -4,8 +4,15 @@ export interface TeamMember {
   bio: string
 }
 
-// Replace with the real founders before launch.
 export const TEAM: TeamMember[] = [
-  { name: 'Founder name', role: 'Founder', bio: 'A short line about the founder and why Tapwe exists.' },
-  { name: 'Co-founder name', role: 'Co-founder', bio: 'A short line about the co-founder and what they lead.' },
+  {
+    name: 'Dharavath Naveen',
+    role: 'Founder',
+    bio: 'Leads product and vision, shaping how Tapwe cards connect businesses to the digital world.',
+  },
+  {
+    name: 'Seelam Vamshidhar Goud',
+    role: 'Co-founder',
+    bio: 'Leads operations and partnerships, bringing Tapwe to restaurants, shops and professionals.',
+  },
 ]
