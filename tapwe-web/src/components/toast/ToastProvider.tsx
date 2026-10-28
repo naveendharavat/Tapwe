@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useRef, useState, type ReactNode } from 'react'
-import { Icon } from '../ui/Icon'
+import { Icon } from '../ui'
 import { ToastContext, type ToastTone } from './toast-context'
 
 interface ToastItem {
@@ -37,9 +37,8 @@ export function ToastProvider({ children }: { children: ReactNode }) {
             <span>{t.message}</span>
             <button
               type="button"
-              className="btn icon btn-g sm"
+              className="btn icon btn-g sm toast-close"
               aria-label="Dismiss notification"
-              style={{ width: 28, height: 28 }}
               onClick={() => dismiss(t.id)}
             >
               <Icon name="x" />

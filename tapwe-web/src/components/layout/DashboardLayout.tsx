@@ -2,10 +2,7 @@ import { Suspense, useState } from 'react'
 import { NavLink, Outlet, useNavigate } from 'react-router'
 import { useAuth } from '../../auth/auth-context'
 import { initials } from '../../lib/initials'
-import { Dropdown } from '../ui/Dropdown'
-import { Icon } from '../ui/Icon'
-import { Logo } from '../ui/Logo'
-import { Skeleton } from '../ui/EmptyState'
+import { Box, Dropdown, Icon, Logo, Skeleton, Stack } from '../ui'
 import type { NavItem } from './nav'
 
 function SideNav({ nav, onNavigate }: { nav: NavItem[]; onNavigate?: () => void }) {
@@ -34,19 +31,17 @@ export function DashboardLayout({ nav, label, settingsPath }: DashboardLayoutPro
   const closeDrawer = () => setDrawerOpen(false)
 
   return (
-    <div className="app page">
+    <Box className="app page">
       <aside className="side">
         <Logo />
         <SideNav nav={nav} />
       </aside>
-      <div className="apmain">
+      <Box className="apmain">
         <header className="atop">
           <button type="button" className="btn icon btn-g menu-btn" aria-label="Open navigation" onClick={() => setDrawerOpen(true)}>
             <Icon name="burger" />
           </button>
-          <span className="faint" style={{ fontSize: 14 }}>
-            {label}
-          </span>
+          <span className="faint atop-label">{label}</span>
           <Dropdown
             menuStyle={{ right: 0 }}
             trigger={(props) => (
@@ -81,27 +76,27 @@ export function DashboardLayout({ nav, label, settingsPath }: DashboardLayoutPro
           </Dropdown>
         </header>
 
-        <div className={`drawer ${drawerOpen ? 'open' : ''}`} role="dialog" aria-modal="true" aria-label="Navigation">
-          <div className="sc" onClick={closeDrawer} />
-          <div className="pn">
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Box className={`drawer ${drawerOpen ? 'open' : ''}`} role="dialog" aria-modal="true" aria-label="Navigation">
+          <Box className="sc" onClick={closeDrawer} />
+          <Box className="pn">
+            <Stack direction="row" justify="space-between" align="center" gap={0}>
               <Logo />
               <button type="button" className="btn icon btn-g" aria-label="Close navigation" onClick={closeDrawer}>
                 <Icon name="x" />
               </button>
-            </div>
-            <div style={{ marginTop: 24 }}>
+            </Stack>
+            <Box className="drawer-nav">
               <SideNav nav={nav} onNavigate={closeDrawer} />
-            </div>
-          </div>
-        </div>
+            </Box>
+          </Box>
+        </Box>
 
         <main className="acontent" id="main">
           <Suspense fallback={<Skeleton label="Loading page" />}>
             <Outlet />
           </Suspense>
         </main>
-      </div>
-    </div>
+      </Box>
+    </Box>
   )
 }

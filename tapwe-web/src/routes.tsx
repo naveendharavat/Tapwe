@@ -1,33 +1,32 @@
-import { lazy, Suspense } from 'react'
+import { Suspense } from 'react'
 import { Navigate, Route, Routes } from 'react-router'
 import { RequireAuth } from './auth/RequireAuth'
 import { DashboardLayout } from './components/layout/DashboardLayout'
 import { ADMIN_NAV, OWNER_NAV } from './components/layout/nav'
 import { MarketingLayout } from './components/layout/MarketingLayout'
-
-const Home = lazy(() => import('./pages/Home'))
-const Features = lazy(() => import('./pages/Features'))
-const HowItWorks = lazy(() => import('./pages/HowItWorks'))
-const Pricing = lazy(() => import('./pages/Pricing'))
-const Team = lazy(() => import('./pages/Team'))
-const Request = lazy(() => import('./pages/Request'))
-const Legal = lazy(() => import('./pages/Legal'))
-const SignIn = lazy(() => import('./pages/SignIn'))
-const SignUp = lazy(() => import('./pages/SignUp'))
-const PublicCard = lazy(() => import('./pages/PublicCard'))
-const Overview = lazy(() => import('./pages/dashboard/Overview'))
-const MyCards = lazy(() => import('./pages/dashboard/MyCards'))
-const RequestCard = lazy(() => import('./pages/dashboard/RequestCard'))
-const QrCode = lazy(() => import('./pages/dashboard/QrCode'))
-const Profile = lazy(() => import('./pages/dashboard/Profile'))
-const Destinations = lazy(() => import('./pages/dashboard/Destinations'))
-const Analytics = lazy(() => import('./pages/dashboard/Analytics'))
-const Settings = lazy(() => import('./pages/dashboard/Settings'))
-const AdminOverview = lazy(() => import('./pages/admin/AdminOverview'))
-const AdminCards = lazy(() => import('./pages/admin/AdminCards'))
-const AdminCardRequests = lazy(() => import('./pages/admin/AdminCardRequests'))
-const AdminChangeRequests = lazy(() => import('./pages/admin/AdminChangeRequests'))
-const AdminUsers = lazy(() => import('./pages/admin/AdminUsers'))
+import { AdminCardRequests } from './pages/admin/AdminCardRequests'
+import { AdminCards } from './pages/admin/AdminCards'
+import { AdminChangeRequests } from './pages/admin/AdminChangeRequests'
+import { AdminOverview } from './pages/admin/AdminOverview'
+import { AdminUsers } from './pages/admin/AdminUsers'
+import { SignIn } from './pages/auth/SignIn'
+import { SignUp } from './pages/auth/SignUp'
+import { Analytics } from './pages/dashboard/Analytics'
+import { Destinations } from './pages/dashboard/Destinations'
+import { MyCards } from './pages/dashboard/MyCards'
+import { Overview } from './pages/dashboard/Overview'
+import { Profile } from './pages/dashboard/Profile'
+import { QrCode } from './pages/dashboard/QrCode'
+import { RequestCard } from './pages/dashboard/RequestCard'
+import { Settings } from './pages/dashboard/Settings'
+import { Features } from './pages/marketing/Features'
+import { Home } from './pages/marketing/Home'
+import { HowItWorks } from './pages/marketing/HowItWorks'
+import { Legal } from './pages/marketing/Legal'
+import { Pricing } from './pages/marketing/Pricing'
+import { Request } from './pages/marketing/Request'
+import { Team } from './pages/marketing/Team'
+import { PublicCard } from './pages/public/PublicCard'
 
 export function AppRoutes() {
   return (

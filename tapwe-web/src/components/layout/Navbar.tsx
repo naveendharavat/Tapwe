@@ -1,8 +1,6 @@
 import { useState } from 'react'
 import { Link, useLocation } from 'react-router'
-import { LinkButton } from '../ui/Button'
-import { Icon } from '../ui/Icon'
-import { Logo } from '../ui/Logo'
+import { Box, Container, Icon, LinkButton, Logo } from '../ui'
 
 const MARKETING_LINKS: Array<[label: string, to: string]> = [
   ['Home', '/'],
@@ -19,8 +17,8 @@ export function Navbar() {
 
   return (
     <header className="top">
-      <div className="wrap">
-        <div className="bar">
+      <Container>
+        <Box className="bar">
           <Logo />
           <nav className="main" aria-label="Main">
             {MARKETING_LINKS.map(([label, to]) => (
@@ -29,11 +27,11 @@ export function Navbar() {
               </Link>
             ))}
           </nav>
-          <div className="actions">
+          <Box className="actions">
             <LinkButton variant="p" to="/request">
               Request a Card
             </LinkButton>
-          </div>
+          </Box>
           <button
             type="button"
             className="burger"
@@ -44,9 +42,9 @@ export function Navbar() {
           >
             <Icon name={open ? 'x' : 'burger'} />
           </button>
-        </div>
-      </div>
-      <div id="mnav" className={open ? 'open' : ''}>
+        </Box>
+      </Container>
+      <Box id="mnav" className={open ? 'open' : ''}>
         <nav aria-label="Mobile">
           {MARKETING_LINKS.map(([label, to]) => (
             <Link key={to} className="l" to={to} onClick={close}>
@@ -54,12 +52,12 @@ export function Navbar() {
             </Link>
           ))}
         </nav>
-        <div className="two">
+        <Box className="two">
           <LinkButton variant="p" size="lg" to="/request" onClick={close}>
             Request a Card
           </LinkButton>
-        </div>
-      </div>
+        </Box>
+      </Box>
     </header>
   )
 }

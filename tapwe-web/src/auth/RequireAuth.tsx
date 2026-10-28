@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { Navigate, useLocation } from 'react-router'
-import { Skeleton } from '../components/ui/EmptyState'
+import { Skeleton } from '../components/ui'
 import type { UserRole } from '../services/auth/auth.types'
 import { homePath, useAuth } from './auth-context'
 

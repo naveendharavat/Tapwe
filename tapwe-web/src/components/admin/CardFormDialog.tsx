@@ -6,11 +6,7 @@ import type { AdminCard } from '../../services/admin/admin.types'
 import { getErrorMessage } from '../../services/api'
 import { DESTINATION_LABELS, STATUS_LABELS } from '../../services/cards/cards.types'
 import { useToast } from '../toast/toast-context'
-import { Button } from '../ui/Button'
-import { Dialog } from '../ui/Dialog'
-import { Field } from '../ui/Field'
-import { describedBy } from '../ui/describedBy'
-import { Input, Select } from '../ui/Input'
+import { Button, describedBy, Dialog, DialogActions, Field, Input, Select } from '../ui'
 
 export type CardDraft = Partial<Pick<AdminCardValues, 'name' | 'ownerEmail'>>
 
@@ -108,14 +104,14 @@ function CardForm({ card, draft, onDone }: { card: AdminCard | null; draft?: Car
           <Input id="cf-url" type="url" placeholder="https://" invalid={!!errors.destinationUrl} {...describedBy('cf-url', errors.destinationUrl?.message)} {...register('destinationUrl')} />
         </Field>
       )}
-      <div className="row">
+      <DialogActions>
         <Button variant="s" onClick={onDone}>
           Cancel
         </Button>
         <Button variant="p" type="submit" loading={save.isPending}>
           {card ? 'Save changes' : 'Create card'}
         </Button>
-      </div>
+      </DialogActions>
     </form>
   )
 }

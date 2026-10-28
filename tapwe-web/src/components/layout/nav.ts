@@ -1,4 +1,4 @@
-import type { IconName } from '../ui/icons'
+import type { IconName } from '../ui'
 
 export type NavItem = [to: string, label: string, icon: IconName]
 

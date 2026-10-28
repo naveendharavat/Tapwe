@@ -1,0 +1,78 @@
+.pub {
+  min-height: 100vh;
+  background: var(--background);
+  display: flex;
+  justify-content: center;
+  padding: var(--space-12) var(--space-4) var(--space-8);
+}
+.pub .box {
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+}
+.pub .av {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: var(--gradient-brand);
+  color: var(--white);
+  display: grid;
+  place-items: center;
+  font-size: 28px;
+  font-weight: 600;
+  margin: 0 auto;
+  box-shadow: 0 10px 20px -8px rgb(90 79 216/0.6);
+}
+.pub h1 {
+  text-align: center;
+  font-size: 26px;
+  font-weight: 700;
+  margin-top: var(--space-4_5);
+}
+.pub .sb {
+  text-align: center;
+  color: var(--subtle-foreground);
+  margin-top: var(--space-1_5);
+}
+.pub .lk {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-2_5);
+  margin-top: var(--space-7);
+}
+.pub .lk a {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2_5);
+  padding: var(--space-3_5) var(--space-4);
+  border: 1px solid var(--border);
+  background: var(--card);
+  border-radius: var(--radius-lg);
+  font-weight: 500;
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.15s;
+}
+.pub .lk a:hover {
+  border-color: var(--brand-200);
+}
+.pub .lk svg {
+  color: var(--primary);
+  font-size: var(--text-lg);
+}
+.pub .save {
+  margin-top: var(--space-5);
+  width: 100%;
+}
+.pub .by {
+  margin-top: auto;
+  padding-top: var(--space-12);
+  text-align: center;
+  font-size: 13px;
+  color: var(--subtle-foreground);
+}
+.empty-page .opening {
+  width: 100%;
+  max-width: 380px;
+  text-align: center;
+}

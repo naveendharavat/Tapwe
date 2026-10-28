@@ -1,0 +1,99 @@
+.auth {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--space-10) var(--space-4);
+}
+.auth .box {
+  width: 100%;
+  max-width: 384px;
+  margin-top: var(--space-10);
+}
+.auth h1 {
+  font-size: var(--text-2xl);
+  font-weight: 600;
+}
+.auth .sub {
+  margin-top: var(--space-1_5);
+  color: var(--muted-foreground);
+}
+.auth form {
+  margin-top: var(--space-7);
+  padding: var(--space-6);
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-sm);
+  display: grid;
+  gap: var(--space-4);
+}
+.auth .alt {
+  margin-top: var(--space-6);
+  text-align: center;
+  font-size: var(--text-sm);
+  color: var(--muted-foreground);
+}
+.auth .alt a {
+  color: var(--primary);
+  font-weight: 500;
+}
+.auth .alt a:hover {
+  text-decoration: underline;
+}
+.authw {
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  min-height: 100vh;
+}
+.authl {
+  position: relative;
+  overflow: hidden;
+  color: var(--white);
+  padding: var(--space-12);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: radial-gradient(520px 380px at 18% 0, rgb(124 92 240/0.6), transparent 60%),
+    radial-gradient(520px 380px at 100% 100%, rgb(193 79 216/0.38), transparent 60%), var(--brand-900);
+}
+.authl .logo {
+  color: var(--white);
+}
+.authl h2 {
+  font-size: clamp(28px, 3vw, 42px);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  max-width: 440px;
+}
+.authl p {
+  color: rgb(255 255 255/0.72);
+  margin-top: var(--space-3_5);
+  max-width: 400px;
+  font-size: 17px;
+}
+.authr {
+  background: var(--background);
+}
+.authr > .logo {
+  display: none;
+}
+@media (max-width: 900px) {
+  .authw {
+    grid-template-columns: 1fr;
+  }
+  .authl {
+    display: none;
+  }
+  .authr > .logo {
+    display: inline-flex;
+  }
+}
+.authl .tagline {
+  color: rgb(255 255 255 / 0.55);
+  font-size: 13px;
+}
+.auth .auth-actions {
+  margin-top: var(--space-6);
+}

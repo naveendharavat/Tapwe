@@ -4,8 +4,8 @@ import MockAdapter from 'axios-mock-adapter'
 import type { CardRequest, ChangeRequest } from '../../services/admin/admin.types'
 import { api } from '../../services/api'
 import { renderApp } from '../../test/render'
-import AdminCardRequests from './AdminCardRequests'
-import AdminChangeRequests from './AdminChangeRequests'
+import AdminCardRequests from './AdminCardRequests/AdminCardRequests'
+import AdminChangeRequests from './AdminChangeRequests/AdminChangeRequests'
 
 const cardRequest: CardRequest = {
   id: 7,

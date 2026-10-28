@@ -7,14 +7,7 @@ import { getErrorMessage } from '../../services/api'
 import { useDeleteCard, useRequestCardChange } from '../../services/cards/cards.queries'
 import { STATUS_LABELS, type Card, type CardStatus } from '../../services/cards/cards.types'
 import { useToast } from '../toast/toast-context'
-import { Badge } from '../ui/Badge'
-import { Button } from '../ui/Button'
-import { Dialog } from '../ui/Dialog'
-import { Dropdown } from '../ui/Dropdown'
-import { Field } from '../ui/Field'
-import { describedBy } from '../ui/describedBy'
-import { Icon } from '../ui/Icon'
-import { Input } from '../ui/Input'
+import { Badge, Button, describedBy, Dialog, DialogActions, Dropdown, Field, Icon, Input, TableContainer } from '../ui'
 import { useCopyCardUrl } from './useCopyCardUrl'
 
 export function StatusBadge({ status }: { status: CardStatus }) {
@@ -30,7 +23,7 @@ export function CardsTable({ cards }: { cards: Card[] }) {
 
   return (
     <>
-      <div className="twrap">
+      <TableContainer>
         <table>
           <caption className="sr">Your cards</caption>
           <thead>
@@ -47,7 +40,7 @@ export function CardsTable({ cards }: { cards: Card[] }) {
           <tbody>
             {cards.map((card) => (
               <tr key={card.code}>
-                <td style={{ fontWeight: 500 }}>{card.name}</td>
+                <td className="strong">{card.name}</td>
                 <td className="id">{card.code}</td>
                 <td>
                   <StatusBadge status={card.status} />
@@ -88,7 +81,7 @@ export function CardsTable({ cards }: { cards: Card[] }) {
             ))}
           </tbody>
         </table>
-      </div>
+      </TableContainer>
       <ChangeRequestDialog card={pending?.kind === 'change' ? pending.card : null} onClose={close} />
       <DeleteCardDialog card={pending?.kind === 'delete' ? pending.card : null} onClose={close} />
     </>
@@ -134,14 +127,14 @@ function ChangeRequestDialog({ card, onClose }: { card: Card | null; onClose: ()
         <Field id="ed" label="What should it open?" required error={error}>
           <Input id="ed" placeholder="e.g. our new menu link" invalid={!!error} {...describedBy('ed', error)} {...register('message')} />
         </Field>
-        <div className="row">
+        <DialogActions>
           <Button variant="s" onClick={finish}>
             Cancel
           </Button>
           <Button variant="p" type="submit" loading={requestChange.isPending}>
             Send request
           </Button>
-        </div>
+        </DialogActions>
       </form>
     </Dialog>
   )
@@ -174,14 +167,14 @@ function DeleteCardDialog({ card, onClose }: { card: Card | null; onClose: () =>
           confirm()
         }}
       >
-        <div className="row">
+        <DialogActions>
           <Button variant="s" onClick={onClose}>
             Cancel
           </Button>
           <Button variant="d" type="submit" loading={deleteCard.isPending}>
             Delete card
           </Button>
-        </div>
+        </DialogActions>
       </form>
     </Dialog>
   )

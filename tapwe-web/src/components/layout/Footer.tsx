@@ -1,5 +1,5 @@
 import { Link } from 'react-router'
-import { Logo } from '../ui/Logo'
+import { Box, Container, Logo } from '../ui'
 import { SupportPhones } from './SupportPhones'
 
 const COLUMNS: Array<[heading: string, links: Array<[label: string, to: string]>]> = [
@@ -38,19 +38,17 @@ const YEAR = new Date().getFullYear()
 export function Footer() {
   return (
     <footer className="foot">
-      <div className="wrap">
-        <div className="fgrid">
-          <div style={{ maxWidth: 300 }}>
+      <Container>
+        <Box className="fgrid">
+          <Box className="fbrand">
             <Logo />
-            <p className="muted" style={{ marginTop: 16, fontSize: 14 }}>
-              Smart NFC and QR cards that connect your business to the digital world with a simple tap.
-            </p>
-            <p className="muted" style={{ marginTop: 12, fontSize: 14 }}>
+            <p className="muted">Smart NFC and QR cards that connect your business to the digital world with a simple tap.</p>
+            <p className="muted">
               Questions? Call <SupportPhones />
             </p>
-          </div>
+          </Box>
           {COLUMNS.map(([heading, links]) => (
-            <div key={heading}>
+            <Box key={heading}>
               <h3>{heading}</h3>
               <ul>
                 {links.map(([label, to]) => (
@@ -59,11 +57,11 @@ export function Footer() {
                   </li>
                 ))}
               </ul>
-            </div>
+            </Box>
           ))}
-        </div>
-        <div className="copy">© {YEAR} Tapwe. All rights reserved.</div>
-      </div>
+        </Box>
+        <p className="copy">© {YEAR} Tapwe. All rights reserved.</p>
+      </Container>
     </footer>
   )
 }

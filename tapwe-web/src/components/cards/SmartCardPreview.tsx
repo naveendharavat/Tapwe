@@ -1,7 +1,6 @@
 import type { CSSProperties, ReactNode } from 'react'
 import { cssVars } from '../../lib/cssVars'
-import { Icon } from '../ui/Icon'
-import { ICON_PATHS, type IconName } from '../ui/icons'
+import { Icon, ICON_PATHS, type IconName } from '../ui'
 import { QRCodePreview } from './QRCodePreview'
 
 export type CardTheme = 'brand' | 'insta' | 'menu' | 'review'

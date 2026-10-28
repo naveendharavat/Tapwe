@@ -1,0 +1,123 @@
+/* Design tokens. Primitives hold raw values; semantic tokens give them a role. Rules use semantic tokens. */
+:root {
+  /* ---- Primitive colours ---- */
+  --white: #fff;
+  --black: #000;
+
+  --brand-50: #f0f0ff;
+  --brand-100: #e4e4fd;
+  --brand-200: #cbcbfa;
+  --brand-500: #5a4fd8;
+  --brand-600: #4a3fc4;
+  --brand-700: #3d33a8;
+  --brand-900: #231d62;
+  --violet-500: #7c5cf0;
+  --magenta-500: #c14fd8;
+
+  --neutral-50: #fbfaf8;
+  --neutral-100: #f4f2ee;
+  --neutral-200: #e7e4de;
+  --neutral-300: #d6d2ca;
+  --neutral-500: #6b6a75;
+  --neutral-600: #4a4953;
+  --neutral-900: #1c1b22;
+
+  --green-50: #e8f5ee;
+  --green-700: #14774a;
+  --red-50: #fdeceb;
+  --red-700: #b42318;
+  --red-800: #8f1b11;
+  --amber-50: #fdf3dc;
+  --amber-700: #8a5a00;
+
+  /* ---- Semantic colours ---- */
+  --background: var(--neutral-50);
+  --foreground: var(--neutral-900);
+  --card: var(--white);
+  --muted: var(--neutral-100);
+  --muted-foreground: var(--neutral-600);
+  --subtle-foreground: var(--neutral-500);
+  --border: var(--neutral-200);
+  --border-strong: var(--neutral-300);
+  --primary: var(--brand-600);
+  --primary-foreground: var(--white);
+  --ring: var(--brand-500);
+  --success: var(--green-700);
+  --success-soft: var(--green-50);
+  --destructive: var(--red-700);
+  --destructive-hover: var(--red-800);
+  --destructive-soft: var(--red-50);
+  --warning: var(--amber-700);
+  --warning-soft: var(--amber-50);
+
+  --gradient-brand: linear-gradient(135deg, var(--brand-500), var(--magenta-500));
+  --gradient-brand-text: linear-gradient(100deg, var(--brand-600) 0%, var(--violet-500) 55%, var(--magenta-500) 100%);
+  --gradient-tint: linear-gradient(160deg, #eeebff, #f7f3ff 60%, #fdf0f8);
+
+  /* ---- Spacing: --space-N = N x 4px, N_5 = N.5 ---- */
+  --space-0: 0;
+  --space-0_5: 2px;
+  --space-1: 4px;
+  --space-1_5: 6px;
+  --space-2: 8px;
+  --space-2_5: 10px;
+  --space-3: 12px;
+  --space-3_5: 14px;
+  --space-4: 16px;
+  --space-4_5: 18px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 28px;
+  --space-8: 32px;
+  --space-9: 36px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-14: 56px;
+  --space-16: 64px;
+  --space-18: 72px;
+  --space-20: 80px;
+
+  /* ---- Radius ---- */
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 10px;
+  --radius-lg: 12px;
+  --radius-xl: 14px;
+  --radius-2xl: 20px;
+  --radius-3xl: 24px;
+  --radius-4xl: 28px;
+  --radius-full: 999px;
+  --radius-control: var(--radius-md);
+  --radius-card: var(--radius-xl);
+
+  /* ---- Typography ---- */
+  --font-sans: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: ui-monospace, Menlo, monospace;
+  --text-xs: 12px;
+  --text-sm: 14px;
+  --text-base: 16px;
+  --text-lg: 18px;
+  --text-xl: 20px;
+  --text-2xl: 24px;
+  --text-3xl: 30px;
+  --text-h3: clamp(24px, 3vw, 32px);
+  --text-h2: clamp(28px, 4vw, 40px);
+  --text-h1: clamp(34px, 5vw, 52px);
+  --text-display: clamp(42px, 6.2vw, 76px);
+
+  /* ---- Elevation ---- */
+  --shadow-sm: 0 1px 2px rgb(28 27 34 / 0.04), 0 1px 1px rgb(28 27 34 / 0.03);
+  --shadow-lg: 0 10px 30px -12px rgb(28 27 34 / 0.18), 0 2px 6px rgb(28 27 34 / 0.05);
+  --shadow-device: 0 40px 70px -30px rgb(35 29 98 / 0.35), 0 12px 24px -12px rgb(28 27 34 / 0.2);
+
+  /* ---- Layout ---- */
+  --container-max: 1152px;
+  --container-gutter: var(--space-6);
+  --header-height: 64px;
+}
+
+@media (max-width: 640px) {
+  :root {
+    --container-gutter: var(--space-4);
+  }
+}

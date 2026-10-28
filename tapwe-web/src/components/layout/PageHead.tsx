@@ -1,3 +1,5 @@
+import { Box, Container, Typography } from '../ui'
+
 interface PageHeadProps {
   eyebrow: string
   title: string
@@ -6,12 +8,12 @@ interface PageHeadProps {
 
 export function PageHead({ eyebrow, title, lead }: PageHeadProps) {
   return (
-    <div className="pagehead">
-      <div className="wrap">
-        <div className="eyebrow">{eyebrow}</div>
+    <Box as="header" className="pagehead">
+      <Container>
+        <Typography variant="eyebrow">{eyebrow}</Typography>
         <h1>{title}</h1>
         <p>{lead}</p>
-      </div>
-    </div>
+      </Container>
+    </Box>
   )
 }
