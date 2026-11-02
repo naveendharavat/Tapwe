@@ -4,50 +4,46 @@ Smart NFC + QR business cards. Each printed card opens one permanent link (`/c/<
 
 | Folder | What it is |
 |---|---|
-| `tapwe-web/` | React 19 + TypeScript + Vite site: marketing pages, request form, owner dashboard, public card page |
-| `tapwe-server/` | NestJS 12 + TypeORM + Postgres (Supabase) REST API |
+| `tapwe-web/` | The whole app: React 19 + TypeScript + Vite. Marketing pages, request form, owner dashboard, admin, public card page |
+| `supabase/` | The database: tables, access rules and functions (`migrations/`), plus demo data (`seed.sql`) |
 | `docs/design/tapwe-design.html` | The approved UI design (open in a browser) |
-| `docs/superpowers/` | Design spec and implementation plan |
+
+There is no separate backend. The app talks to Supabase directly: Supabase Auth handles accounts, row-level security decides who can read or change each row, and a few database functions do the server-side work (opening a card and counting the tap, analytics, admin search).
+
+## Set up Supabase (once)
+
+1. Create a project at <https://supabase.com>.
+2. **Authentication → Sign In / Providers → Email**: turn **Confirm email** off (sign-up signs people straight in).
+3. **SQL Editor**: paste and run `supabase/migrations/20261102000000_init.sql`.
+4. Optional, for a test project only: run `supabase/seed.sql` for the demo accounts below.
+5. **Project Settings → API**: copy the Project URL and the `anon` public key.
 
 ## Run it locally
 
-Requirements: Node 22+, Yarn 1, a Postgres 14+ database (Supabase works).
+Requirements: Node 22+, Yarn 1.
 
 ```bash
-# 1. Database: in Supabase open the project → Connect → Session pooler,
-#    and copy host / port / user / database / password into tapwe-server/.env (DB_SSL=true).
-
-# 2. API — http://localhost:4000
-cd tapwe-server
+cd tapwe-web
 yarn install
-cp .env.example .env          # fill in the DB_* values and a long random JWT_SECRET
-yarn migration:run            # creates the tables
-yarn seed                     # demo data (safe to re-run)
-yarn start:dev
-
-# 3. Website — http://localhost:5173
-cd ../tapwe-web
-yarn install
-cp .env.example .env.local
-yarn dev
+cp .env.example .env.local     # paste the Project URL and anon key
+yarn dev                       # http://localhost:5173
 ```
 
-Demo logins created by `yarn seed`:
+Demo logins created by `seed.sql`:
 
-- Owner: `demo@tapwe.in` / `demo12345` — 3 cards (`ab12cd` profile, `k9f2xq` menu link, `m4t8zr` draft) and a week of taps
-- Admin: `admin01@tapwe.in` / `admin@0123` — signs in on the same page and lands on the admin dashboard (`/admin`)
+- Owner: `demo@tapwe.in` / `demo12345`: 3 cards (`ab12cd` profile, `k9f2xq` menu link, `m4t8zr` draft) and a week of taps
+- Admin: `admin01@tapwe.in` / `admin@0123`: signs in on the same page and lands on the admin dashboard (`/admin`)
 
 Try the public card page: <http://localhost:5173/c/ab12cd> (profile), `/c/k9f2xq` (redirects), `/c/m4t8zr` (not active yet).
 
+## Deploy (Vercel)
+
+One Vercel project, root directory `tapwe-web`. Add the three `VITE_*` variables from `.env.example` in the project settings. `vercel.json` sends every path to the app so links like `/c/ab12cd` work.
+
 ## Tests
 
-The e2e tests rebuild a throwaway Postgres on port 5433 (they never read the DB settings in `.env`):
-
 ```bash
-docker run -d --rm --name tapwe-pg-test -p 5433:5432 -e POSTGRES_USER=tapwe -e POSTGRES_PASSWORD=tapwe -e POSTGRES_DB=tapwe_test postgres:16-alpine
-cd tapwe-server && yarn test && yarn test:e2e
 cd tapwe-web && yarn test
-docker stop tapwe-pg-test
 ```
 
 ## How a card gets to its owner
@@ -58,12 +54,10 @@ Customers sign up and sign in at `/sign-in`; admins sign in on the same page and
 - **Cards**: every card from every customer. Create a card for a customer's email (they may not have an account yet; it appears in their dashboard as soon as they sign up), then edit its name, owner, status and where it opens. Copy its link or download its QR code for printing.
 - **Change requests**: customers asking to repoint a card. **Edit card**, then **Mark done**.
 
-To make another account an admin, set its `role` to `admin` in the `users` table.
+To make another account an admin, set its `role` to `admin` in the `users` table (Supabase → Table Editor).
 
 ## Before launch
 
-- Change the seeded admin password, or delete the demo accounts: their passwords are published in this README.
-
-- Replace the placeholder founders in `tapwe-web/src/content/team.ts`.
+- Don't run `seed.sql` on the live project: its passwords are published in this README.
 - Pricing, Privacy, Terms and Support pages still hold the design's placeholder copy.
-- Set `PUBLIC_CARD_BASE_URL` (server) to the real domain — it is the link written to every NFC chip and QR code, so it must never change once cards are printed.
+- Set `VITE_PUBLIC_CARD_BASE_URL` to the real domain — it is the link written to every NFC chip and QR code, so it must never change once cards are printed.

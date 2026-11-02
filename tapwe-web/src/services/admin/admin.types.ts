@@ -63,7 +63,7 @@ export const CARD_REQUEST_STATUS_LABELS: Record<CardRequestStatus, string> = {
 };
 
 export interface AdminUser {
-  id: number;
+  id: string;
   name: string;
   email: string;
   role: UserRole;

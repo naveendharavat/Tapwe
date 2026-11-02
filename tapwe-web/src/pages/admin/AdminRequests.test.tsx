@@ -1,8 +1,7 @@
 import { screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import MockAdapter from 'axios-mock-adapter'
+import { AdminService } from '../../services/admin/admin.service'
 import type { CardRequest, ChangeRequest } from '../../services/admin/admin.types'
-import { api } from '../../services/api'
 import { renderApp } from '../../test/render'
 import AdminCardRequests from './AdminCardRequests/AdminCardRequests'
 import AdminChangeRequests from './AdminChangeRequests/AdminChangeRequests'
@@ -33,12 +32,9 @@ const changeRequest: ChangeRequest = {
 }
 
 describe('Admin requests', () => {
-  const mock = new MockAdapter(api)
-  afterEach(() => mock.reset())
-
   it('shows a card request and moves it to contacted', async () => {
-    mock.onGet('/admin/card-requests').reply(200, [cardRequest])
-    mock.onPatch('/admin/card-requests/7').reply(200, { ...cardRequest, status: 'contacted' })
+    vi.spyOn(AdminService, 'listCardRequests').mockResolvedValue([cardRequest])
+    const update = vi.spyOn(AdminService, 'updateCardRequestStatus').mockResolvedValue({ ...cardRequest, status: 'contacted' })
     renderApp(<AdminCardRequests />)
 
     const row = (await screen.findByText('Asha Café')).closest('tr')!
@@ -46,20 +42,18 @@ describe('Admin requests', () => {
     expect(within(row).getByText('Menu, Feedback form')).toBeInTheDocument()
 
     await userEvent.selectOptions(within(row).getByLabelText('Status for Asha Café'), 'contacted')
-    await vi.waitFor(() => expect(mock.history.patch).toHaveLength(1))
-    expect(JSON.parse(mock.history.patch[0].data)).toEqual({ status: 'contacted' })
+    await vi.waitFor(() => expect(update).toHaveBeenCalledExactlyOnceWith(7, 'contacted'))
   })
 
   it('marks an open change request as done', async () => {
-    mock.onGet('/admin/change-requests').reply(200, [changeRequest])
-    mock.onPatch('/admin/change-requests/3').reply(200, { ...changeRequest, status: 'done' })
+    vi.spyOn(AdminService, 'listChangeRequests').mockResolvedValue([changeRequest])
+    const update = vi.spyOn(AdminService, 'updateChangeRequestStatus').mockResolvedValue({ ...changeRequest, status: 'done' })
     renderApp(<AdminChangeRequests />)
 
     const row = (await screen.findByText('Point it to our new menu')).closest('tr')!
     expect(within(row).getByText('Table menu')).toBeInTheDocument()
     await userEvent.click(within(row).getByRole('button', { name: 'Mark done' }))
 
-    await vi.waitFor(() => expect(mock.history.patch).toHaveLength(1))
-    expect(JSON.parse(mock.history.patch[0].data)).toEqual({ status: 'done' })
+    await vi.waitFor(() => expect(update).toHaveBeenCalledExactlyOnceWith(3, 'done'))
   })
 })

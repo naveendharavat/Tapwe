@@ -1,7 +1,6 @@
 import { screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import MockAdapter from 'axios-mock-adapter'
-import { api } from '../../../services/api'
+import { CardsService } from '../../../services/cards/cards.service'
 import type { Card } from '../../../services/cards/cards.types'
 import { renderApp } from '../../../test/render'
 import MyCards from './MyCards'
@@ -19,11 +18,8 @@ const card = (over: Partial<Card>): Card => ({
 })
 
 describe('My Cards', () => {
-  const mock = new MockAdapter(api)
-  afterEach(() => mock.reset())
-
   it('shows the error state with a retry when cards fail to load', async () => {
-    mock.onGet('/cards').replyOnce(500).onGet('/cards').reply(200, [card({})])
+    vi.spyOn(CardsService, 'list').mockRejectedValueOnce(new Error('down')).mockResolvedValue([card({})])
     renderApp(<MyCards />)
     expect(await screen.findByText('We couldn’t load your cards')).toBeInTheDocument()
 
@@ -32,13 +28,13 @@ describe('My Cards', () => {
   })
 
   it('shows the empty state when there are no cards', async () => {
-    mock.onGet('/cards').reply(200, [])
+    vi.spyOn(CardsService, 'list').mockResolvedValue([])
     renderApp(<MyCards />)
     expect(await screen.findByText('No cards yet')).toBeInTheDocument()
   })
 
   it('filters by status tab', async () => {
-    mock.onGet('/cards').reply(200, [card({}), card({ code: 'm4t8zr', name: 'Feedback card', status: 'draft' })])
+    vi.spyOn(CardsService, 'list').mockResolvedValue([card({}), card({ code: 'm4t8zr', name: 'Feedback card', status: 'draft' })])
     renderApp(<MyCards />)
     await screen.findByText('Front desk card')
 
@@ -52,8 +48,8 @@ describe('My Cards', () => {
   })
 
   it('deletes a card after confirming', async () => {
-    mock.onGet('/cards').replyOnce(200, [card({})]).onGet('/cards').reply(200, [])
-    mock.onDelete('/cards/ab12cd').reply(204)
+    vi.spyOn(CardsService, 'list').mockResolvedValueOnce([card({})]).mockResolvedValue([])
+    const remove = vi.spyOn(CardsService, 'remove').mockResolvedValue()
     renderApp(<MyCards />)
 
     await userEvent.click(await screen.findByRole('button', { name: 'Actions for Front desk card' }))
@@ -61,6 +57,6 @@ describe('My Cards', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Delete card' }))
 
     expect(await screen.findByText('No cards yet')).toBeInTheDocument()
-    expect(mock.history.delete).toHaveLength(1)
+    expect(remove).toHaveBeenCalledExactlyOnceWith('ab12cd')
   })
 })

@@ -1,13 +1,12 @@
 import { screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import MockAdapter from 'axios-mock-adapter'
+import { AdminService } from '../../../services/admin/admin.service'
 import type { AdminUser } from '../../../services/admin/admin.types'
-import { api } from '../../../services/api'
 import { renderApp } from '../../../test/render'
 import AdminUsers from './AdminUsers'
 
 const user = (over: Partial<AdminUser>): AdminUser => ({
-  id: 5,
+  id: 'u-5',
   name: 'Asha',
   email: 'asha@cafe.in',
   role: 'owner',
@@ -19,13 +18,10 @@ const user = (over: Partial<AdminUser>): AdminUser => ({
 })
 
 describe('Admin users', () => {
-  const mock = new MockAdapter(api)
-  afterEach(() => mock.reset())
-
   it('lists every account with its details', async () => {
-    mock.onGet('/admin/users').reply(200, [
+    vi.spyOn(AdminService, 'listUsers').mockResolvedValue([
       user({}),
-      user({ id: 1, name: 'Tapwe Admin', email: 'admin01@tapwe.in', role: 'admin', businessName: null, phone: null, cardCount: 0 }),
+      user({ id: 'u-1', name: 'Tapwe Admin', email: 'admin01@tapwe.in', role: 'admin', businessName: null, phone: null, cardCount: 0 }),
     ])
     renderApp(<AdminUsers />)
 
@@ -38,7 +34,7 @@ describe('Admin users', () => {
   })
 
   it('searches by name, email, business or phone', async () => {
-    mock.onGet('/admin/users').reply(200, [user({}), user({ id: 6, name: 'Ravi', email: 'ravi@salon.in', businessName: 'Ravi Salon', phone: '9123456780' })])
+    vi.spyOn(AdminService, 'listUsers').mockResolvedValue([user({}), user({ id: 'u-6', name: 'Ravi', email: 'ravi@salon.in', businessName: 'Ravi Salon', phone: '9123456780' })])
     renderApp(<AdminUsers />)
     await screen.findByText('asha@cafe.in')
 

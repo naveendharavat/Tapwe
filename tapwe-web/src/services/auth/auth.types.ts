@@ -1,15 +1,10 @@
 export type UserRole = 'owner' | 'admin'
 
 export interface User {
-  id: number
+  id: string
   name: string
   email: string
   role: UserRole
-}
-
-export interface AuthResponse {
-  token: string
-  user: User
 }
 
 export interface SignInRequest {

@@ -1,7 +1,6 @@
 import { screen } from '@testing-library/react'
-import MockAdapter from 'axios-mock-adapter'
 import { Route, Routes } from 'react-router'
-import { api } from '../../../services/api'
+import { PublicCardsService } from '../../../services/public/public.service'
 import { renderApp } from '../../../test/render'
 import PublicCard from './PublicCard'
 
@@ -14,11 +13,8 @@ const renderCard = (code: string) =>
   )
 
 describe('Public card page', () => {
-  const mock = new MockAdapter(api)
-  afterEach(() => mock.reset())
-
   it('shows the business profile and hides actions for missing fields', async () => {
-    mock.onGet('/public/cards/ab12cd').reply(200, {
+    vi.spyOn(PublicCardsService, 'resolve').mockResolvedValue({
       state: 'profile',
       profile: { businessName: 'Blue Tokai Café', description: 'Open until 10 pm', phone: null, website: 'https://cafe.in' },
     })
@@ -31,7 +27,7 @@ describe('Public card page', () => {
   })
 
   it('shows a call action when a phone is set', async () => {
-    mock.onGet('/public/cards/ab12cd').reply(200, {
+    vi.spyOn(PublicCardsService, 'resolve').mockResolvedValue({
       state: 'profile',
       profile: { businessName: 'Shop', description: null, phone: '9876543210', website: null },
     })
@@ -40,13 +36,13 @@ describe('Public card page', () => {
   })
 
   it('explains an inactive card', async () => {
-    mock.onGet('/public/cards/m4t8zr').reply(200, { state: 'inactive' })
+    vi.spyOn(PublicCardsService, 'resolve').mockResolvedValue({ state: 'inactive' })
     renderCard('m4t8zr')
     expect(await screen.findByText('This card isn’t active yet')).toBeInTheDocument()
   })
 
   it('shows card not found for an unknown code', async () => {
-    mock.onGet('/public/cards/zzzzzz').reply(404, { message: 'Card not found.' })
+    vi.spyOn(PublicCardsService, 'resolve').mockResolvedValue({ state: 'not-found' })
     renderCard('zzzzzz')
     expect(await screen.findByText('Card not found')).toBeInTheDocument()
   })
@@ -54,7 +50,7 @@ describe('Public card page', () => {
   it('redirects a link card', async () => {
     const replace = vi.fn()
     vi.stubGlobal('location', { ...window.location, replace })
-    mock.onGet('/public/cards/k9f2xq').reply(200, { state: 'redirect', url: 'https://example.com/menu' })
+    vi.spyOn(PublicCardsService, 'resolve').mockResolvedValue({ state: 'redirect', url: 'https://example.com/menu' })
     renderCard('k9f2xq')
     expect(await screen.findByText(/Opening/)).toBeInTheDocument()
     await vi.waitFor(() => expect(replace).toHaveBeenCalledWith('https://example.com/menu'))

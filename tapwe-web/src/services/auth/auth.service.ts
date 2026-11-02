@@ -1,24 +1,43 @@
-import { api } from '../api'
-import type { AuthResponse, SignInRequest, SignUpRequest, UpdateMeRequest, User } from './auth.types'
+import { supabase, unwrap, UserFacingError } from '../supabase'
+import type { SignInRequest, SignUpRequest, UpdateMeRequest, User } from './auth.types'
 
 export class AuthService {
-  static async signIn(body: SignInRequest): Promise<AuthResponse> {
-    const { data } = await api.post<AuthResponse>('/auth/sign-in', body)
-    return data
+  /** The signed-in account, or null when nobody is signed in. */
+  static async me(): Promise<User | null> {
+    const { data } = await supabase.auth.getSession()
+    if (!data.session) return null
+    return AuthService.load(data.session.user.id)
   }
 
-  static async signUp(body: SignUpRequest): Promise<AuthResponse> {
-    const { data } = await api.post<AuthResponse>('/auth/sign-up', body)
-    return data
+  static async signIn({ email, password }: SignInRequest): Promise<User> {
+    const { data, error } = await supabase.auth.signInWithPassword({ email: email.trim().toLowerCase(), password })
+    if (error) throw error
+    return AuthService.load(data.user.id)
   }
 
-  static async me(): Promise<User> {
-    const { data } = await api.get<User>('/auth/me')
-    return data
+  static async signUp({ name, email, password }: SignUpRequest): Promise<User> {
+    const { data, error } = await supabase.auth.signUp({
+      email: email.trim().toLowerCase(),
+      password,
+      options: { data: { name: name.trim() } },
+    })
+    if (error) throw error
+    if (!data.session) throw new UserFacingError('Check your inbox to confirm your email, then sign in.')
+    return AuthService.load(data.session.user.id)
   }
 
-  static async updateMe(body: UpdateMeRequest): Promise<User> {
-    const { data } = await api.patch<User>('/users/me', body)
-    return data
+  /** A new email only takes effect once its owner clicks the confirmation link Supabase sends. */
+  static async updateMe({ name, email }: UpdateMeRequest): Promise<{ user: User; emailPending: boolean }> {
+    const { data, error } = await supabase.auth.updateUser({ email: email?.trim().toLowerCase(), data: { name: name?.trim() } })
+    if (error) throw error
+    return { user: await AuthService.load(data.user.id), emailPending: !!data.user.new_email }
+  }
+
+  static async signOut(): Promise<void> {
+    await supabase.auth.signOut()
+  }
+
+  private static async load(id: string): Promise<User> {
+    return unwrap<User>(await supabase.from('users').select('id, name, email, role').eq('id', id).single())
   }
 }

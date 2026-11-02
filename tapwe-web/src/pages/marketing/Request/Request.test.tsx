@@ -1,14 +1,10 @@
 import { screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import MockAdapter from 'axios-mock-adapter'
-import { api } from '../../../services/api'
+import { CardRequestsService } from '../../../services/card-requests/card-requests.service'
 import { renderApp } from '../../../test/render'
 import Request from './Request'
 
 describe('Request page', () => {
-  const mock = new MockAdapter(api)
-  afterEach(() => mock.reset())
-
   it('shows design-copy errors and focuses the first invalid field on an empty submit', async () => {
     renderApp(<Request />)
     await userEvent.click(screen.getByRole('button', { name: 'Send request' }))
@@ -20,7 +16,7 @@ describe('Request page', () => {
   })
 
   it('submits a valid request and shows the confirmation summary', async () => {
-    mock.onPost('/card-requests').reply(201, { id: 9 })
+    const submit = vi.spyOn(CardRequestsService, 'submit').mockResolvedValue()
     renderApp(<Request />)
     const user = userEvent.setup()
 
@@ -35,6 +31,6 @@ describe('Request page', () => {
 
     expect(await screen.findByRole('heading', { name: 'Request received' })).toBeInTheDocument()
     expect(screen.getByText('Blue Tokai Café')).toBeInTheDocument()
-    expect(JSON.parse(mock.history.post[0].data)).toMatchObject({ phone: '9876543210', destinations: ['Menu'], agreed: true })
+    expect(submit.mock.calls[0][0]).toMatchObject({ phone: '9876543210', destinations: ['Menu'], agreed: true })
   })
 })

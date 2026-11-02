@@ -1,4 +1,3 @@
-import { isAxiosError } from 'axios'
 import { useEffect, type ReactNode } from 'react'
 import { useParams } from 'react-router'
 import { initials } from '../../../lib/initials'
@@ -30,8 +29,8 @@ export default function PublicCard() {
     )
   }
 
-  if (card.isError) {
-    const notFound = isAxiosError(card.error) && card.error.response?.status === 404
+  if (card.isError || card.data.state === 'not-found') {
+    const notFound = !card.isError
     return (
       <Centered>
         <EmptyState

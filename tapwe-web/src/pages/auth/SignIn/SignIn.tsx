@@ -6,7 +6,7 @@ import { AuthLayout } from '../../../components/layout/AuthLayout'
 import { Button, describedBy, Field, Input, PasswordInput } from '../../../components/ui'
 import { useToast } from '../../../components/toast/toast-context'
 import { signInSchema, type SignInValues } from '../../../lib/validation'
-import { getErrorMessage } from '../../../services/api'
+import { getErrorMessage } from '../../../services/supabase'
 
 export default function SignIn() {
   const { user, signIn } = useAuth()

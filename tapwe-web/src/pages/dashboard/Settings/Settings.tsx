@@ -6,7 +6,7 @@ import { PageTitle } from '../../../components/dashboard/PageTitle'
 import { useToast } from '../../../components/toast/toast-context'
 import { Box, Button, Card, describedBy, Field, Input } from '../../../components/ui'
 import { settingsSchema, type SettingsValues } from '../../../lib/validation'
-import { getErrorMessage } from '../../../services/api'
+import { getErrorMessage } from '../../../services/supabase'
 import { AuthService } from '../../../services/auth/auth.service'
 
 export default function Settings() {
@@ -24,9 +24,9 @@ export default function Settings() {
 
   const onSubmit = (values: SettingsValues) =>
     save.mutate(values, {
-      onSuccess: (updated) => {
+      onSuccess: ({ user: updated, emailPending }) => {
         setUser(updated)
-        toast('Account details saved.')
+        toast(emailPending ? 'Saved. Click the link we sent to your new email to finish changing it.' : 'Account details saved.')
       },
       onError: (error) => toast(getErrorMessage(error), 'error'),
     })

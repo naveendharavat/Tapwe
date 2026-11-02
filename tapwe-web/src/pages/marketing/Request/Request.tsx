@@ -25,7 +25,7 @@ import { useReveal } from '../../../hooks/useReveal'
 import { revealDelay } from '../../../lib/cssVars'
 import { BUSINESS_TYPES, CARD_QUANTITIES, REQUEST_DESTINATIONS } from '../../../lib/options'
 import { requestSchema, type RequestValues } from '../../../lib/validation'
-import { getErrorMessage } from '../../../services/api'
+import { getErrorMessage } from '../../../services/supabase'
 import { useSubmitCardRequest } from '../../../services/card-requests/card-requests.queries'
 
 const STEPS: Array<[string, string]> = [

@@ -5,7 +5,7 @@ import { PageTitle } from '../../../components/dashboard/PageTitle'
 import { useToast } from '../../../components/toast/toast-context'
 import { Box, Button, Card, describedBy, EmptyState, Field, Input, Skeleton, Typography } from '../../../components/ui'
 import { profileSchema, type ProfileValues } from '../../../lib/validation'
-import { getErrorMessage } from '../../../services/api'
+import { getErrorMessage } from '../../../services/supabase'
 import { useProfile, useUpdateProfile } from '../../../services/profile/profile.queries'
 import type { BusinessProfile } from '../../../services/profile/profile.types'
 

@@ -1,9 +1,7 @@
 import { screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import MockAdapter from 'axios-mock-adapter'
-import { setToken } from '../../../auth/token'
 import { Footer } from '../../../components/layout/Footer'
-import { api } from '../../../services/api'
+import { AuthService } from '../../../services/auth/auth.service'
 import { renderApp } from '../../../test/render'
 import Legal from './Legal'
 import SignUp from '../../auth/SignUp/SignUp'
@@ -22,12 +20,9 @@ describe('Contact numbers', () => {
 })
 
 describe('Sign up while signed in', () => {
-  const mock = new MockAdapter(api)
-  afterEach(() => mock.reset())
-
   it('says who is signed in and lets them sign out to create a new account', async () => {
-    setToken('admin-token')
-    mock.onGet('/auth/me').reply(200, { id: 4, name: 'Tapwe Admin', email: 'admin01@tapwe.in', role: 'admin' })
+    vi.spyOn(AuthService, 'me').mockResolvedValue({ id: 'u-4', name: 'Tapwe Admin', email: 'admin01@tapwe.in', role: 'admin' })
+    vi.spyOn(AuthService, 'signOut').mockResolvedValue()
     renderApp(<SignUp />, { route: '/sign-up' })
 
     expect(await screen.findByText(/admin01@tapwe\.in/)).toBeInTheDocument()

@@ -6,7 +6,7 @@ import { Button, CellLine, EmptyState, Icon, Select, Skeleton, TableContainer, T
 import { shortDate } from '../../../lib/dates'
 import { useCardRequests, useUpdateCardRequestStatus } from '../../../services/admin/admin.queries'
 import { CARD_REQUEST_STATUS_LABELS, type CardRequest, type CardRequestStatus } from '../../../services/admin/admin.types'
-import { getErrorMessage } from '../../../services/api'
+import { getErrorMessage } from '../../../services/supabase'
 
 type Filter = 'all' | CardRequestStatus
 const FILTERS: Array<[Filter, string]> = [

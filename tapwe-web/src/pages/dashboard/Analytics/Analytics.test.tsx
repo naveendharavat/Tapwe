@@ -1,6 +1,5 @@
 import { screen } from '@testing-library/react'
-import MockAdapter from 'axios-mock-adapter'
-import { api } from '../../../services/api'
+import { AnalyticsService } from '../../../services/analytics/analytics.service'
 import { renderApp } from '../../../test/render'
 import Analytics from './Analytics'
 
@@ -10,11 +9,8 @@ const week = (counts: number[]) => ({
 })
 
 describe('Analytics page', () => {
-  const mock = new MockAdapter(api)
-  afterEach(() => mock.reset())
-
   it('draws seven flat bars without NaN heights when there are no taps', async () => {
-    mock.onGet('/analytics/summary').reply(200, week([0, 0, 0, 0, 0, 0, 0]))
+    vi.spyOn(AnalyticsService, 'summary').mockResolvedValue(week([0, 0, 0, 0, 0, 0, 0]))
     renderApp(<Analytics />)
     const bars = await screen.findAllByTestId('bar')
     expect(bars).toHaveLength(7)
@@ -22,7 +18,7 @@ describe('Analytics page', () => {
   })
 
   it('scales bars to the busiest day and labels weekdays', async () => {
-    mock.onGet('/analytics/summary').reply(200, week([12, 18, 9, 24, 30, 38, 21]))
+    vi.spyOn(AnalyticsService, 'summary').mockResolvedValue(week([12, 18, 9, 24, 30, 38, 21]))
     renderApp(<Analytics />)
     const bars = await screen.findAllByTestId('bar')
     expect(bars[5].style.height).toBe('100%')

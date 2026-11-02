@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query'
-import { isAxiosError } from 'axios'
 import { PublicCardsService } from './public.service'
 
 export function usePublicCard(code: string) {
@@ -8,6 +7,6 @@ export function usePublicCard(code: string) {
     queryFn: () => PublicCardsService.resolve(code),
     // Each resolve records a tap, so never refetch on its own.
     staleTime: Infinity,
-    retry: (count, error) => !(isAxiosError(error) && error.response?.status === 404) && count < 1,
+    retry: 1,
   })
 }

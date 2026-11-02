@@ -5,7 +5,7 @@ import { Badge, Button, CellLine, EmptyState, Icon, LinkButton, Skeleton, Stack,
 import { shortDate } from '../../../lib/dates'
 import { useChangeRequests, useUpdateChangeRequestStatus } from '../../../services/admin/admin.queries'
 import type { ChangeRequest, ChangeRequestStatus } from '../../../services/admin/admin.types'
-import { getErrorMessage } from '../../../services/api'
+import { getErrorMessage } from '../../../services/supabase'
 
 type Filter = 'all' | ChangeRequestStatus
 const FILTERS: Array<[Filter, string]> = [
