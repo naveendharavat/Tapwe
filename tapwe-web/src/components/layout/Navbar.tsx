@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, useLocation } from 'react-router'
 import { Box, Container, Icon, LinkButton, Logo } from '../ui'
 
@@ -12,11 +12,37 @@ const MARKETING_LINKS: Array<[label: string, to: string]> = [
 
 export function Navbar() {
   const { pathname } = useLocation()
-  const [open, setOpen] = useState(false)
-  const close = () => setOpen(false)
+  // The menu remembers the page it was opened on, so navigating anywhere closes it.
+  const [openOn, setOpenOn] = useState<string | null>(null)
+  const open = openOn === pathname
+  const header = useRef<HTMLElement>(null)
+  const burger = useRef<HTMLButtonElement>(null)
+  const close = () => setOpenOn(null)
+
+  // While the mobile menu is open: Escape and taps outside close it, and the page behind it stays put.
+  useEffect(() => {
+    if (!open) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== 'Escape') return
+      setOpenOn(null)
+      burger.current?.focus()
+    }
+    const onPointer = (e: PointerEvent) => {
+      if (!header.current?.contains(e.target as Node)) setOpenOn(null)
+    }
+    document.addEventListener('keydown', onKey)
+    document.addEventListener('pointerdown', onPointer)
+    const { overflow } = document.body.style
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      document.removeEventListener('pointerdown', onPointer)
+      document.body.style.overflow = overflow
+    }
+  }, [open])
 
   return (
-    <header className="top">
+    <header className="top" ref={header}>
       <Container>
         <Box className="bar">
           <Logo />
@@ -35,10 +61,11 @@ export function Navbar() {
           <button
             type="button"
             className="burger"
+            ref={burger}
             aria-label={open ? 'Close menu' : 'Open menu'}
             aria-expanded={open}
             aria-controls="mnav"
-            onClick={() => setOpen((o) => !o)}
+            onClick={() => setOpenOn(open ? null : pathname)}
           >
             <Icon name={open ? 'x' : 'burger'} />
           </button>
@@ -52,11 +79,6 @@ export function Navbar() {
             </Link>
           ))}
         </nav>
-        <Box className="two">
-          <LinkButton variant="p" size="lg" to="/request" onClick={close}>
-            Request a Card
-          </LinkButton>
-        </Box>
       </Box>
     </header>
   )

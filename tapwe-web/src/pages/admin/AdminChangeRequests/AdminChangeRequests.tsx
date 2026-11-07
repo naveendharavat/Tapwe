@@ -87,7 +87,7 @@ function ChangeRequestsTable({ requests }: { requests: ChangeRequest[] }) {
                 <CellLine className="id">{request.cardCode}</CellLine>
               </td>
               <td>{request.message}</td>
-              <td className="faint">{shortDate(request.createdAt)}</td>
+              <td className="faint nowrap">{shortDate(request.createdAt)}</td>
               <td>
                 <Badge tone={request.status === 'done' ? 'ok' : 'warn'}>{request.status === 'done' ? 'Done' : 'Open'}</Badge>
               </td>

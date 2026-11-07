@@ -10,8 +10,8 @@ const STAGES: Array<[title: string, text: string]> = [
 
 export function CardJourney() {
   return (
-    <Section id="journey" tone="alt">
-      <SectionHeader eyebrow="The journey" title="How a card gets to you" />
+    <Section id="how" tone="alt">
+      <SectionHeader eyebrow="How it works" title="How a card gets to you" lead="We handle the setup. You hand over the card." />
       <ol className="tl">
         {STAGES.map(([title, text], n) => (
           <Card as="li" size="md" key={title} className="rv" style={revealDelay(n * 0.08)}>

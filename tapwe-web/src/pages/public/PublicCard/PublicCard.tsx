@@ -1,5 +1,6 @@
 import { useEffect, type ReactNode } from 'react'
 import { useParams } from 'react-router'
+import { usePageMeta } from '../../../hooks/usePageMeta'
 import { initials } from '../../../lib/initials'
 import { Box, Button, EmptyState, Icon, type IconName, LinkButton, Skeleton, Typography } from '../../../components/ui'
 import { profileVCard } from '../../../lib/vcard'
@@ -13,6 +14,7 @@ function Centered({ children }: { children: ReactNode }) {
 export default function PublicCard() {
   const { code = '' } = useParams()
   const card = usePublicCard(code.toLowerCase())
+  usePageMeta(card.data?.state === 'profile' ? card.data.profile.businessName || 'Business profile' : 'Card')
 
   useEffect(() => {
     if (card.data?.state === 'redirect') window.location.replace(card.data.url)

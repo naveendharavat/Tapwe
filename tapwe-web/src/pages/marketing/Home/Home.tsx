@@ -2,6 +2,7 @@ import { CtaBand } from '../../../components/marketing/CtaBand'
 import { Pills } from '../../../components/marketing/Pills'
 import { TeamSection } from '../../../components/marketing/TeamSection'
 import { Section, type IconName } from '../../../components/ui'
+import { usePageMeta } from '../../../hooks/usePageMeta'
 import { useReveal } from '../../../hooks/useReveal'
 import { AboutSection } from './sections/AboutSection'
 import { CardExperiences } from './sections/CardExperiences'
@@ -9,7 +10,6 @@ import { CardJourney } from './sections/CardJourney'
 import { CustomersStrip } from './sections/CustomersStrip'
 import { DemoSection } from './sections/DemoSection'
 import { Hero } from './sections/Hero'
-import { HowSteps } from './sections/HowSteps'
 import { Marquee } from './sections/Marquee'
 import { UseCases } from './sections/UseCases'
 import { WaysIn } from './sections/WaysIn'
@@ -26,6 +26,7 @@ const HIGHLIGHTS: Array<[IconName, string]> = [
 ].map((label): [IconName, string] => ['check', label])
 
 export default function Home() {
+  usePageMeta('Smart NFC & QR business cards', 'Smart NFC and QR cards that connect your business to the digital world with one tap.')
   useReveal()
   return (
     <>
@@ -33,7 +34,7 @@ export default function Home() {
       <Marquee />
       <CustomersStrip />
       <WhyTapwe />
-      <HowSteps />
+      <CardJourney />
       <WaysIn />
       <DemoSection />
       <AboutSection />
@@ -41,9 +42,7 @@ export default function Home() {
       <Section spacing="flush-top">
         <Pills items={HIGHLIGHTS} />
       </Section>
-      <CtaBand />
       <CardExperiences />
-      <CardJourney />
       <UseCases />
       <WhyChoose />
       <CtaBand />

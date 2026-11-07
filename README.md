@@ -14,9 +14,10 @@ There is no separate backend. The app talks to Supabase directly: Supabase Auth 
 
 1. Create a project at <https://supabase.com>.
 2. **Authentication → Sign In / Providers → Email**: turn **Confirm email** off (sign-up signs people straight in).
-3. **SQL Editor**: paste and run `supabase/migrations/20261102000000_init.sql`.
-4. Optional, for a test project only: run `supabase/seed.sql` for the demo accounts below.
-5. **Project Settings → API**: copy the Project URL and the `anon` public key.
+3. **Authentication → URL Configuration**: set the Site URL to the site's address and add `<site>/reset-password` to Redirect URLs (plus `http://localhost:5173/reset-password` for local work). Password-reset emails link there.
+4. **SQL Editor**: paste and run `supabase/migrations/20261102000000_init.sql`.
+5. Optional, for a test project only: run `supabase/seed.sql` for the demo accounts below.
+6. **Project Settings → API**: copy the Project URL and the `anon` public key.
 
 ## Run it locally
 
@@ -59,5 +60,6 @@ To make another account an admin, set its `role` to `admin` in the `users` table
 ## Before launch
 
 - Don't run `seed.sql` on the live project: its passwords are published in this README.
-- Pricing, Privacy, Terms and Support pages still hold the design's placeholder copy.
+- The Privacy Policy and Terms (`tapwe-web/src/content/legal.ts`) are a first draft written by the team; have them checked before launch and keep the "Last updated" date current.
+- `index.html` points link previews (Open Graph) at `https://tapwe.in` and `public/og.png`; change both if the domain changes.
 - Set `VITE_PUBLIC_CARD_BASE_URL` to the real domain — it is the link written to every NFC chip and QR code, so it must never change once cards are printed.

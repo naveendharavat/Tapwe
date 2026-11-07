@@ -1,9 +1,22 @@
 .rq {
   display: grid;
   grid-template-columns: 0.9fr 1.1fr;
-  gap: var(--space-14);
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
+    'intro form'
+    'steps form';
+  gap: 0 var(--space-14);
   align-items: start;
   padding: var(--space-16) 0 88px;
+}
+.rq-intro {
+  grid-area: intro;
+}
+.rq-steps {
+  grid-area: steps;
+}
+.rq .rqc {
+  grid-area: form;
 }
 .rq h1 {
   font-size: clamp(34px, 4.6vw, 54px);
@@ -127,8 +140,16 @@
 @media (max-width: 900px) {
   .rq {
     grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    grid-template-areas:
+      'intro'
+      'form'
+      'steps';
     gap: var(--space-10);
     padding: var(--space-10) 0 var(--space-16);
+  }
+  .rq ol {
+    margin-top: 0;
   }
   .rq .mock {
     display: none;

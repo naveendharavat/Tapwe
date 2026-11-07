@@ -33,6 +33,19 @@ export class AuthService {
     return { user: await AuthService.load(data.user.id), emailPending: !!data.user.new_email }
   }
 
+  /** Emails a link that opens /reset-password with a short-lived session. Succeeds even for unknown emails. */
+  static async requestPasswordReset(email: string): Promise<void> {
+    const { error } = await supabase.auth.resetPasswordForEmail(email.trim().toLowerCase(), {
+      redirectTo: `${window.location.origin}/reset-password`,
+    })
+    if (error) throw error
+  }
+
+  static async updatePassword(password: string): Promise<void> {
+    const { error } = await supabase.auth.updateUser({ password })
+    if (error) throw error
+  }
+
   static async signOut(): Promise<void> {
     await supabase.auth.signOut()
   }

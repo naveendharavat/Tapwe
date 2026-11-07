@@ -24,7 +24,6 @@ export default function SignIn() {
   const onSubmit = async (values: SignInValues) => {
     try {
       const signedIn = await signIn(values)
-      toast('Signed in.')
       navigate(from ?? homePath(signedIn), { replace: true })
     } catch (error) {
       toast(getErrorMessage(error), 'error')
@@ -50,6 +49,9 @@ export default function SignIn() {
         <Field id="pw" label="Password" required error={errors.password?.message}>
           <PasswordInput id="pw" autoComplete="current-password" invalid={!!errors.password} {...describedBy('pw', errors.password?.message)} {...register('password')} />
         </Field>
+        <Link to="/forgot-password" className="forgot">
+          Forgot password?
+        </Link>
         <Button variant="p" size="lg" type="submit" loading={isSubmitting}>
           Sign In
         </Button>

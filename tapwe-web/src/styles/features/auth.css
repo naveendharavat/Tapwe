@@ -28,6 +28,16 @@
   display: grid;
   gap: var(--space-4);
 }
+.auth form .forgot {
+  justify-self: end;
+  margin-top: calc(-1 * var(--space-2));
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--primary);
+}
+.auth form .forgot:hover {
+  text-decoration: underline;
+}
 .auth .alt {
   margin-top: var(--space-6);
   text-align: center;

@@ -253,41 +253,6 @@
   margin-top: var(--space-1_5);
   line-height: 1.6;
 }
-.plan.f {
-  border-color: var(--brand-500);
-  box-shadow: 0 0 0 1px var(--brand-500);
-}
-.plan .price {
-  font-size: 32px;
-  font-weight: 600;
-  color: var(--subtle-foreground);
-  margin-top: var(--space-4);
-}
-.plan .blurb {
-  margin-top: var(--space-2);
-  font-size: var(--text-sm);
-}
-.plan .price small {
-  font-size: var(--text-base);
-  font-weight: 400;
-}
-.plan ul {
-  list-style: none;
-  padding: 0;
-  margin: var(--space-6) 0;
-  display: grid;
-  gap: var(--space-2_5);
-  font-size: var(--text-sm);
-  color: var(--muted-foreground);
-}
-.plan li {
-  display: flex;
-  gap: var(--space-2_5);
-}
-.plan li svg {
-  color: var(--primary);
-  margin-top: 3px;
-}
 @media (max-width: 640px) {
   .sc2 {
     grid-template-columns: 1fr !important;
@@ -940,34 +905,6 @@
   color: var(--muted-foreground);
   font-size: var(--text-sm);
 }
-.arc {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr auto 1fr;
-  gap: var(--space-4);
-  align-items: stretch;
-}
-.arc .a h3 {
-  font-size: var(--text-xl);
-  margin-top: var(--space-4_5);
-}
-.arc .a p {
-  margin-top: var(--space-2);
-  color: var(--muted-foreground);
-}
-.arc .a b {
-  display: block;
-  margin-top: var(--space-4);
-  font-size: var(--text-sm);
-  color: var(--primary);
-}
-.arc .ar {
-  align-self: center;
-  color: var(--primary);
-}
-.arc .ar svg {
-  width: 26px;
-  height: 26px;
-}
 .jc {
   border-radius: var(--radius-3xl);
 }
@@ -1138,13 +1075,6 @@
   .num4 {
     grid-template-columns: repeat(2, 1fr);
   }
-  .arc {
-    grid-template-columns: 1fr;
-  }
-  .arc .ar {
-    justify-self: center;
-    transform: rotate(90deg);
-  }
   .dd {
     grid-template-columns: 1fr;
     gap: var(--space-7);
@@ -1292,8 +1222,30 @@ section.legal-support {
 .support-card {
   max-width: 480px;
 }
-.legal-placeholder {
-  height: 240px;
+.legal {
+  max-width: 720px;
+  padding: var(--space-10) 0 120px;
+}
+.legal h2 {
+  font-size: var(--text-xl);
+  font-weight: 600;
+  margin-top: var(--space-8);
+}
+.legal p {
+  margin-top: var(--space-3);
+  color: var(--muted-foreground);
+  line-height: 1.65;
+}
+.legal .updated {
+  font-size: var(--text-sm);
+  color: var(--subtle-foreground);
+}
+.legal a {
+  color: var(--primary);
+  font-weight: 500;
+}
+.legal a:hover {
+  text-decoration: underline;
 }
 .features-body {
   padding-block: var(--space-10);

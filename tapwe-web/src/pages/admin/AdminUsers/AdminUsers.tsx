@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { PageTitle } from '../../../components/dashboard/PageTitle'
 import { Badge, Button, EmptyState, Icon, Input, Skeleton, TableContainer, Toolbar, Typography } from '../../../components/ui'
-import { telHref } from '../../../content/contact'
+import { mailHref, telHref, whatsappHref } from '../../../content/contact'
 import { shortDate } from '../../../lib/dates'
 import { useAdminUsers } from '../../../services/admin/admin.queries'
 import type { AdminUser } from '../../../services/admin/admin.types'
@@ -72,14 +72,28 @@ function UsersTable({ users }: { users: AdminUser[] }) {
           {users.map((user) => (
             <tr key={user.id}>
               <td className="strong">{user.name}</td>
-              <td>{user.email}</td>
+              <td>
+                <a href={mailHref(user.email)}>{user.email}</a>
+              </td>
               <td>{user.businessName ?? <span className="faint">—</span>}</td>
-              <td>{user.phone ? <a href={telHref(user.phone)}>{user.phone}</a> : <span className="faint">—</span>}</td>
+              <td className="nowrap">
+                {user.phone ? (
+                  <>
+                    <a href={telHref(user.phone)}>{user.phone}</a>
+                    {' · '}
+                    <a href={whatsappHref(user.phone)} target="_blank" rel="noopener noreferrer">
+                      WhatsApp
+                    </a>
+                  </>
+                ) : (
+                  <span className="faint">—</span>
+                )}
+              </td>
               <td>
                 <Badge tone={user.role === 'admin' ? 'brand' : undefined}>{user.role === 'admin' ? 'Admin' : 'Customer'}</Badge>
               </td>
               <td>{user.cardCount}</td>
-              <td className="faint">{shortDate(user.createdAt)}</td>
+              <td className="faint nowrap">{shortDate(user.createdAt)}</td>
             </tr>
           ))}
         </tbody>

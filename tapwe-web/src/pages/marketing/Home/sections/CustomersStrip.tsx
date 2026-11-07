@@ -7,7 +7,7 @@ export function CustomersStrip() {
   return (
     <Box as="section" className="cust" id="customers">
       <Container className="rv">
-        <Typography variant="eyebrow">Our customers</Typography>
+        <Typography variant="eyebrow">{CUSTOMERS.length === 1 ? 'Our first customer' : 'Our customers'}</Typography>
         <ul className="cust-row">
           {CUSTOMERS.map((customer) => (
             <li key={customer.name}>

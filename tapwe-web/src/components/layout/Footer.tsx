@@ -11,7 +11,7 @@ const COLUMNS: Array<[heading: string, links: Array<[label: string, to: string]>
       ['Pricing', '/pricing'],
       ['Request a Card', '/request'],
       ['Team', '/team'],
-      ['Dashboard', '/app'],
+      ['Customer sign in', '/sign-in'],
     ],
   ],
   [

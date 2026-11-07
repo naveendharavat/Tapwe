@@ -1,3 +1,4 @@
+import { usePageMeta } from '../../hooks/usePageMeta'
 import { Box, Container, Typography } from '../ui'
 
 interface PageHeadProps {
@@ -7,6 +8,7 @@ interface PageHeadProps {
 }
 
 export function PageHead({ eyebrow, title, lead }: PageHeadProps) {
+  usePageMeta(title, lead)
   return (
     <Box as="header" className="pagehead">
       <Container>

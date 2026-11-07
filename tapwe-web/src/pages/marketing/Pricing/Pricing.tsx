@@ -1,51 +1,36 @@
 import { PageHead } from '../../../components/layout/PageHead'
-import { Badge, Card, Grid, Icon, LinkButton, Note, Section, Stack, Typography } from '../../../components/ui'
+import { CtaBand } from '../../../components/marketing/CtaBand'
+import { Card, Grid, IconBox, Section, type IconName } from '../../../components/ui'
+import { useReveal } from '../../../hooks/useReveal'
+import { revealDelay } from '../../../lib/cssVars'
 
-// Placeholder plans until pricing is announced (spec: no real pricing in v1).
-const PLANS: Array<[name: string, blurb: string, features: number, featured?: boolean]> = [
-  ['Plan A', 'Placeholder for a starter plan.', 3],
-  ['Plan B', 'Placeholder for a growing business.', 4, true],
-  ['Plan C', 'Placeholder for multi-location teams.', 3],
+const INCLUDED: Array<[IconName, string, string]> = [
+  ['card', 'The card', 'A durable PVC card with an NFC chip and a printed QR code, both tied to one permanent link.'],
+  ['sliders', 'Setup by our team', 'Tell us what the card should open. We configure the page, link and QR code before it reaches you.'],
+  ['refresh', 'Changes any time', 'Point the same card at a new menu, form or page later. No reprint needed.'],
 ]
 
 export default function Pricing() {
+  useReveal()
   return (
     <>
       <PageHead
         eyebrow="Pricing"
-        title="Simple plans, coming soon"
-        lead="Pricing has not been announced yet. This layout is ready for plans once they are defined."
+        title="Pricing on request"
+        lead="Every Tapwe card is set up for your business, so the price depends on how many cards you need and what they open. Send a request and we will get back to you with a quote."
       />
       <Section spacing="page">
-        <Note>Placeholder content. Plan names, prices, and features are editable examples, and no plan is currently available.</Note>
         <Grid columns={3}>
-          {PLANS.map(([name, blurb, features, featured]) => (
-            <Card key={name} size="md" className={featured ? 'plan f' : 'plan'}>
-              <Stack direction="row" justify="space-between" align="center">
-                <Typography variant="heading-sm">{name}</Typography>
-                {featured && <Badge tone="brand">Placeholder highlight</Badge>}
-              </Stack>
-              <p className="price">
-                ₹ — <small>/ editable</small>
-              </p>
-              <Typography variant="muted" className="blurb">
-                {blurb}
-              </Typography>
-              <ul>
-                {Array.from({ length: features }, (_, i) => (
-                  <li key={i}>
-                    <Icon name="check" />
-                    Feature placeholder
-                  </li>
-                ))}
-              </ul>
-              <LinkButton variant={featured ? 'p' : 's'} to="/sign-up" className="full">
-                Get Started
-              </LinkButton>
+          {INCLUDED.map(([icon, title, text], n) => (
+            <Card key={title} size="lg" className="why rv" style={revealDelay(n * 0.08)}>
+              <IconBox name={icon} />
+              <h3>{title}</h3>
+              <p>{text}</p>
             </Card>
           ))}
         </Grid>
       </Section>
+      <CtaBand />
     </>
   )
 }

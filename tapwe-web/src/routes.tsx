@@ -9,6 +9,8 @@ import { AdminCards } from './pages/admin/AdminCards'
 import { AdminChangeRequests } from './pages/admin/AdminChangeRequests'
 import { AdminOverview } from './pages/admin/AdminOverview'
 import { AdminUsers } from './pages/admin/AdminUsers'
+import { ForgotPassword } from './pages/auth/ForgotPassword'
+import { ResetPassword } from './pages/auth/ResetPassword'
 import { SignIn } from './pages/auth/SignIn'
 import { SignUp } from './pages/auth/SignUp'
 import { Analytics } from './pages/dashboard/Analytics'
@@ -46,6 +48,8 @@ export function AppRoutes() {
 
         <Route path="sign-in" element={<SignIn />} />
         <Route path="sign-up" element={<SignUp />} />
+        <Route path="forgot-password" element={<ForgotPassword />} />
+        <Route path="reset-password" element={<ResetPassword />} />
         <Route path="c/:code" element={<PublicCard />} />
 
         <Route

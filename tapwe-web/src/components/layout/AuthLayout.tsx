@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { usePageMeta } from '../../hooks/usePageMeta'
 import { SmartCardPreview } from '../cards/SmartCardPreview'
 import { Box, Logo } from '../ui'
 
@@ -13,6 +14,7 @@ interface AuthLayoutProps {
 
 /** The design's split auth screen: branded panel with floating cards, form on the right. */
 export function AuthLayout({ asideTitle, asideText, title, subtitle, footer, children }: AuthLayoutProps) {
+  usePageMeta(title, subtitle)
   return (
     <Box className="authw page">
       <aside className="authl">

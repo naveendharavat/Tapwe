@@ -16,7 +16,7 @@ export const TEAM: TeamMember[] = [
   },
   {
     name: 'Seelam Vamshidhar Goud',
-    role: 'Founder',
+    role: 'Co-founder',
     bio: 'Leads operations and partnerships, bringing Tapwe to restaurants, shops and professionals.',
     tags: ['Operations', 'Partnerships'],
   },

@@ -5,3 +5,7 @@ export const telHref = (phone: string) => `tel:+91${phone}`
 
 /** "+91 77949 28975" */
 export const formatPhone = (phone: string) => `+91 ${phone.slice(0, 5)} ${phone.slice(5)}`
+
+export const mailHref = (email: string) => `mailto:${email}`
+
+export const whatsappHref = (phone: string) => `https://wa.me/91${phone}`

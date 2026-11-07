@@ -51,6 +51,16 @@ export const signUpSchema = Y.object({
 })
 export type SignUpValues = Y.InferType<typeof signUpSchema>
 
+export const forgotPasswordSchema = Y.object({
+  email: email(),
+})
+export type ForgotPasswordValues = Y.InferType<typeof forgotPasswordSchema>
+
+export const resetPasswordSchema = Y.object({
+  password: Y.string().required(msg.pw).min(8, msg.pwLen),
+})
+export type ResetPasswordValues = Y.InferType<typeof resetPasswordSchema>
+
 export const requestSchema = Y.object({
   name: requiredName(),
   businessName: Y.string().trim().required('Enter your business name.'),

@@ -114,6 +114,13 @@ select.input {
   color: var(--muted-foreground);
   cursor: pointer;
 }
+.chk a {
+  color: var(--primary);
+  font-weight: 500;
+}
+.chk a:hover {
+  text-decoration: underline;
+}
 .chk input {
   width: 18px;
   height: 18px;

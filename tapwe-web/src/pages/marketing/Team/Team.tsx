@@ -1,6 +1,7 @@
 import { CtaBand } from '../../../components/marketing/CtaBand'
 import { TeamSection } from '../../../components/marketing/TeamSection'
 import { Card, Grid, IconBox, Section, SectionHeader, type IconName } from '../../../components/ui'
+import { usePageMeta } from '../../../hooks/usePageMeta'
 import { useReveal } from '../../../hooks/useReveal'
 import { revealDelay } from '../../../lib/cssVars'
 
@@ -11,6 +12,7 @@ const VALUES: Array<[IconName, string, string]> = [
 ]
 
 export default function Team() {
+  usePageMeta('Team', 'The people behind Tapwe: a small team helping businesses turn every in-person visit into a lasting connection.')
   useReveal()
   return (
     <>

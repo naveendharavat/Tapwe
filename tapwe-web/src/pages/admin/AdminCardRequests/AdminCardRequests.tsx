@@ -3,6 +3,7 @@ import { CardFormDialog, type CardDraft } from '../../../components/admin/CardFo
 import { PageTitle } from '../../../components/dashboard/PageTitle'
 import { useToast } from '../../../components/toast/toast-context'
 import { Button, CellLine, EmptyState, Icon, Select, Skeleton, TableContainer, Tabs } from '../../../components/ui'
+import { mailHref, telHref, whatsappHref } from '../../../content/contact'
 import { shortDate } from '../../../lib/dates'
 import { useCardRequests, useUpdateCardRequestStatus } from '../../../services/admin/admin.queries'
 import { CARD_REQUEST_STATUS_LABELS, type CardRequest, type CardRequestStatus } from '../../../services/admin/admin.types'
@@ -97,8 +98,16 @@ function CardRequestsTable({ requests, onCreateCard }: { requests: CardRequest[]
                 <CellLine tone="faint">{request.name}</CellLine>
               </td>
               <td>
-                <CellLine>{request.email}</CellLine>
-                <CellLine tone="faint">{request.phone}</CellLine>
+                <CellLine>
+                  <a href={mailHref(request.email)}>{request.email}</a>
+                </CellLine>
+                <CellLine tone="faint">
+                  <a href={telHref(request.phone)}>{request.phone}</a>
+                  {' · '}
+                  <a href={whatsappHref(request.phone)} target="_blank" rel="noopener noreferrer">
+                    WhatsApp
+                  </a>
+                </CellLine>
               </td>
               <td>
                 <CellLine>{request.destinations.join(', ')}</CellLine>
@@ -108,7 +117,7 @@ function CardRequestsTable({ requests, onCreateCard }: { requests: CardRequest[]
                 </CellLine>
                 {request.note && <CellLine tone="faint">“{request.note}”</CellLine>}
               </td>
-              <td className="faint">{shortDate(request.createdAt)}</td>
+              <td className="faint nowrap">{shortDate(request.createdAt)}</td>
               <td>
                 <Select
                   aria-label={`Status for ${request.businessName}`}

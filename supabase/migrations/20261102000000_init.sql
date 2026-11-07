@@ -1,4 +1,9 @@
 -- Tapwe schema. Accounts live in Supabase Auth; every access rule is a row-level security policy.
+-- Run it whole in the SQL Editor: it is one transaction, so a failure changes nothing.
+
+-- Removes the tables from the old NestJS server, if this project still has them.
+drop table if exists public.change_requests, public.tap_events, public.profiles, public.cards, public.card_requests, public.users, public.migrations cascade;
+drop type if exists public.users_role_enum, public.cards_status_enum, public.cards_destination_type_enum, public.card_requests_status_enum, public.change_requests_status_enum;
 
 create type public.user_role as enum ('owner', 'admin');
 create type public.card_status as enum ('draft', 'active', 'paused');

@@ -1,6 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { Link } from 'react-router'
 import { CardFan } from '../../../components/cards/SmartCardPreview'
 import { useToast } from '../../../components/toast/toast-context'
 import {
@@ -21,6 +22,7 @@ import {
   Textarea,
   Typography,
 } from '../../../components/ui'
+import { usePageMeta } from '../../../hooks/usePageMeta'
 import { useReveal } from '../../../hooks/useReveal'
 import { revealDelay } from '../../../lib/cssVars'
 import { BUSINESS_TYPES, CARD_QUANTITIES, REQUEST_DESTINATIONS } from '../../../lib/options'
@@ -48,6 +50,7 @@ const EMPTY: RequestValues = {
 }
 
 export default function Request() {
+  usePageMeta('Request a card', 'Tell us about your business and what your card should open. We set it up and deliver it ready to use.')
   useReveal()
   const [submitted, setSubmitted] = useState<RequestValues | null>(null)
   const box = useRef<HTMLElement>(null)
@@ -61,7 +64,7 @@ export default function Request() {
     <Box className="hero-wrap">
       <Container>
         <section className="rq">
-          <Box className="rv">
+          <Box className="rq-intro rv">
             <Typography variant="eyebrow">Request a card</Typography>
             <h1>
               Get your own <span className="gt">Tapwe card</span>
@@ -70,6 +73,8 @@ export default function Request() {
               Tell us about your business and what you want your card to open. We will use these details to set up your
               card.
             </Typography>
+          </Box>
+          <Box className="rq-steps rv">
             <ol>
               {STEPS.map(([title, text], i) => (
                 <li key={title}>
@@ -196,7 +201,7 @@ function RequestForm({ onSent }: { onSent: (values: RequestValues) => void }) {
         <label className="chk">
           <input type="checkbox" id="rq-ok" aria-describedby={e.ok ? 'rq-ok-e' : undefined} {...register('agreed')} />
           <span>
-            I agree to be contacted about this request.
+            I agree to be contacted about this request and to the <Link to="/privacy">Privacy Policy</Link>.
             <RequiredMark />
           </span>
         </label>
