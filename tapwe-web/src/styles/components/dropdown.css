@@ -1,0 +1,42 @@
+.menu {
+  position: absolute;
+  right: 12px;
+  z-index: 20;
+  min-width: 180px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-control);
+  box-shadow: var(--shadow-lg);
+  padding: var(--space-1);
+  text-align: left;
+  animation: up 0.15s ease-out;
+}
+.menu button,
+.menu a {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+  width: 100%;
+  padding: var(--space-2) var(--space-2_5);
+  border-radius: 6px;
+  font-size: var(--text-sm);
+  color: var(--muted-foreground);
+  text-align: left;
+}
+.menu button:hover,
+.menu a:hover {
+  background: var(--muted);
+  color: var(--foreground);
+}
+.menu .dng {
+  color: var(--destructive);
+}
+.menu .dng:hover {
+  background: var(--destructive-soft);
+  color: var(--destructive);
+}
+.menu hr {
+  border: 0;
+  border-top: 1px solid var(--border);
+  margin: var(--space-1) 0;
+}

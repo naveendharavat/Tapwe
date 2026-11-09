@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
-import { Icon } from '../ui/Icon'
-import type { IconName } from '../ui/icons'
+import { Icon, type IconName } from '../ui'
+import { cn } from '../../lib/cn'
 import { initials } from '../../lib/initials'
 
 interface PhoneMockupProps {
@@ -14,7 +14,7 @@ export function PhoneMockup({ children, screenId, screenClassName }: PhoneMockup
   return (
     <div className="phone" role="img" aria-label="Smartphone showing a digital business page">
       <div className="notch" />
-      <div id={screenId} className={['scr', screenClassName].filter(Boolean).join(' ')}>{children}</div>
+      <div id={screenId} className={cn('scr', screenClassName)}>{children}</div>
     </div>
   )
 }

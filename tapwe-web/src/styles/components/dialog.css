@@ -1,0 +1,32 @@
+dialog {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  padding: var(--space-6);
+  width: min(440px, calc(100% - 32px));
+  box-shadow: var(--shadow-lg);
+  color: var(--foreground);
+  background: var(--white);
+  margin: auto;
+}
+dialog::backdrop {
+  background: rgb(28 27 34/0.4);
+}
+dialog h2 {
+  font-size: var(--text-lg);
+  font-weight: 600;
+}
+dialog > p {
+  margin-top: var(--space-1_5);
+  color: var(--subtle-foreground);
+  font-size: var(--text-sm);
+}
+dialog form {
+  margin-top: var(--space-5);
+  display: grid;
+  gap: var(--space-5);
+}
+dialog .row {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+}

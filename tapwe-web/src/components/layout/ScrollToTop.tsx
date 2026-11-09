@@ -16,7 +16,7 @@ export function ScrollToTop() {
       const target = document.getElementById(hash.slice(1))
       if (target || ++tries > 20) {
         window.clearInterval(timer)
-        target?.scrollIntoView({ behavior: 'smooth' })
+        target?.scrollIntoView()
       }
     }, 50)
     return () => window.clearInterval(timer)

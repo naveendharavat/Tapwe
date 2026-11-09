@@ -1,0 +1,171 @@
+.rq {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
+    'intro form'
+    'steps form';
+  gap: 0 var(--space-14);
+  align-items: start;
+  padding: var(--space-16) 0 88px;
+}
+.rq-intro {
+  grid-area: intro;
+}
+.rq-steps {
+  grid-area: steps;
+}
+.rq .rqc {
+  grid-area: form;
+}
+.rq h1 {
+  font-size: clamp(34px, 4.6vw, 54px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+.rq .lead {
+  margin-top: var(--space-4_5);
+  font-size: var(--text-lg);
+  line-height: 1.65;
+  color: var(--muted-foreground);
+  max-width: 480px;
+}
+.rq ol {
+  list-style: none;
+  padding: 0;
+  margin-top: var(--space-8);
+  display: grid;
+  gap: var(--space-4_5);
+}
+.rq ol li {
+  display: flex;
+  gap: var(--space-3_5);
+  align-items: flex-start;
+}
+.rq ol b {
+  display: block;
+  font-weight: 600;
+}
+.rq ol span.d {
+  font-size: var(--text-sm);
+  color: var(--muted-foreground);
+}
+.rq ol i {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, var(--brand-500), var(--violet-500));
+  color: var(--white);
+  display: grid;
+  place-items: center;
+  font-style: normal;
+  font-weight: 600;
+  font-size: var(--text-sm);
+  flex: none;
+}
+.rq .mock {
+  margin-top: var(--space-9);
+  max-width: 340px;
+}
+.rqc {
+  padding: var(--space-8);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-lg);
+}
+.rqc form {
+  display: grid;
+  gap: var(--space-5);
+}
+.rqc h2 {
+  font-size: var(--text-xl);
+  font-weight: 600;
+}
+.rqc .field {
+  align-content: start;
+}
+.rqc textarea.input {
+  height: auto;
+  min-height: 88px;
+  padding: var(--space-2_5) var(--space-3);
+  resize: vertical;
+  line-height: 1.5;
+}
+.rqok {
+  text-align: center;
+  padding: var(--space-6) var(--space-2);
+}
+.rqok .big {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--success-soft);
+  color: var(--success);
+  display: grid;
+  place-items: center;
+  font-size: 28px;
+  margin: 0 auto;
+}
+.rqok h2 {
+  margin-top: var(--space-4_5);
+  font-size: var(--text-2xl);
+}
+.rqok p {
+  margin-top: var(--space-2);
+  color: var(--muted-foreground);
+}
+.rqok dl {
+  margin: var(--space-6) auto 0;
+  max-width: 360px;
+  text-align: left;
+  display: grid;
+  gap: var(--space-2_5);
+  font-size: var(--text-sm);
+  padding: var(--space-4);
+  background: var(--muted);
+  border-radius: var(--radius-lg);
+}
+.rqok dl div {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+.rqok dt {
+  color: var(--subtle-foreground);
+}
+.rqok dd {
+  margin: 0;
+  font-weight: 500;
+  text-align: right;
+}
+@media (max-width: 900px) {
+  .rq {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    grid-template-areas:
+      'intro'
+      'form'
+      'steps';
+    gap: var(--space-10);
+    padding: var(--space-10) 0 var(--space-16);
+  }
+  .rq ol {
+    margin-top: 0;
+  }
+  .rq .mock {
+    display: none;
+  }
+}
+@media (max-width: 560px) {
+  .rqc {
+    padding: var(--space-5);
+  }
+}
+.rqc .form-intro {
+  margin-top: calc(-1 * var(--space-2));
+}
+.rqc .pills-hint {
+  margin-top: var(--space-1_5);
+}
+.rqok-actions {
+  margin-top: var(--space-6);
+}

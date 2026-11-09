@@ -4,6 +4,7 @@ import { cleanup } from '@testing-library/react'
 afterEach(() => {
   cleanup()
   localStorage.clear()
+  vi.restoreAllMocks()
 })
 
 class NoopIntersectionObserver {
@@ -12,6 +13,7 @@ class NoopIntersectionObserver {
   disconnect() {}
 }
 globalThis.IntersectionObserver ??= NoopIntersectionObserver as unknown as typeof IntersectionObserver
+globalThis.ResizeObserver ??= NoopIntersectionObserver as unknown as typeof ResizeObserver
 window.matchMedia ??= ((query: string) => ({
   matches: false,
   media: query,

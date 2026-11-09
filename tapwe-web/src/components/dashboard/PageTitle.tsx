@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
-import { LinkButton } from '../ui/Button'
-import { Icon } from '../ui/Icon'
+import { usePageMeta } from '../../hooks/usePageMeta'
+import { Box, Icon, LinkButton } from '../ui'
 
 interface PageTitleProps {
   title: string
@@ -9,14 +9,15 @@ interface PageTitleProps {
 }
 
 export function PageTitle({ title, description, action }: PageTitleProps) {
+  usePageMeta(title, description)
   return (
-    <div className="ptitle">
-      <div>
+    <Box as="header" className="ptitle">
+      <Box>
         <h1>{title}</h1>
         {description && <p>{description}</p>}
-      </div>
+      </Box>
       {action}
-    </div>
+    </Box>
   )
 }
 

@@ -1,6 +1,5 @@
 import type { ReactNode } from 'react'
-import { LinkButton } from '../ui/Button'
-import { EmptyState } from '../ui/EmptyState'
+import { EmptyState, LinkButton } from '../ui'
 
 export function EmptyCards({ extra }: { extra?: ReactNode }) {
   return (

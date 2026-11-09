@@ -1,5 +1,6 @@
 import { Suspense } from 'react'
 import { Outlet, useLocation } from 'react-router'
+import { Box } from '../ui'
 import { Footer } from './Footer'
 import { Navbar } from './Navbar'
 
@@ -12,7 +13,7 @@ export function MarketingLayout() {
       </a>
       <Navbar />
       <main id="main" className="page" key={pathname}>
-        <Suspense fallback={<div style={{ minHeight: '60vh' }} />}>
+        <Suspense fallback={<Box className="page-fallback" />}>
           <Outlet />
         </Suspense>
       </main>
