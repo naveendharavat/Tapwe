@@ -3,6 +3,7 @@ import { useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Link } from 'react-router'
 import { CardFan } from '../../../components/cards/SmartCardPreview'
+import { SupportPhones } from '../../../components/layout/SupportPhones'
 import { useToast } from '../../../components/toast/toast-context'
 import {
   Box,
@@ -72,6 +73,9 @@ export default function Request() {
             <Typography variant="lead">
               Tell us about your business and what you want your card to open. We will use these details to set up your
               card.
+            </Typography>
+            <Typography variant="muted" className="rq-talk">
+              Prefer to talk? Call or WhatsApp <SupportPhones />.
             </Typography>
           </Box>
           <Box className="rq-steps rv">

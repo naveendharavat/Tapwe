@@ -6,7 +6,7 @@ const MARKETING_LINKS: Array<[label: string, to: string]> = [
   ['Home', '/'],
   ['Features', '/features'],
   ['How It Works', '/how-it-works'],
-  ['Team', '/team'],
+  ['Contact', '/support'],
   ['Pricing', '/pricing'],
 ]
 

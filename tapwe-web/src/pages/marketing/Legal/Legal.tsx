@@ -1,6 +1,9 @@
 import { PageHead } from '../../../components/layout/PageHead'
 import { SupportPhones } from '../../../components/layout/SupportPhones'
-import { Card, Container, Section, Stack, Typography } from '../../../components/ui'
+import { ContactSection } from '../../../components/marketing/ContactSection'
+import { Container } from '../../../components/ui'
+import { usePageMeta } from '../../../hooks/usePageMeta'
+import { useReveal } from '../../../hooks/useReveal'
 import { PRIVACY_POLICY, TERMS, type LegalPage } from '../../../content/legal'
 
 const PAGES = { privacy: PRIVACY_POLICY, terms: TERMS } as const
@@ -32,19 +35,11 @@ function LegalArticle({ page }: { page: LegalPage }) {
 
 export default function Legal({ page }: { page: keyof typeof PAGES | 'support' }) {
   if (page !== 'support') return <LegalArticle page={PAGES[page]} />
-  return (
-    <>
-      <PageHead eyebrow="Tapwe" title="Support and contact" lead="Questions about a card, an order or your account? Call us and we will help." />
-      <Section className="legal-support">
-        <Card size="md" className="support-card">
-          <Stack gap={2}>
-            <Typography variant="heading-sm">Call us</Typography>
-            <Typography variant="muted">
-              <SupportPhones />
-            </Typography>
-          </Stack>
-        </Card>
-      </Section>
-    </>
-  )
+  return <ContactPage />
+}
+
+function ContactPage() {
+  usePageMeta('Contact us', 'Call or WhatsApp Tapwe to order a card or ask anything.')
+  useReveal()
+  return <ContactSection titleAs="h1" />
 }

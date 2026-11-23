@@ -10,8 +10,7 @@ const COLUMNS: Array<[heading: string, links: Array<[label: string, to: string]>
       ['How It Works', '/how-it-works'],
       ['Pricing', '/pricing'],
       ['Request a Card', '/request'],
-      ['Team', '/team'],
-      ['Customer sign in', '/sign-in'],
+      ['Sign in', '/sign-in'],
     ],
   ],
   [
