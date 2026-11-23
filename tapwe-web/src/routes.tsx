@@ -27,7 +27,6 @@ import { HowItWorks } from './pages/marketing/HowItWorks'
 import { Legal } from './pages/marketing/Legal'
 import { Pricing } from './pages/marketing/Pricing'
 import { Request } from './pages/marketing/Request'
-import { Team } from './pages/marketing/Team'
 import { PublicCard } from './pages/public/PublicCard'
 
 export function AppRoutes() {
@@ -38,7 +37,6 @@ export function AppRoutes() {
           <Route index element={<Home />} />
           <Route path="features" element={<Features />} />
           <Route path="how-it-works" element={<HowItWorks />} />
-          <Route path="team" element={<Team />} />
           <Route path="pricing" element={<Pricing />} />
           <Route path="request" element={<Request />} />
           <Route path="privacy" element={<Legal page="privacy" />} />

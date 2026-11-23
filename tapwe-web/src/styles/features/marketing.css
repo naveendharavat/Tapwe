@@ -1162,65 +1162,8 @@
     padding-bottom: var(--space-6);
   }
 }
-.cust {
-  padding: var(--space-14) 0 0;
-  text-align: center;
-}
-.cust-row {
-  list-style: none;
-  padding: 0;
-  margin: var(--space-1) 0 0;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: var(--space-4);
-}
-.cust-row li {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-3_5);
-  padding: var(--space-3_5) var(--space-6) var(--space-3_5) var(--space-3_5);
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  box-shadow: var(--shadow-sm);
-  text-align: left;
-}
-.cust-av {
-  width: 52px;
-  height: 52px;
-  flex: none;
-  border-radius: var(--radius-xl);
-  background: var(--brand-50);
-  color: var(--brand-700);
-  display: grid;
-  place-items: center;
-  font-size: var(--text-lg);
-  font-weight: 700;
-  object-fit: contain;
-}
-.cust-row b {
-  display: block;
-  font-size: 17px;
-  font-weight: 700;
-}
-.cust-row small {
-  display: flex;
-  align-items: center;
-  gap: var(--space-1_5);
-  margin-top: 3px;
-  font-size: var(--text-sm);
-  color: var(--muted-foreground);
-}
-.cust-row small svg {
-  color: #f5a524;
-  fill: currentColor;
-}
-section.legal-support {
-  padding: var(--space-10) 0 120px;
-}
-.support-card {
-  max-width: 480px;
+.rq-talk {
+  margin-top: var(--space-4);
 }
 .legal {
   max-width: 720px;
@@ -1305,4 +1248,27 @@ section.legal-support {
 .fv-list .hint {
   font-size: var(--text-xs);
   margin-top: var(--space-2);
+}
+.contact-grid {
+  max-width: 720px;
+  margin: 0 auto;
+}
+.contact-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  text-align: center;
+}
+.contact-number {
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+.contact-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-3);
 }

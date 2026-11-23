@@ -1,13 +1,12 @@
 import { CtaBand } from '../../../components/marketing/CtaBand'
+import { ContactSection } from '../../../components/marketing/ContactSection'
 import { Pills } from '../../../components/marketing/Pills'
-import { TeamSection } from '../../../components/marketing/TeamSection'
 import { Section, type IconName } from '../../../components/ui'
 import { usePageMeta } from '../../../hooks/usePageMeta'
 import { useReveal } from '../../../hooks/useReveal'
 import { AboutSection } from './sections/AboutSection'
 import { CardExperiences } from './sections/CardExperiences'
 import { CardJourney } from './sections/CardJourney'
-import { CustomersStrip } from './sections/CustomersStrip'
 import { DemoSection } from './sections/DemoSection'
 import { Hero } from './sections/Hero'
 import { Marquee } from './sections/Marquee'
@@ -32,19 +31,18 @@ export default function Home() {
     <>
       <Hero />
       <Marquee />
-      <CustomersStrip />
       <WhyTapwe />
       <CardJourney />
       <WaysIn />
       <DemoSection />
       <AboutSection />
-      <TeamSection />
       <Section spacing="flush-top">
         <Pills items={HIGHLIGHTS} />
       </Section>
       <CardExperiences />
       <UseCases />
       <WhyChoose />
+      <ContactSection />
       <CtaBand />
     </>
   )
